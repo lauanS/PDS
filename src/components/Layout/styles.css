@@ -16,3 +16,7 @@
   height: 100%;
 }
 
+.content-layout{
+  height: 100%;
+  margin: 64px 0 0 0;  /* Margen superior do tamanho do header*/
+}
