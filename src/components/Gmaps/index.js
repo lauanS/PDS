@@ -3,8 +3,6 @@ import GoogleMapReact from 'google-map-react';
 
 import apiKey from '../../utils/apiKey';
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
-
 export default class SimpleMap extends Component {
   static defaultProps = {
     center: {
@@ -22,11 +20,7 @@ export default class SimpleMap extends Component {
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
         >
-          <AnyReactComponent
-            lat={59.955413}
-            lng={30.337844}
-            text="My Marker"
-          />
+          {this.props.children}
         </GoogleMapReact>
       </div>
     );
