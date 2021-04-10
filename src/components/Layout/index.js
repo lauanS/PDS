@@ -1,12 +1,12 @@
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu } from 'antd';
 import { UploadOutlined, LoginOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { Link } from "react-router-dom";
 
-import Map from '../Gmaps/index'
 import './styles.css';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
-export default function Main_Layout() {
+export default function Main_Layout(props) {
     return(    
     <Layout className="main-layout">
       <Header style={{ position: 'fixed', zIndex: 1, width: '100%', color: 'white' }}>
@@ -24,9 +24,9 @@ export default function Main_Layout() {
           }}
         >
           <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+          <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1" icon={<LoginOutlined />}>
-              Login
+              <Link to="/login/">Login</Link>
             </Menu.Item>
             <Menu.Item key="2" icon={<VideoCameraOutlined />}>
               Minhas denúncias
@@ -37,7 +37,7 @@ export default function Main_Layout() {
           </Menu>
         </Sider>
         <Content>
-          <Map />
+          {props.children}
         </Content>
       </Layout>      
     </Layout>
