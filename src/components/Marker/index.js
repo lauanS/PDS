@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { EnvironmentTwoTone } from '@ant-design/icons';
-import { Button, Drawer } from 'antd';
+import { Button } from 'antd';
 import './styles.css';
 
 export default function Marker(props){  
