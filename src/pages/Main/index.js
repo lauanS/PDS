@@ -37,8 +37,18 @@ export default function Main(){
     <Layout>
       <Map handleApiLoaded={handleApiLoaded}>
         <Marker            
-          lat={59.955413}
-          lng={30.337844}
+          lat={-23.55413}
+          lng={-46.64044}
+          onClick={showDrawer}
+        />
+        <Marker            
+          lat={-23.56313}
+          lng={-46.6544}
+          onClick={showDrawer}
+        />
+        <Marker            
+          lat={-23.54613}
+          lng={-46.63944}
           onClick={showDrawer}
         />
       </Map>
