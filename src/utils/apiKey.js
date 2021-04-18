@@ -1,3 +1,3 @@
 export default function apiKey() {
-    return 'yourApiKey';
+    return process.env.REACT_APP_MAPS_API_KEY;
 }
