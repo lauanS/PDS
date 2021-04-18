@@ -23,4 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 # security
-src/utils/apiKey.js
+.env.development
+.env.production
