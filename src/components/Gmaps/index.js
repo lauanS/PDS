@@ -3,6 +3,12 @@ import GoogleMapReact from 'google-map-react';
 
 import apiKey from '../../utils/apiKey';
 
+function createMapOptions(maps) {
+  return {    
+    disableDefaultUI:true
+  };
+}
+
 export default class SimpleMap extends Component {
   static defaultProps = {
     center: {
@@ -10,7 +16,7 @@ export default class SimpleMap extends Component {
       lng: -46.6402224
     },
     zoom: 14
-  };
+  }; 
 
   render() {
     return (
@@ -20,15 +26,14 @@ export default class SimpleMap extends Component {
             key: apiKey(),
             libraries: ['places'],
             language: 'pt-BR',
-            region: 'BR'          
+            region: 'BR'     
           }}
+          options={createMapOptions}
           defaultCenter={this.props.center}
           defaultZoom={this.props.zoom}
 
-
           yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({map, maps}) => this.props.handleApiLoaded(map, maps)}
-          
+          onGoogleApiLoaded={({map, maps}) => this.props.handleApiLoaded(map, maps)}          
         >
           {this.props.children}
         </GoogleMapReact>
