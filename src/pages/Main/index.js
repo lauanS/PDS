@@ -10,6 +10,7 @@ import { getReports } from '../../services/index';
 
 export default function Main(){
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const [currentReport, setCurrentReport] = useState({});
 
   const [mapInstance, setMapInstance] = useState(false);
   const [mapApi, setMapApi] = useState(false);
@@ -17,7 +18,7 @@ export default function Main(){
 
   const [places, setPlaces] = useState([]);
 
-  const [markers, setMarkers] = useState([]);
+  const [reports, setReports] = useState([]);
 
   const [errors, setErrors] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +32,11 @@ export default function Main(){
   const hideDrawer = () => {
     setDrawerVisible(false);
   };
+
+  const onClickMarker = (report) => {
+    setCurrentReport(report);
+    showDrawer();
+  }
 
   const handleApiLoaded = (map, maps) => {
     if (map && maps) {
@@ -49,7 +55,7 @@ export default function Main(){
       try {
         const response = await getReports();
         if(mounted.current){
-          setMarkers(response);
+          setReports(response);
           setIsLoading(false);  
         }
       } catch (error) {
@@ -69,12 +75,13 @@ export default function Main(){
   return (
     <Layout>
       <Map handleApiLoaded={handleApiLoaded}>
-        {!isLoading && !errors && markers.map((marker, key) => (
+        {!isLoading && !errors && reports.map((report, key) => (
           <Marker
             key={key}
-            lat={marker.lat}
-            lng={marker.lng}
-            onClick={showDrawer}
+            lat={report.lat}
+            lng={report.lng}
+            report={report}
+            onClick={onClickMarker}
           />
         ))}
       </Map>
@@ -87,7 +94,7 @@ export default function Main(){
         visible={drawerVisible}
         footer ={
           <div>
-            <Button onClick={null} style={{ marginRight: 8 }}>
+            <Button onClick={hideDrawer} style={{ marginRight: 8 }}>
               Fechar
             </Button>
             <Button onClick={null} type="primary">
@@ -96,9 +103,12 @@ export default function Main(){
           </div>
         }
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        { !isLoading && !errors && <>
+          <p>{currentReport.adress}</p>
+          <p>Raça/Espécie: {currentReport.animal} 
+            {currentReport.breeds && " | " + currentReport.breeds}</p>
+          <p>Situação: {currentReport.status} </p>
+        </>}
       </Drawer>
     </Layout>
   );
