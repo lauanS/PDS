@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Drawer } from 'antd';
 
 import Map from '../../components/Gmaps/index';
 import Layout from '../../components/Layout/index';
 import Marker from '../../components/Marker/index';
 import SearchBox from '../../components/SearchBox/index';
+
+import { getReports } from '../../services/index';
 
 export default function Main(){
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -14,6 +16,13 @@ export default function Main(){
   const [apiReady, setApiReady] = useState(false);
 
   const [places, setPlaces] = useState([]);
+
+  const [markers, setMarkers] = useState([]);
+
+  const [errors, setErrors] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  const mounted = useRef(true);
 
   const showDrawer = () => {
     setDrawerVisible(true);
@@ -33,24 +42,41 @@ export default function Main(){
     console.log("ESTÁ FALSO");
   };
 
+  /* Carregando as denúncias */
+  useEffect(() => {   
+    async function load(){
+      setIsLoading(true);
+      try {
+        const response = await getReports();
+        if(mounted.current){
+          setMarkers(response);
+          setIsLoading(false);  
+        }
+      } catch (error) {
+        if(mounted.current){
+          console.log(error);
+          setIsLoading(false);  
+          setErrors(true);
+        }
+      }
+      return;
+    }
+    load(); 
+    
+    return () => {mounted.current = false} 
+  }, []);
+
   return (
     <Layout>
       <Map handleApiLoaded={handleApiLoaded}>
-        <Marker            
-          lat={-23.55413}
-          lng={-46.64044}
-          onClick={showDrawer}
-        />
-        <Marker            
-          lat={-23.56313}
-          lng={-46.6544}
-          onClick={showDrawer}
-        />
-        <Marker            
-          lat={-23.54613}
-          lng={-46.63944}
-          onClick={showDrawer}
-        />
+        {!isLoading && !errors && markers.map((marker, key) => (
+          <Marker
+            key={key}
+            lat={marker.lat}
+            lng={marker.lng}
+            onClick={showDrawer}
+          />
+        ))}
       </Map>
       {apiReady && <SearchBox map={mapInstance} mapApi={mapApi} addplace={setPlaces} />}
       <Drawer
