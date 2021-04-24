@@ -1,0 +1,17 @@
+.addButton-div{
+  position: absolute;
+  float: right;
+  top: 65px; /* Tamanho do header */
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 20px 20px 0px 20px; 
+}
+
+.fixed-widgets{
+  position: fixed;
+  right: 20px;
+  bottom: 40px;
+  float: right;
+  z-index: 2147483640;
+}

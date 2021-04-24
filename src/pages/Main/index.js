@@ -5,6 +5,9 @@ import Map from '../../components/Gmaps/index';
 import Layout from '../../components/Layout/index';
 import Marker from '../../components/Marker/index';
 import SearchBox from '../../components/SearchBox/index';
+import AddButton from '../../components/AddButton/index';
+
+import alertIcon from '../../assets/alert.png';
 
 import { getReports } from '../../services/index';
 
@@ -25,6 +28,33 @@ export default function Main(){
   
   const mounted = useRef(true);
 
+
+  const addPin = (map, maps) => {
+    var icon = {
+      url: alertIcon,
+      scaledSize: new maps.Size(32, 32), // scaled size
+    };
+    new maps.Marker({
+      position: { lat: -23.558676911772462, lng: -46.64665970163575 },
+      map: map,
+      draggable: true,
+      icon: icon
+    });
+  
+  }
+
+  const setCurrentLocation = () => {
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            console.log({
+                center: [position.coords.latitude, position.coords.longitude],
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            });
+        });
+    }
+}
+
   const showDrawer = () => {
     setDrawerVisible(true);
   };
@@ -38,25 +68,29 @@ export default function Main(){
     showDrawer();
   }
 
+  const onClickReport = (newReport) => {
+    console.log([...reports, newReport]);
+    addPin(mapInstance, mapApi);
+    setReports([...reports, newReport]);
+  }
+
   const handleApiLoaded = (map, maps) => {
     if (map && maps) {
       setMapInstance(map);
       setMapApi(maps);
       setApiReady(true);
-      console.log("SET TRUE");
     }
-    console.log("ESTÁ FALSO");
   };
 
   /* Carregando as denúncias */
-  useEffect(() => {   
+  useEffect(() => {
     async function load(){
       setIsLoading(true);
       try {
         const response = await getReports();
         if(mounted.current){
           setReports(response);
-          setIsLoading(false);  
+          setIsLoading(false);
         }
       } catch (error) {
         if(mounted.current){
@@ -82,9 +116,11 @@ export default function Main(){
             lng={report.lng}
             report={report}
             onClick={onClickMarker}
+            
           />
         ))}
       </Map>
+      <AddButton mapInstance={mapInstance} onClick={onClickReport}/>
       {apiReady && <SearchBox map={mapInstance} mapApi={mapApi} addplace={setPlaces} />}
       <Drawer
         title="Informações sobre a denúncia"
