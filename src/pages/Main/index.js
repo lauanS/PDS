@@ -136,7 +136,7 @@ export default function Main(){
       {apiReady && <SearchBox map={mapInstance} mapApi={mapApi} addplace={setPlaces} />}
       
       <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>
-        <Report />
+        <Report/>
       </Modal>      
       
       <Drawer

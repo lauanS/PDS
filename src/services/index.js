@@ -32,6 +32,7 @@ export async function getReports(){
 }
 
 export async function postReport(report){
+  console.log("Nova denúncia: ", report);
   return;
 }
 

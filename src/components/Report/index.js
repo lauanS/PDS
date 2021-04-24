@@ -1,12 +1,26 @@
 import React from 'react';
 import { Button, Form, Input, Switch } from 'antd';
 
-export default function Report(){
+import { postReport } from "../../services/index";
+
+export default function Report(props){
+    const { lat, lng, adress  } = props;
+
     const handleSubmit = async e => {
+        const obj = {
+            lat:lat,
+            lng:lng,
+            isAnonymous:e.isAnonymous,
+            animal:e.animal,
+            breeds:e.breeds,
+            adress: e.adress,
+            description: e.description
+        }
+
+        postReport(e);
         console.log(e);
     }
 
-    const initialValue = '0.0000, 0.0000';
     return (
         <Form
             name="Report"
@@ -15,8 +29,7 @@ export default function Report(){
         >
             <Form.Item
                 label="Localização"
-                name={'local'}
-                initialValue={[initialValue]}
+                name={'adress'}
                 rules={[
                     {
                         required: true,
@@ -24,28 +37,12 @@ export default function Report(){
                     },
                 ]}
             >
-                <Input type='text'
-                        placeholder={[initialValue]}
-                        disabled
-                />
-
-            </Form.Item>
-            <Form.Item
-                label="Descrição da denúncia"
-                name={'descricao'}
-                rules={[
-                    {
-                        required: true,
-                        message: 'Por favor, digite uma descrição detalhada do problema',
-                    },
-                ]}
-            >
-                <Input.TextArea />
+                <Input type='text' />
             </Form.Item>
 
             <Form.Item
                 label="Espécie"
-                name={'especie'}
+                name={'animal'}
                 rules={[
                     {
                         required: true,
@@ -60,7 +57,7 @@ export default function Report(){
 
             <Form.Item
                 label="Raça"
-                name={"raca"}
+                name={"breeds"}
                 rules={[
                     {
                         required: false,
@@ -75,14 +72,28 @@ export default function Report(){
 
             <Form.Item
                 label="Denunciar de forma anônima"
-                name={ ['anonimo'] }
+                name={ 'isAnonymous' }
                 valuePropName="checked"
+                initialValue={false}
             >
-                <Switch />
+                <Switch/>
+            </Form.Item>
+
+            <Form.Item
+                label="Descrição da denúncia"
+                name={'description'}
+                rules={[
+                    {
+                        required: true,
+                        message: 'Por favor, digite uma descrição detalhada do problema',
+                    },
+                ]}
+            >
+                <Input.TextArea />
             </Form.Item>
 
             <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button type="default" htmlType="submit">
                     Enviar
                 </Button>
             </Form.Item>

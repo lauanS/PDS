@@ -23,7 +23,7 @@ export default function AddButton(props) {
     <div className="fixed-widgets">
       <Tooltip title="Realizar nova denúncia" color="yellow">
         <Button 
-          type="primary" 
+          type="default" 
           shape="circle" 
           icon={<PlusOutlined />} 
           size="large" 
