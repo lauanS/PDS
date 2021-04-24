@@ -1,3 +1,4 @@
+// Denúncias
 export async function getReports(){
   return [
           {
@@ -28,4 +29,16 @@ export async function getReports(){
             "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
             "status": "opened"
           }]
+}
+
+export async function postReport(report){
+  return;
+}
+
+export async function putReport(id){
+  return;
+}
+
+export async function deleteReport(id){
+  return;
 }

@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Drawer } from 'antd';
+import { Button, Drawer, Modal } from 'antd';
 
 import Map from '../../components/Gmaps/index';
 import Layout from '../../components/Layout/index';
 import Marker from '../../components/Marker/index';
 import SearchBox from '../../components/SearchBox/index';
 import AddButton from '../../components/AddButton/index';
+import Report from '../../components/Report';
 
 import alertIcon from '../../assets/alert.png';
 
 import { getReports } from '../../services/index';
 
+
 export default function Main(){
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
   const [currentReport, setCurrentReport] = useState({});
 
   const [mapInstance, setMapInstance] = useState(false);
@@ -54,6 +58,14 @@ export default function Main(){
         });
     }
 }
+
+  const showModal = () => {
+    setModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setModalVisible(false);
+  };
 
   const showDrawer = () => {
     setDrawerVisible(true);
@@ -120,8 +132,13 @@ export default function Main(){
           />
         ))}
       </Map>
-      <AddButton mapInstance={mapInstance} onClick={onClickReport}/>
+      <AddButton mapInstance={mapInstance} onClick={showModal}/>
       {apiReady && <SearchBox map={mapInstance} mapApi={mapApi} addplace={setPlaces} />}
+      
+      <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>
+        <Report />
+      </Modal>      
+      
       <Drawer
         title="Informações sobre a denúncia"
         placement="bottom"
@@ -146,6 +163,7 @@ export default function Main(){
           <p>Situação: {currentReport.status} </p>
         </>}
       </Drawer>
+    
     </Layout>
   );
 }
