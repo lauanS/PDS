@@ -43,3 +43,8 @@ export async function putReport(id){
 export async function deleteReport(id){
   return;
 }
+
+export async function postSignUp(signUp){
+  console.log("Novo cadastro: ", signUp);
+  return;
+}
