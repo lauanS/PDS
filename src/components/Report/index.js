@@ -17,7 +17,7 @@ export default function Report(props){
             description: e.description
         }
 
-        postReport(e);
+        postReport(obj);
         console.log(e);
     }
 
@@ -26,6 +26,7 @@ export default function Report(props){
             name="Report"
             layout="vertical"
             onFinish={handleSubmit}
+            initialValues={{adress: adress}}
         >
             <Form.Item
                 label="Localização"

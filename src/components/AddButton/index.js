@@ -1,31 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { CheckOutlined } from '@ant-design/icons';
 
 import './styles.css';
 
 export default function AddButton(props) {
+  const { onClick, onClickConfirm } = props;
+  const [ isSelected, setIsSelected ] = useState(false);
   const handleOnClick = () => {
-
-    props.onClick({
-      "lat":props.mapInstance.getCenter().lat(),
-      "lng":props.mapInstance.getCenter().lng(),
-      "date": "XX",
-      "adress": "Avenida Nova Denúncia, 37, São Paulo, SP",
-      "animal": "Cacatua",
-      "breeds": "",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
-      "status": "closed"
-    });
+    if(isSelected){
+      onClickConfirm();
+    } else{
+      onClick();
+    }
+    setIsSelected(true);    
   } 
 
   return (
     <div className="fixed-widgets">
-      <Tooltip title="Realizar nova denúncia" color="yellow">
+      <Tooltip title={!isSelected ? "Realizar nova denúncia" : "Confirmar Localização"} color="yellow">
         <Button 
           type="default" 
           shape="circle" 
-          icon={<PlusOutlined />} 
+          icon={!isSelected ? <PlusOutlined /> : <CheckOutlined /> } 
           size="large" 
           onClick={handleOnClick}
         />
