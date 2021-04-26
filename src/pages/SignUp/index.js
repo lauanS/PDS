@@ -8,13 +8,14 @@ import './styles.css';
 
 export default function SignUp() {
 
+    const [form] = Form.useForm();
+
     const checkMatchingPasswords = (rule, value, callback) => {
-        if (value) {
-            const passwordConfirmation = getFieldValue('passwordConfirmation');
-            console.log(value);
-            if (value !== passwordConfirmation) {
-                callback("As duas senhas não correspondem. Por favor, digite novamente.");
-            }
+        const password = form.getFieldValue('password');
+        const passwordConfirmation = form.getFieldValue('passwordConfirmation');
+
+        if (value && password !== passwordConfirmation) {
+            callback("As senhas digitadas não correspondem. Por favor, digite novamente.");
         }
         else
             callback();
@@ -34,7 +35,8 @@ export default function SignUp() {
         <Layout>
             <Form
                 name="SignUp"
-                onFinish={ handleSubmit }
+                onFinish={handleSubmit}
+                form={form}
             >
                 <Form.Item
                     label="Nome completo"
@@ -55,7 +57,10 @@ export default function SignUp() {
                 <Form.Item
                     label="Senha"
                     name="password"
-                    rules={[{ required: true, message: 'Por favor, digite a senha.' }]}
+                    rules={[
+                        { required: true, message: 'Por favor, digite a senha.' },
+                        { min: 8, message: 'A senha deve conter pelo menos 8 caracteres.'}
+                    ]}
                     hasFeedback
                 >
                     <Input.Password />
@@ -66,15 +71,7 @@ export default function SignUp() {
                     name="passwordConfirmation"
                     rules={[
                         { required: true, message: 'Por favor, digite a senha novamente.' },
-                        ({ getFieldValue }) => ({
-                            validator(_, value) {
-                              if (!value || getFieldValue('password') === value) {
-                                return Promise.resolve();
-                              }
-                
-                              return Promise.reject(new Error('As senhas não correspondem. Por favor, digite novamente.'));
-                            },
-                          }),
+                        { validator: checkMatchingPasswords }
                     ]}
                     dependencies={['password']}
                     hasFeedback
