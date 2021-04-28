@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Button, Drawer, Modal } from 'antd';
 
 import Map from '../../components/Gmaps/index';
@@ -34,6 +34,23 @@ export default function Main(){
   
   const mounted = useRef(true);
 
+  const loadReports = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const response = await getReports();
+      if(mounted.current){
+        setReports(response.data);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      if(mounted.current){
+        console.log(error);
+        setIsLoading(false);  
+        setErrors(true);
+      }
+    }
+    return;
+  }, []);
 
   const addMarker = (map, maps) => {
     var icon = {
@@ -85,6 +102,11 @@ export default function Main(){
     setModalVisible(false);
   };
 
+  const onFinishForm = async () => {
+    hideModal();
+    await loadReports();
+  }
+
   const showDrawer = () => {
     setDrawerVisible(true);
   };
@@ -99,9 +121,7 @@ export default function Main(){
   }
 
   const onClickReport = () => {
-    //console.log([...reports, newReport]);
     addMarker(mapInstance, mapApi);
-    //setReports([...reports, newReport]);
   }
 
   const onClickConfirm = () => {
@@ -119,27 +139,9 @@ export default function Main(){
 
   /* Carregando as denúncias */
   useEffect(() => {
-    async function load(){
-      setIsLoading(true);
-      try {
-        const response = await getReports();
-        if(mounted.current){
-          setReports(response.data);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        if(mounted.current){
-          console.log(error);
-          setIsLoading(false);  
-          setErrors(true);
-        }
-      }
-      return;
-    }
-    load(); 
-    
+    loadReports();  
     return () => {mounted.current = false} 
-  }, []);
+  }, [loadReports]);
 
   return (
     <Layout>
@@ -150,8 +152,7 @@ export default function Main(){
             lat={report.lat}
             lng={report.lng}
             report={report}
-            onClick={onClickMarker}
-            
+            onClick={onClickMarker}            
           />
         ))}
       </Map>
@@ -167,8 +168,8 @@ export default function Main(){
       <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>
         <Report lat={currentLocation.lat} 
                 lng={currentLocation.lng} 
-                adress="TODO"
-                onFinish={hideModal}
+                address="TODO"
+                onFinish={onFinishForm}
         />
       </Modal>      
       
@@ -190,7 +191,7 @@ export default function Main(){
         }
       >
         { !isLoading && !errors && <>
-          <p>{currentReport.adress}</p>
+          <p>{currentReport.address}</p>
           <p>Raça/Espécie: {currentReport.animal} 
             {currentReport.breeds && " | " + currentReport.breeds}</p>
           <p>Situação: {currentReport.status} </p>
