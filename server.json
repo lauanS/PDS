@@ -1,0 +1,60 @@
+{
+  "reports": [
+    {
+      "id": 1619638409706,
+      "lat": -23.5535,
+      "lng": -46.64756,
+      "date": "XX",
+      "adress": "Avenida Nova Denúncia, 37, São Paulo, SP",
+      "animal": "Cacatua",
+      "breeds": "",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
+      "status": "closed"
+    },
+    {
+      "id": 1619638408888,
+      "lat": -23.55413,
+      "lng": -46.64044,
+      "date": "XX",
+      "adress": "Avenide Ipanemas, 123, São Paulo, SP",
+      "animal": "Papagaio",
+      "breeds": "",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
+      "status": "closed"
+    },
+    {
+      "id": 1619638409999,
+      "lat": -23.56313,
+      "lng": -46.6544,
+      "date": "XX",
+      "adress": "Rua Carvalho Cavalcanti, 33, São Paulo, SP",
+      "animal": "Gato",
+      "breeds": "",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
+      "status": "opened"
+    },
+    {
+      "id": 1619638407777,
+      "lat": -23.54613,
+      "lng": -46.63944,
+      "date": "XX",
+      "adress": "Rua Sete e Meio de Abril, 123, São Paulo, SP",
+      "animal": "Cão",
+      "breeds": "pinscher",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
+      "status": "opened"
+    },
+    {
+      "id": 1619639679923,
+      "lat": -23.558268775205526,
+      "lng": -46.63340422468415,
+      "date": "X",
+      "animal": "Cachorros",
+      "breeds": "Viralatas",
+      "adress": "Rua Barão do Iguape",
+      "description": "O dono do bar costuma afugentar os cachorros que se aproximam do estabelecimento com violência",
+      "status": "opened",
+      "isAnonymous": true
+    }
+  ]
+}

@@ -4,21 +4,26 @@ import { Button, Form, Input, Switch } from 'antd';
 import { postReport } from "../../services/index";
 
 export default function Report(props){
-    const { lat, lng, adress  } = props;
+    const { lat, lng, adress, onFinish  } = props;
+    const [form] = Form.useForm();
 
     const handleSubmit = async e => {
         const obj = {
+            id: new Date().getTime(),
             lat:lat,
             lng:lng,
-            isAnonymous:e.isAnonymous,
+            date: 'X',            
             animal:e.animal,
             breeds:e.breeds,
             adress: e.adress,
-            description: e.description
+            description: e.description,
+            status: 'opened',
+            isAnonymous:e.isAnonymous
         }
-
+        console.log(obj);
         postReport(obj);
-        console.log(e);
+        form.resetFields();
+        onFinish();
     }
 
     return (

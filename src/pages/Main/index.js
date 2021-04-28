@@ -50,11 +50,12 @@ export default function Main(){
 
     // Atualiza a posição quando reposicionar o marker
     marker.addListener("dragend", () => {
-      setCurrentLocation(marker.getPosition());
+      setCurrentLocation(marker.getPosition().toJSON());
     });
 
     setMarker(marker);
-  
+    setCurrentLocation(marker.getPosition().toJSON());
+    
   }
 
   const removeMarker = () => {
@@ -123,7 +124,7 @@ export default function Main(){
       try {
         const response = await getReports();
         if(mounted.current){
-          setReports(response);
+          setReports(response.data);
           setIsLoading(false);
         }
       } catch (error) {
@@ -164,7 +165,11 @@ export default function Main(){
       {apiReady && <SearchBox map={mapInstance} mapApi={mapApi} addplace={setPlaces} />}
       
       <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>
-        <Report lat={currentLocation.lat} lng={currentLocation.lng} adress="TODO"/>
+        <Report lat={currentLocation.lat} 
+                lng={currentLocation.lng} 
+                adress="TODO"
+                onFinish={hideModal}
+        />
       </Modal>      
       
       <Drawer
