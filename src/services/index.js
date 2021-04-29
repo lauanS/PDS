@@ -11,8 +11,6 @@ export async function getReports(){
 
 export async function postReport(report){
   return api.post('/reports', report);
-  console.log("Nova denúncia: ", report);
-  return;
 }
 
 export async function putReport(id){
