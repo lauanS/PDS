@@ -8,7 +8,7 @@ Projeto de um sistema de denúncias de maus tratos a animais
 
 É necessário ter o [NodeJS](https://nodejs.org/en/) _(~v14.16.X)_ instalado na sua máquina.
 
-Possuir uma chave da [Google Cloud Platform](https://console.cloud.google.com/home) para usar a API do Google Maps
+Possuir uma chave da [Google Cloud Platform](https://console.cloud.google.com/home) para usar a API do Google Maps, com a Geocoding API e a Places API habilitadas.
 
 ### Preparando o ambiente
 
