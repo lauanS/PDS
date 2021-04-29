@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form, Input, Switch } from 'antd';
 
 import { postReport } from "../../services/index";
 
 export default function Report(props){
-  const { lat, lng, address, onFinish  } = props;
+  const { lat, lng, address, onFinish } = props;
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const mounted = useRef(true);
 
   const handleSubmit = async e => {
     setIsLoading(true);
@@ -26,8 +27,16 @@ export default function Report(props){
     await postReport(obj);
     form.resetFields();
     await onFinish();
-    setIsLoading(false);
+    
+    if(mounted.current){
+      setIsLoading(false);
+    }
   }
+
+  /* Atualiza o status do mounted ao desmontar o componente para impedir vazamento de memória */
+  useEffect(() => {
+    return () => {mounted.current = false} 
+  }, []);
 
   return (
     <Form

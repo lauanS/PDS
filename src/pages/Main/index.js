@@ -18,13 +18,14 @@ export default function Main(){
   const [modalVisible, setModalVisible] = useState(false);
 
   const [currentReport, setCurrentReport] = useState({});
-  const [currentLocation, setCurrentLocation] = useState({});
+  const [currentLocation, setCurrentLocation] = useState({lat: 0, lng: 0});
 
   const [mapInstance, setMapInstance] = useState(false);
   const [mapApi, setMapApi] = useState(false);
   const [apiReady, setApiReady] = useState(false);
 
   const [places, setPlaces] = useState([]);
+  const [address, setAddress] = useState("");
 
   const [reports, setReports] = useState([]);
   const [marker, setMarker] = useState(null);
@@ -52,6 +53,33 @@ export default function Main(){
     return;
   }, []);
 
+  const latLngToAddress = useCallback(async (latlng) => {
+
+    if(latlng.lat === 0){      
+      return "Without address";
+    }
+    
+    const geocoder = new mapApi.Geocoder();
+    await geocoder.geocode({ location: latlng }, (results, status) => {  
+      if (status === "OK") {
+        if (results[0]) {
+          setAddress(results[0].formatted_address);
+        } else {
+          setErrors(true);
+          console.log("No results found");
+          setAddress("Endereço não encontrado");
+        }
+      } else {
+        setErrors(true);
+        console.log("Geocoder failed due to: " + status);
+        setAddress("Erro ao buscar o endereço");
+      } 
+         
+    });  
+    
+    
+  }, [mapApi]);
+
   const addMarker = (map, maps) => {
     var icon = {
       url: alertIcon,
@@ -59,7 +87,7 @@ export default function Main(){
     };
 
     const marker = new maps.Marker({
-      position: { lat: -23.558676911772462, lng: -46.64665970163575 },
+      position: map.getCenter(),
       map: map,
       draggable: true,
       icon: icon
@@ -68,11 +96,10 @@ export default function Main(){
     // Atualiza a posição quando reposicionar o marker
     marker.addListener("dragend", () => {
       setCurrentLocation(marker.getPosition().toJSON());
-    });
+    });    
 
     setMarker(marker);
     setCurrentLocation(marker.getPosition().toJSON());
-    
   }
 
   const removeMarker = () => {
@@ -139,9 +166,14 @@ export default function Main(){
 
   /* Carregando as denúncias */
   useEffect(() => {
-    loadReports();  
+    loadReports();
     return () => {mounted.current = false} 
   }, [loadReports]);
+
+  /* Atualiza o endereço */
+  useEffect(( () => {
+    latLngToAddress(currentLocation);
+  }), [currentLocation, latLngToAddress]);
 
   return (
     <Layout>
@@ -165,13 +197,14 @@ export default function Main(){
       }      
       {apiReady && <SearchBox map={mapInstance} mapApi={mapApi} addplace={setPlaces} />}
       
-      <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>
+      {!isLoading &&
+      <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>        
         <Report lat={currentLocation.lat} 
                 lng={currentLocation.lng} 
-                address="TODO"
+                address={address}
                 onFinish={onFinishForm}
         />
-      </Modal>      
+      </Modal>}   
       
       <Drawer
         title="Informações sobre a denúncia"
