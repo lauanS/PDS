@@ -32,8 +32,8 @@ Em ambos os arquivos, coloque a sua chave de API onde está escrito yourApiKey.
 Utilizando o comando:
 
 ``` bash
- yarn server server.json -w -d 750 -p 3333
- # ou npm server server.json -w -d 750 -p 3333
+ yarn server
+ # ou npm server
 ``` 
 Você inicializa um servidor em localhost para simular o funcionamento da API. Essêncial para a visualização de denúncias e login.
 
