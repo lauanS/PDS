@@ -1,10 +1,20 @@
 import axios from "axios";
+import { getToken } from "./auth";
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_SERVER_BASE_URL
 });
 
-// Denúncias
+/* Adicionando o token de autenticação no cabeçalho de cada request */
+api.interceptors.request.use(async config => {
+  const token = getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+/******** Denúncias ********/
 export async function getReports(){
   return api.get('/reports');
 }
@@ -21,7 +31,22 @@ export async function deleteReport(id){
   return;
 }
 
+/******** Login ********/
+export async function postSignIn(signIn){
+  console.log("Login: ", signIn);
+  console.log("...");
+  await delay(2000);
+  console.log("ok");
+  return { data: { token: "TOKEN"} };
+}
+
 export async function postSignUp(signUp){
   console.log("Novo cadastro: ", signUp);
+  console.log("...");
+  await delay(2000);
+  console.log("ok");
   return;
 }
+
+/******** útil ********/
+const delay = ms => new Promise(res => setTimeout(res, ms));

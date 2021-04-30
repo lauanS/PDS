@@ -1,5 +1,6 @@
-import React from 'react';
-import { Form, Input, Button, Checkbox, Row, Col } from 'antd';
+import React, { useState, useRef } from 'react';
+
+import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import Layout from '../../components/Layout/index';
 
@@ -8,28 +9,45 @@ import { postSignUp } from "../../services/index";
 import './styles.css';
 
 export default function SignUp() {
+  const [isLoading, setIsLoading] = useState(false);
+  const mounted = useRef(true);
 
-    const [form] = Form.useForm();
+  const [form] = Form.useForm();
 
-    const checkMatchingPasswords = (rule, value, callback) => {
-        const password = form.getFieldValue('password');
-        const passwordConfirmation = form.getFieldValue('passwordConfirmation');
+  const checkMatchingPasswords = (rule, value, callback) => {
+    const password = form.getFieldValue('password');
+    const passwordConfirmation = form.getFieldValue('passwordConfirmation');
 
-        if (value && password !== passwordConfirmation) {
-            callback("As senhas digitadas não correspondem. Por favor, digite novamente.");
-        }
-        else
-            callback();
+    if (value && password !== passwordConfirmation) {
+      callback("As senhas digitadas não correspondem. Por favor, digite novamente.");
     }
+    else
+      callback();
+  }
 
     const handleSubmit = async e => {
-        const obj = {
-            nome: e.name,
-            email: e.email,
-            password: e.password
-        }
+      setIsLoading(true);
 
-        postSignUp(obj);
+      const obj = {
+          nome: e.name,
+          email: e.email,
+          password: e.password
+      }
+
+      try {
+        await postSignUp(obj);
+        
+        if(mounted.current){
+          console.log("Trocar de página");
+        }
+      } catch(error){
+        if(mounted.current){
+          console.log("Erro ao tentar cadastrar um novo usuário");
+          console.log(error);
+          form.resetFields();
+        }
+      }
+      setIsLoading(false);      
     }
 
     return (
@@ -50,6 +68,7 @@ export default function SignUp() {
                             <Input
                                 prefix={<UserOutlined/>}
                                 placeholder="Nome completo"
+                                disabled={isLoading}
                             />
                         </Form.Item>
 
@@ -62,6 +81,7 @@ export default function SignUp() {
                                 type="email"
                                 prefix={<MailOutlined />}
                                 placeholder="Endereço de e-mail"
+                                disabled={isLoading}
                             />
                         </Form.Item>
 
@@ -77,6 +97,7 @@ export default function SignUp() {
                             <Input.Password 
                                 prefix={<LockOutlined />}
                                 placeholder="Senha"
+                                disabled={isLoading}
                             />
                         </Form.Item>
 
@@ -93,13 +114,19 @@ export default function SignUp() {
                             <Input.Password 
                                 prefix={<LockOutlined />}
                                 placeholder="Confirmar senha"
+                                disabled={isLoading}
                             />
                                 Já possui uma conta? <a href="">Faça login.</a>
                         </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" className="signup-button">
-                                Cadastrar
-                                </Button>
+                            <Button 
+                              type="primary" 
+                              htmlType="submit" 
+                              className="signup-button" 
+                              loading={isLoading}
+                            >
+                              Cadastrar
+                            </Button>
                         </Form.Item>
                     </div>
                 </Form>
