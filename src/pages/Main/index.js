@@ -1,24 +1,24 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Button, Drawer, Modal } from 'antd';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { Button, Drawer, Modal } from "antd";
 
-import Map from '../../components/Gmaps/index';
-import Layout from '../../components/Layout/index';
-import Marker from '../../components/Marker/index';
-import SearchBox from '../../components/SearchBox/index';
-import AddButton from '../../components/AddButton/index';
-import Report from '../../components/Report';
+import Map from "../../components/Gmaps/index";
+import Layout from "../../components/Layout/index";
+import Marker from "../../components/Marker/index";
+import SearchBox from "../../components/SearchBox/index";
+import AddButton from "../../components/AddButton/index";
+import Report from "../../components/Report";
 
-import alertIcon from '../../assets/alert.png';
+import alertIcon from "../../assets/alert.png";
 
-import { getReports } from '../../services/index';
+import { getReports } from "../../services/index";
+import { isAuthenticated } from "../../services/auth";
 
-
-export default function Main(){
+export default function Main() {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   const [currentReport, setCurrentReport] = useState({});
-  const [currentLocation, setCurrentLocation] = useState({lat: 0, lng: 0});
+  const [currentLocation, setCurrentLocation] = useState({ lat: 0, lng: 0 });
 
   const [mapInstance, setMapInstance] = useState(false);
   const [mapApi, setMapApi] = useState(false);
@@ -32,53 +32,52 @@ export default function Main(){
 
   const [errors, setErrors] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const mounted = useRef(true);
 
   const loadReports = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await getReports();
-      if(mounted.current){
+      if (mounted.current) {
         setReports(response.data);
         setIsLoading(false);
       }
     } catch (error) {
-      if(mounted.current){
+      if (mounted.current) {
         console.log(error);
-        setIsLoading(false);  
+        setIsLoading(false);
         setErrors(true);
       }
     }
     return;
   }, []);
 
-  const latLngToAddress = useCallback(async (latlng) => {
+  const latLngToAddress = useCallback(
+    async (latlng) => {
+      if (latlng.lat === 0) {
+        return "Without address";
+      }
 
-    if(latlng.lat === 0){      
-      return "Without address";
-    }
-    
-    const geocoder = new mapApi.Geocoder();
-    await geocoder.geocode({ location: latlng }, (results, status) => {  
-      if (status === "OK") {
-        if (results[0]) {
-          setAddress(results[0].formatted_address);
+      const geocoder = new mapApi.Geocoder();
+      await geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === "OK") {
+          if (results[0]) {
+            setAddress(results[0].formatted_address);
+          } else {
+            setErrors(true);
+            console.log("No results found");
+            setAddress("Endereço não encontrado");
+          }
         } else {
           setErrors(true);
-          console.log("No results found");
-          setAddress("Endereço não encontrado");
+          console.log("Geocoder failed due to: " + status);
+          setAddress("Erro ao buscar o endereço");
         }
-      } else {
-        setErrors(true);
-        console.log("Geocoder failed due to: " + status);
-        setAddress("Erro ao buscar o endereço");
-      } 
-         
-    });  
-    
-    
-  }, [mapApi]);
+      });
+    },
+    [mapApi]
+  );
 
   const addMarker = (map, maps) => {
     var icon = {
@@ -90,36 +89,36 @@ export default function Main(){
       position: map.getCenter(),
       map: map,
       draggable: true,
-      icon: icon
+      icon: icon,
     });
 
     // Atualiza a posição quando reposicionar o marker
     marker.addListener("dragend", () => {
       setCurrentLocation(marker.getPosition().toJSON());
-    });    
+    });
 
     setMarker(marker);
     setCurrentLocation(marker.getPosition().toJSON());
-  }
+  };
 
   const removeMarker = () => {
     // Remove do mapa
     marker.setMap(null);
     // Remove da página
     setMarker(null);
-  }
+  };
 
   const getBrowserLocation = () => {
-    if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            console.log({
-                center: [position.coords.latitude, position.coords.longitude],
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            });
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log({
+          center: [position.coords.latitude, position.coords.longitude],
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         });
+      });
     }
-  }
+  };
 
   const showModal = () => {
     setModalVisible(true);
@@ -132,7 +131,7 @@ export default function Main(){
   const onFinishForm = async () => {
     hideModal();
     await loadReports();
-  }
+  };
 
   const showDrawer = () => {
     setDrawerVisible(true);
@@ -145,17 +144,17 @@ export default function Main(){
   const onClickMarker = (report) => {
     setCurrentReport(report);
     showDrawer();
-  }
+  };
 
   const onClickReport = () => {
     addMarker(mapInstance, mapApi);
-  }
+  };
 
   const onClickConfirm = () => {
     showModal();
     removeMarker();
-  }
-  
+  };
+
   const handleApiLoaded = (map, maps) => {
     if (map && maps) {
       setMapInstance(map);
@@ -167,52 +166,60 @@ export default function Main(){
   /* Carregando as denúncias */
   useEffect(() => {
     loadReports();
-    return () => {mounted.current = false} 
+    return () => {
+      mounted.current = false;
+    };
   }, [loadReports]);
 
   /* Atualiza o endereço */
-  useEffect(( () => {
+  useEffect(() => {
     latLngToAddress(currentLocation);
-  }), [currentLocation, latLngToAddress]);
+  }, [currentLocation, latLngToAddress]);
 
   return (
     <Layout>
       <Map handleApiLoaded={handleApiLoaded}>
-        {!isLoading && !errors && reports.map((report, key) => (
-          <Marker
-            key={key}
-            lat={report.lat}
-            lng={report.lng}
-            report={report}
-            onClick={onClickMarker}            
-          />
-        ))}
+        {!isLoading &&
+          !errors &&
+          reports.map((report, key) => (
+            <Marker
+              key={key}
+              lat={report.lat}
+              lng={report.lng}
+              report={report}
+              onClick={onClickMarker}
+            />
+          ))}
       </Map>
-      {!modalVisible &&
-        <AddButton       
-          mapInstance={mapInstance} 
-          onClick={onClickReport} 
+      {!modalVisible && isAuthenticated() && (
+        <AddButton
+          mapInstance={mapInstance}
+          onClick={onClickReport}
           onClickConfirm={onClickConfirm}
         />
-      }      
-      {apiReady && <SearchBox map={mapInstance} mapApi={mapApi} addplace={setPlaces} />}
-      
-      {!isLoading &&
-      <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>        
-        <Report lat={currentLocation.lat} 
-                lng={currentLocation.lng} 
-                address={address}
-                onFinish={onFinishForm}
-        />
-      </Modal>}   
-      
+      )}
+      {apiReady && (
+        <SearchBox map={mapInstance} mapApi={mapApi} addplace={setPlaces} />
+      )}
+
+      {!isLoading && (
+        <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>
+          <Report
+            lat={currentLocation.lat}
+            lng={currentLocation.lng}
+            address={address}
+            onFinish={onFinishForm}
+          />
+        </Modal>
+      )}
+
       <Drawer
         title="Informações sobre a denúncia"
         placement="bottom"
         closable={false}
         onClose={hideDrawer}
         visible={drawerVisible}
-        footer ={
+        footer={
           <div>
             <Button onClick={hideDrawer} style={{ marginRight: 8 }}>
               Fechar
@@ -223,14 +230,17 @@ export default function Main(){
           </div>
         }
       >
-        { !isLoading && !errors && <>
-          <p>{currentReport.address}</p>
-          <p>Raça/Espécie: {currentReport.animal} 
-            {currentReport.breeds && " | " + currentReport.breeds}</p>
-          <p>Situação: {currentReport.status} </p>
-        </>}
+        {!isLoading && !errors && (
+          <>
+            <p>{currentReport.address}</p>
+            <p>
+              Raça/Espécie: {currentReport.animal}
+              {currentReport.breeds && " | " + currentReport.breeds}
+            </p>
+            <p>Situação: {currentReport.status} </p>
+          </>
+        )}
       </Drawer>
-    
     </Layout>
   );
 }
