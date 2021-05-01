@@ -9,45 +9,45 @@ import { postSignUp } from "../../services/index";
 import './styles.css';
 
 export default function SignUp() {
-  const [isLoading, setIsLoading] = useState(false);
-  const mounted = useRef(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const mounted = useRef(true);
 
-  const [form] = Form.useForm();
+    const [form] = Form.useForm();
 
-  const checkMatchingPasswords = (rule, value, callback) => {
-    const password = form.getFieldValue('password');
-    const passwordConfirmation = form.getFieldValue('passwordConfirmation');
+    const checkMatchingPasswords = (rule, value, callback) => {
+        const password = form.getFieldValue('password');
+        const passwordConfirmation = form.getFieldValue('passwordConfirmation');
 
-    if (value && password !== passwordConfirmation) {
-      callback("As senhas digitadas não correspondem. Por favor, digite novamente.");
+        if (value && password !== passwordConfirmation) {
+            callback("As senhas digitadas não correspondem. Por favor, digite novamente.");
+        }
+        else
+            callback();
     }
-    else
-      callback();
-  }
 
     const handleSubmit = async e => {
-      setIsLoading(true);
+        setIsLoading(true);
 
-      const obj = {
-          nome: e.name,
-          email: e.email,
-          password: e.password
-      }
+        const obj = {
+            nome: e.name,
+            email: e.email,
+            password: e.password
+        }
 
-      try {
-        await postSignUp(obj);
-        
-        if(mounted.current){
-          console.log("Trocar de página");
+        try {
+            await postSignUp(obj);
+
+            if (mounted.current) {
+                console.log("Trocar de página");
+            }
+        } catch (error) {
+            if (mounted.current) {
+                console.log("Erro ao tentar cadastrar um novo usuário");
+                console.log(error);
+                form.resetFields();
+            }
         }
-      } catch(error){
-        if(mounted.current){
-          console.log("Erro ao tentar cadastrar um novo usuário");
-          console.log(error);
-          form.resetFields();
-        }
-      }
-      setIsLoading(false);      
+        setIsLoading(false);
     }
 
     return (
@@ -66,7 +66,7 @@ export default function SignUp() {
                             rules={[{ required: true, message: 'Por favor, digite o seu nome completo.' }]}
                         >
                             <Input
-                                prefix={<UserOutlined/>}
+                                prefix={<UserOutlined />}
                                 placeholder="Nome completo"
                                 disabled={isLoading}
                             />
@@ -77,7 +77,7 @@ export default function SignUp() {
                             name="email"
                             rules={[{ required: true, message: 'Por favor, digite o seu endereço de e-mail.' }]}
                         >
-                            <Input 
+                            <Input
                                 type="email"
                                 prefix={<MailOutlined />}
                                 placeholder="Endereço de e-mail"
@@ -94,7 +94,7 @@ export default function SignUp() {
                             ]}
                             hasFeedback
                         >
-                            <Input.Password 
+                            <Input.Password
                                 prefix={<LockOutlined />}
                                 placeholder="Senha"
                                 disabled={isLoading}
@@ -111,23 +111,23 @@ export default function SignUp() {
                             dependencies={['password']}
                             hasFeedback
                         >
-                            <Input.Password 
+                            <Input.Password
                                 prefix={<LockOutlined />}
                                 placeholder="Confirmar senha"
                                 disabled={isLoading}
                             />
-                                Já possui uma conta? <a href="">Faça login.</a>
                         </Form.Item>
                         <Form.Item>
-                            <Button 
-                              type="primary" 
-                              htmlType="submit" 
-                              className="signup-button" 
-                              loading={isLoading}
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                className="signup-button"
+                                loading={isLoading}
                             >
-                              Cadastrar
-                            </Button>
+                                Cadastrar
+                </Button>
                         </Form.Item>
+                        Já possui uma conta? <a href="">Faça login.</a>
                     </div>
                 </Form>
             </div>

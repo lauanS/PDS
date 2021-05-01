@@ -1,5 +1,7 @@
 #SignUp {
     padding: 10px;
+    min-width: 350px;
+    width: 500px;
     max-width: 800px;
 }
 
