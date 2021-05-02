@@ -1,20 +1,21 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext} from "react";
 import { useHistory } from "react-router";
 
 import { Form, Input, Button, Checkbox } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
-import Layout from "../../components/Layout/index";
-
 import { postSignIn } from "../../services/index";
-import { login } from "../../services/auth";
+
+import { Context } from "../../context/authContext";
+
 import "./styles.css";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const mounted = useRef(true);
-
+  const { handleLogin } = useContext(Context);
+  
   let history = useHistory();
   const [form] = Form.useForm();
 
@@ -30,7 +31,7 @@ export default function Login() {
       const res = await postSignIn(obj);
 
       if (mounted.current) {
-        login(res.data.token);
+        handleLogin(res.data.token);
         history.push("/");
       }
     } catch (error) {
@@ -44,7 +45,7 @@ export default function Login() {
   };
 
   return (
-    <Layout>
+    <>
       <div className="container">
         <Form
           name="Login"
@@ -104,6 +105,6 @@ export default function Login() {
           Não possui registro? <Link to="/cadastro"> Cadastre-se!</Link>
         </Form>
       </div>
-    </Layout>
+    </>
   );
 }

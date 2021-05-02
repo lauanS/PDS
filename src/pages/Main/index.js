@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useContext } from "react";
 import { Button, Drawer, Modal } from "antd";
 
 import Map from "../../components/Gmaps/index";
-import Layout from "../../components/Layout/index";
 import Marker from "../../components/Marker/index";
 import SearchBox from "../../components/SearchBox/index";
 import AddButton from "../../components/AddButton/index";
@@ -11,7 +10,7 @@ import Report from "../../components/Report";
 import alertIcon from "../../assets/alert.png";
 
 import { getReports } from "../../services/index";
-import { isAuthenticated } from "../../services/auth";
+import { Context } from "../../context/authContext";
 
 export default function Main() {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -34,6 +33,8 @@ export default function Main() {
   const [isLoading, setIsLoading] = useState(true);
 
   const mounted = useRef(true);
+
+  const { isAuthenticated } = useContext(Context);
 
   const loadReports = useCallback(async () => {
     setIsLoading(true);
@@ -177,7 +178,7 @@ export default function Main() {
   }, [currentLocation, latLngToAddress]);
 
   return (
-    <Layout>
+    <>
       <Map handleApiLoaded={handleApiLoaded}>
         {!isLoading &&
           !errors &&
@@ -241,6 +242,6 @@ export default function Main() {
           </>
         )}
       </Drawer>
-    </Layout>
+    </>
   );
 }

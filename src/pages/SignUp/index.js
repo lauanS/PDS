@@ -5,8 +5,6 @@ import { Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
-import Layout from "../../components/Layout/index";
-
 import { postSignUp } from "../../services/index";
 
 import "./styles.css";
@@ -56,7 +54,7 @@ export default function SignUp() {
   };
 
   return (
-    <Layout>
+    <>
       <div className="container">
         <Form
           name="SignUp"
@@ -149,6 +147,6 @@ export default function SignUp() {
           </div>
         </Form>
       </div>
-    </Layout>
+    </>
   );
 }

@@ -1,26 +1,17 @@
+import { useContext } from 'react';
 import { Layout, Menu } from 'antd';
 import { UploadOutlined, LoginOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+
+import { Context } from '../../context/authContext';
 
 import './styles.css';
-import { isAuthenticated, logout } from '../../services/auth';
-import { useEffect, useState } from 'react';
+
 
 const { Header, Content, Sider } = Layout;
 
 export default function Main_Layout(props) {
-  const [isAuth, setIsAuth] = useState(isAuthenticated());
-  let history = useHistory();
-
-  const onClickLogout = () => {
-    logout();
-    setIsAuth(false);
-    history.push("/");
-  }
-
-  useEffect(() => {
-    setIsAuth(isAuthenticated())
-  }, []);
+  const { isAuthenticated, handleLogout } = useContext(Context);
 
   return(    
   <Layout className="main-layout">
@@ -40,8 +31,8 @@ export default function Main_Layout(props) {
       >
         <div className="logo" />
         <Menu theme="light" mode="inline" defaultSelectedKeys={['1']}>
-          {isAuth ? 
-            <Menu.Item key="1" icon={<LoginOutlined />} onClick={onClickLogout}>
+          {isAuthenticated() ? 
+            <Menu.Item key="1" icon={<LoginOutlined />} onClick={handleLogout}>
               Sair
             </Menu.Item>
             : 

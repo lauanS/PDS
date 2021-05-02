@@ -1,7 +1,7 @@
 export const TOKEN_KEY = "@salvacao-token";
 export const TOKENTIME_KEY = "@salvacao-tokentime"; 
 
-export const isAuthenticated = () => {
+export const isAuth = () => {
   return sessionStorage.getItem(TOKEN_KEY) !== null;
 }
 
