@@ -18,5 +18,9 @@
 
 .content-layout{
   height: 100%;
-  margin: 64px 0 0 0;  /* Margen superior do tamanho do header*/
+  margin: 64px 0 0 0;  /* Margem superior do tamanho do header*/
+}
+
+.sider-layout {
+  z-index: 1;
 }

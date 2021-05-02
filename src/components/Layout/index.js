@@ -19,7 +19,7 @@ export default function Main_Layout(props) {
       SalvaCão
     </Header>
     <Layout className="content-layout">
-      <Sider
+      <Sider className="sider-layout"
         breakpoint="lg"
         collapsedWidth="0"
         onBreakpoint={broken => {

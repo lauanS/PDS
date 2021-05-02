@@ -1,5 +1,7 @@
 #Login {
     padding: 10px;
+    min-width: 350px;
+    max-width: 500px;
 }
 
 .container {

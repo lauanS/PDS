@@ -57,7 +57,7 @@ export default function SignUp() {
     <>
       <div className="container">
         <Form
-          name="SignUp"
+          className="SignUp"
           onFinish={handleSubmit}
           form={form}
           layout="vertical"

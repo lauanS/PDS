@@ -101,8 +101,8 @@ export default function Login() {
                 Entrar
               </Button>
             </Form.Item>
+            Não possui registro? <Link to="/cadastro"> Cadastre-se!</Link>
           </div>
-          Não possui registro? <Link to="/cadastro"> Cadastre-se!</Link>
         </Form>
       </div>
     </>
