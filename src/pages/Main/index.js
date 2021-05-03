@@ -9,7 +9,7 @@ import Report from "../../components/Report";
 
 import alertIcon from "../../assets/alert.png";
 
-import { getReports } from "../../services/index";
+import { getReports, getReportsDev } from "../../services/index";
 import { Context } from "../../context/authContext";
 
 export default function Main() {
@@ -39,9 +39,9 @@ export default function Main() {
   const loadReports = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await getReports();
+      const data = await getReportsDev();
       if (mounted.current) {
-        setReports(response.data);
+        setReports(data);
         setIsLoading(false);
       }
     } catch (error) {
