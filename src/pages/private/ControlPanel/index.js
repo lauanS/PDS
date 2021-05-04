@@ -1,22 +1,19 @@
 import React from "react";
-import { useState, useEffect, useRef, useCallback, useContext } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Table, Input, Space } from "antd";
 import { Link } from "react-router-dom";
 
 import { getReportsDev } from "../../../services/index";
-import { Context } from "../../../context/authContext";
 
 import "./styles.css";
 const { Search } = Input;
 export default function ControlPanel() {
   const [reports, setReports] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
-  const [errors, setErrors] = useState(false);
+  const [  , setErrors] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const mounted = useRef(true);
-
-  const { isAuthenticated } = useContext(Context);
 
   const screenSize = { x: window.innerWidth, y: window.innerHeight };
 
@@ -29,7 +26,7 @@ export default function ControlPanel() {
         data.map((report, key) => {
           report.key = key;
           temp.push(report);
-          return;
+          return key;
         });
         setReports(temp);
         setFilteredReports(temp);
@@ -80,7 +77,7 @@ export default function ControlPanel() {
       title: "Endereço",
       dataIndex: "address",
       key: "address",
-      render: (text) => <Link>{text}</Link>,
+      render: (text) => <Link to="\">{text}</Link>,
     },
     {
       title: "Espécie",
