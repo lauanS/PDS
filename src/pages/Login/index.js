@@ -45,27 +45,27 @@ export default function Login() {
     setIsLoading(false);
   };
 
-  const handleGoogleLogin = async (response) => {
-    const obj = {
-      nome: response.profileObj.name,
-      email: response.profileObj.email,
-      token: response.tokenId,
-    };
-    try {
-     await postGoogleSignIn(obj);
+//   const handleGoogleLogin = async (response) => {
+//     const obj = {
+//       nome: response.profileObj.name,
+//       email: response.profileObj.email,
+//       token: response.tokenId,
+//     };
+//     try {
+//      await postGoogleSignIn(obj);
 
-     if (mounted.current) {
-       history.push("/login");
-     }
-   } catch (error) {
-     if (mounted.current) {
-       console.log("Erro ao tentar cadastrar um novo usuário");
-       console.log(error);
-       form.resetFields();
-     }
-   }
-   setIsLoading(false);
- }
+//      if (mounted.current) {
+//        history.push("/login");
+//      }
+//    } catch (error) {
+//      if (mounted.current) {
+//        console.log("Erro ao tentar cadastrar um novo usuário");
+//        console.log(error);
+//        form.resetFields();
+//      }
+//    }
+//    setIsLoading(false);
+//  }
 
   return (
     <>
