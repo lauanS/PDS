@@ -1,0 +1,18 @@
+.spin-container{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-container{
+  padding: 20px;
+  max-height: 70vh;
+}
+
+.table-reports{
+  max-width: 100%;
+}
+.search-title{
+  margin: 0px;
+}
