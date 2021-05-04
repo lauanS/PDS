@@ -1,9 +1,11 @@
-import React, { useState, useRef, useContext} from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useHistory } from "react-router";
 
 import { Form, Input, Button, Checkbox } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+
+import { GoogleLogin } from 'react-google-login';
 
 import { postSignIn } from "../../services/index";
 
@@ -15,7 +17,6 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const mounted = useRef(true);
   const { handleLogin } = useContext(Context);
-  
   let history = useHistory();
   const [form] = Form.useForm();
 
@@ -43,6 +44,28 @@ export default function Login() {
     }
     setIsLoading(false);
   };
+
+  const handleGoogleLogin = async (response) => {
+    const obj = {
+      nome: response.profileObj.name,
+      email: response.profileObj.email,
+      token: response.tokenId,
+    };
+    try {
+     await postGoogleSignIn(obj);
+
+     if (mounted.current) {
+       history.push("/login");
+     }
+   } catch (error) {
+     if (mounted.current) {
+       console.log("Erro ao tentar cadastrar um novo usuário");
+       console.log(error);
+       form.resetFields();
+     }
+   }
+   setIsLoading(false);
+ }
 
   return (
     <>
@@ -102,6 +125,20 @@ export default function Login() {
               </Button>
             </Form.Item>
             Não possui registro? <Link to="/cadastro"> Cadastre-se!</Link>
+            <div className="separator">
+              <div className="horizontal-bar"></div>
+              <h4>OU</h4>
+              <div className="horizontal-bar"></div>
+            </div>
+            <div className="google-login">
+              <GoogleLogin
+                clientId="316764013062-k4otr5duv097p0rivipquavfhsdbckcd.apps.googleusercontent.com"
+                buttonText="Entre com Google"
+                //isSignedIn={true} //Manter logado
+                theme="dark"
+                cookiePolicy={'single_host_origin'}
+              />
+            </div>
           </div>
         </Form>
       </div>

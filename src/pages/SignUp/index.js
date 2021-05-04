@@ -5,7 +5,9 @@ import { Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
-import { postSignUp } from "../../services/index";
+import { GoogleLogin } from 'react-google-login';
+
+import { postSignUp, postGoogleSignIn } from "../../services/index";
 
 import "./styles.css";
 
@@ -52,6 +54,28 @@ export default function SignUp() {
     }
     setIsLoading(false);
   };
+
+   const handleGoogleLogin = async (response) => {
+     const obj = {
+       nome: response.profileObj.name,
+       email: response.profileObj.email,
+       token: response.tokenId,
+     };
+     try {
+      await postGoogleSignIn(obj);
+
+      if (mounted.current) {
+        history.push("/login");
+      }
+    } catch (error) {
+      if (mounted.current) {
+        console.log("Erro ao tentar cadastrar um novo usuário");
+        console.log(error);
+        form.resetFields();
+      }
+    }
+    setIsLoading(false);
+  }
 
   return (
     <>
@@ -133,7 +157,7 @@ export default function SignUp() {
                 disabled={isLoading}
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item className="form-item-button">
               <Button
                 type="primary"
                 htmlType="submit"
@@ -144,6 +168,21 @@ export default function SignUp() {
               </Button>
             </Form.Item>
             Já possui uma conta? <Link to="/login"> Faça login.</Link>
+            <div className="separator">
+              <div className="horizontal-bar"></div>
+              <h4>OU</h4>
+              <div className="horizontal-bar"></div>
+            </div>
+            <div className="google-login">
+              <GoogleLogin
+                clientId="316764013062-k4otr5duv097p0rivipquavfhsdbckcd.apps.googleusercontent.com"
+                buttonText="Registre-se com Google"
+                //isSignedIn={true} //Manter logado
+                onSuccess={handleGoogleLogin}
+                theme="dark"
+                cookiePolicy={'single_host_origin'}
+              />
+            </div>
           </div>
         </Form>
       </div>

@@ -9,7 +9,7 @@ function AuthProvider({ children }) {
 
   const isAuthenticated  = () => {
     if(isAuth() !== authenticated){
-      console.debug("Erro inesperado -> Autentificação em dois estados diferentes");
+      console.debug("Erro inesperado -> Autenticação em dois estados diferentes");
     }
     return authenticated;
   };

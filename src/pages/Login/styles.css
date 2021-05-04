@@ -1,28 +1,48 @@
 #Login {
-    padding: 10px;
-    min-width: 350px;
-    max-width: 500px;
+  padding: 10px;
+  min-width: 350px;
+  max-width: 500px;
+  margin-bottom: 0px
 }
 
 .container {
-    height: 80vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-form {
-    width: 500px;
+  width: 500px;
 }
 
 .login-form-button {
-    width: 100%;
+  width: 100%;
 }
 
 .login-form .form-container {
-    background-color: #F8F9FA;
-    border: 0.3px solid #C6CDD4;
-    border-radius: 20px;
-    padding: 25px;
-    margin: auto;
+  background-color: #F8F9FA;
+  border: 0.3px solid #C6CDD4;
+  border-radius: 20px;
+  padding: 25px;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+}
+
+.separator h4 {
+  padding: 0 10px;
+}
+
+.separator .horizontal-bar {
+  flex: 1;
+  height: 0.5px;
+  background-color: rgb(95, 95, 95);
+}
+
+.google-login {
+  text-align: center;
+  display: block;
 }
