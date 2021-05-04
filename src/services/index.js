@@ -1,3 +1,4 @@
+import { ConsoleSqlOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { getToken } from "./auth";
 
@@ -87,6 +88,12 @@ export async function postSignUp(signUp){
   await delay(2000);
   console.log("ok");
   return;
+}
+
+export async function postGoogleSignIn(signIn) {
+  console.log("Login via Google: ", signIn);
+  await delay(2000);
+  return { data: { token: signIn.token }};
 }
 
 /******** útil ********/
