@@ -12,6 +12,7 @@ import alertIcon from "../../assets/alert.png";
 import { getReports} from "../../services/index";
 // import {deleteReport } from "../../services/index";
 import { Context } from "../../context/authContext";
+import { errorMsg } from "../../utils/errorMessage";
 
 export default function Main() {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -50,10 +51,13 @@ export default function Main() {
         console.log(error);
         setIsLoading(false);
         setErrors(true);
+        errorMsg("Erro ao carregar as denúncias")
       }
     }
     return;
   }, []);
+
+
 
   const latLngToAddress = useCallback(
     async (latlng) => {

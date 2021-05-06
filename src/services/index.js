@@ -85,11 +85,37 @@ export async function postSignIn(signIn){
   return { data: { token: "TOKEN"} };
 }
 
+export async function postSignInDev(signIn){
+  const obj = {
+    email: signIn.email,
+    password: signIn.password
+  }
+
+  const response = await api.post('/authenticate', obj);
+  const data = response.data;
+
+
+  return { data: { token: data.jwt} };
+}
+
 export async function postSignUp(signUp){
   console.log("Novo cadastro: ", signUp);
   console.log("...");
   await delay(2000);
   console.log("ok");
+  return;
+}
+
+export async function postSignUpDev(signUp){
+  const obj = {
+    nome: signUp.name,
+    email: signUp.email,
+    password: signUp.password
+  }
+
+  const response = await api.post('/cadastro', obj);
+  const data = response.data;
+
   return;
 }
 

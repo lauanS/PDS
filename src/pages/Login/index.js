@@ -7,11 +7,12 @@ import { Link } from "react-router-dom";
 
 import { GoogleLogin } from 'react-google-login';
 
-import { postSignIn } from "../../services/index";
+import { postSignIn, postGoogleSignIn } from "../../services/index";
 
 import { Context } from "../../context/authContext";
 
 import "./styles.css";
+import { errorMsg } from "../../utils/errorMessage";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,32 +41,37 @@ export default function Login() {
         console.log("Erro ao realizar o login");
         console.log(error);
         form.resetFields();
+        errorMsg("Erro ao realizar login");
       }
     }
     setIsLoading(false);
   };
 
-//   const handleGoogleLogin = async (response) => {
-//     const obj = {
-//       nome: response.profileObj.name,
-//       email: response.profileObj.email,
-//       token: response.tokenId,
-//     };
-//     try {
-//      await postGoogleSignIn(obj);
+  const handleGoogleLogin = async (response) => {
+    const obj = {
+      nome: response.profileObj.name,
+      email: response.profileObj.email,
+      token: response.tokenId,
+    };
+    try {
+      await postGoogleSignIn(obj);
 
-//      if (mounted.current) {
-//        history.push("/login");
-//      }
-//    } catch (error) {
-//      if (mounted.current) {
-//        console.log("Erro ao tentar cadastrar um novo usuário");
-//        console.log(error);
-//        form.resetFields();
-//      }
-//    }
-//    setIsLoading(false);
-//  }
+      if (mounted.current) {
+        history.push("/");
+      }
+    } catch (error) {
+      if (mounted.current) {
+        console.log("Erro ao tentar cadastrar um novo usuário");
+        console.log(error);
+        form.resetFields();
+      }
+    }
+    setIsLoading(false);
+  }
+
+  const errorGoogleLogin = () => {
+    errorMsg("Não foi possível completar o login pelo google");
+  }
 
   return (
     <>
@@ -134,6 +140,8 @@ export default function Login() {
               <GoogleLogin
                 clientId="316764013062-k4otr5duv097p0rivipquavfhsdbckcd.apps.googleusercontent.com"
                 buttonText="Entre com Google"
+                onSuccess={handleGoogleLogin}
+                onFailure={errorGoogleLogin}
                 //isSignedIn={true} //Manter logado
                 theme="dark"
                 cookiePolicy={'single_host_origin'}

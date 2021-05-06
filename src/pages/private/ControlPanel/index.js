@@ -6,7 +6,10 @@ import { Link } from "react-router-dom";
 import { getReports } from "../../../services/index";
 
 import "./styles.css";
+import { errorMsg } from "../../../utils/errorMessage";
+
 const { Search } = Input;
+
 export default function ControlPanel() {
   const [reports, setReports] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
@@ -37,6 +40,7 @@ export default function ControlPanel() {
         console.log(error);
         setIsLoading(false);
         setErrors(true);
+        errorMsg("Erro ao carregar as denúncias");
       }
     }
     return;

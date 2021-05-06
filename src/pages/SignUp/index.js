@@ -10,6 +10,7 @@ import { GoogleLogin } from 'react-google-login';
 import { postSignUp, postGoogleSignIn } from "../../services/index";
 
 import "./styles.css";
+import { errorMsg } from "../../utils/errorMessage";
 
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +35,7 @@ export default function SignUp() {
     setIsLoading(true);
 
     const obj = {
-      nome: e.name,
+      name: e.name,
       email: e.email,
       password: e.password,
     };
@@ -50,6 +51,7 @@ export default function SignUp() {
         console.log("Erro ao tentar cadastrar um novo usuário");
         console.log(error);
         form.resetFields();
+        errorMsg("Não foi possível realizar o cadastro");
       }
     }
     setIsLoading(false);
@@ -57,7 +59,7 @@ export default function SignUp() {
 
    const handleGoogleLogin = async (response) => {
      const obj = {
-       nome: response.profileObj.name,
+       name: response.profileObj.name,
        email: response.profileObj.email,
        token: response.tokenId,
      };
@@ -65,13 +67,14 @@ export default function SignUp() {
       await postGoogleSignIn(obj);
 
       if (mounted.current) {
-        history.push("/login");
+        history.push("/");
       }
     } catch (error) {
       if (mounted.current) {
         console.log("Erro ao tentar cadastrar um novo usuário");
         console.log(error);
         form.resetFields();
+        errorMsg("Não foi possível realizar o cadastro pelo Google");
       }
     }
     setIsLoading(false);
