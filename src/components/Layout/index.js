@@ -11,7 +11,7 @@ import {
 
 import { Layout, Menu } from "antd";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { Context } from "../../context/authContext";
 
@@ -23,6 +23,7 @@ const { Header, Content, Sider } = Layout;
 export default function Main_Layout(props) {
   const [collapsed, setCollapsed] = useState(true);
   const { isAuthenticated, isAdmin, handleLogout } = useContext(Context);
+  let history = useHistory();
 
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
@@ -32,6 +33,11 @@ export default function Main_Layout(props) {
     if(!collapsed){
       setCollapsed(true);
     }
+  }
+
+  const onClickLogout = () => {
+    handleLogout();
+    history.push("/");
   }
 
   const MenuFoldIcon = collapsed? MenuUnfoldOutlined: MenuFoldOutlined;
@@ -68,7 +74,7 @@ export default function Main_Layout(props) {
               <Menu.Item
                 key="1"
                 icon={<LogoutOutlined />}
-                onClick={handleLogout}
+                onClick={onClickLogout}
               >
                 Sair
               </Menu.Item>
