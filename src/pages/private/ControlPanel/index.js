@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Table, Input, Space } from "antd";
 import { Link } from "react-router-dom";
 
-import { getReportsDev } from "../../../services/index";
+import { getReports } from "../../../services/index";
 
 import "./styles.css";
 const { Search } = Input;
@@ -20,7 +20,7 @@ export default function ControlPanel() {
   const loadReports = useCallback(async () => {
     setIsLoading(true);
     try {
-      const data = await getReportsDev();
+      const data = await getReports();
       if (mounted.current) {
         let temp = [];
         data.map((report, key) => {

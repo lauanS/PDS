@@ -9,7 +9,8 @@ import Report from "../../components/Report";
 
 import alertIcon from "../../assets/alert.png";
 
-import { getReports, deleteReport } from "../../services/index";
+import { getReports} from "../../services/index";
+// import {deleteReport } from "../../services/index";
 import { Context } from "../../context/authContext";
 
 export default function Main() {
@@ -17,7 +18,7 @@ export default function Main() {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [currentReport, setCurrentReport] = useState({});
-  const [currentLocation, setCurrentLocation] = useState({ lat: 0, lng: 0 });
+  const [currentLocation, setCurrentLocation] = useState({ lat: -23.5532481, lng: -46.6402224 });
 
   const [mapInstance, setMapInstance] = useState(false);
   const [mapApi, setMapApi] = useState(false);
@@ -56,28 +57,31 @@ export default function Main() {
 
   const latLngToAddress = useCallback(
     async (latlng) => {
-      if (latlng.lat === 0) {
-        return "Without address";
-      }
-
-      const geocoder = new mapApi.Geocoder();
-      await geocoder.geocode({ location: latlng }, (results, status) => {
-        if (status === "OK") {
-          if (results[0]) {
-            setAddress(results[0].formatted_address);
+      if(apiReady){
+        console.log("API READY");
+        if (latlng.lat === 0) {
+          return "Without address";
+        }
+  
+        const geocoder = new mapApi.Geocoder();
+        await geocoder.geocode({ location: latlng }, (results, status) => {
+          if (status === "OK") {
+            if (results[0]) {
+              setAddress(results[0].formatted_address);
+            } else {
+              setErrors(true);
+              console.log("No results found");
+              setAddress("Endereço não encontrado");
+            }
           } else {
             setErrors(true);
-            console.log("No results found");
-            setAddress("Endereço não encontrado");
+            console.log("Geocoder failed due to: " + status);
+            setAddress("Erro ao buscar o endereço");
           }
-        } else {
-          setErrors(true);
-          console.log("Geocoder failed due to: " + status);
-          setAddress("Erro ao buscar o endereço");
-        }
-      });
+        });        
+      }
     },
-    [mapApi]
+    [mapApi, apiReady]
   );
 
   const addMarker = (map, maps) => {
@@ -109,18 +113,6 @@ export default function Main() {
     setMarker(null);
   };
 
-  const getBrowserLocation = () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        console.log({
-          center: [position.coords.latitude, position.coords.longitude],
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      });
-    }
-  };
-
   const showModal = () => {
     setModalVisible(true);
   };
@@ -143,18 +135,18 @@ export default function Main() {
     setDrawerVisible(false);
   };
 
-  const onClickDeleteReport = async () => {
-    try {
-      const response = await deleteReport(currentReport.id);
-      if(mounted.current){
-        hideDrawer();
-        return response;
-      }
-    } catch (error) {
-      console.log(error);
-      return;
-    }
-  };
+  // const onClickDeleteReport = async () => {
+  //   try {
+  //     const response = await deleteReport(currentReport.id);
+  //     if(mounted.current){
+  //       hideDrawer();
+  //       return response;
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     return;
+  //   }
+  // };
 
   /* */
   const onClickMarker = (report) => {    
@@ -176,6 +168,16 @@ export default function Main() {
       setMapInstance(map);
       setMapApi(maps);
       setApiReady(true);
+    }
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const browserLocation = {
+          lat: position.coords.latitude, 
+          lng: position.coords.longitude
+        };
+        map.setCenter(browserLocation);      
+        setCurrentLocation(browserLocation);
+      });
     }
   };
 
@@ -240,8 +242,8 @@ export default function Main() {
             <Button onClick={hideDrawer} style={{ marginRight: 8 }}>
               Fechar
             </Button>
-            <Button onClick={onClickDeleteReport} type="primary">
-              Excluir caso
+            <Button onClick={hideDrawer} type="primary">
+              Abrir caso
             </Button>
           </div>
         }
