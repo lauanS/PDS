@@ -1,4 +1,3 @@
-import { ConsoleSqlOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { getToken } from "./auth";
 
@@ -9,29 +8,33 @@ const api = axios.create({
 /* Adicionando o token de autenticação no cabeçalho de cada request */
 api.interceptors.request.use(async config => {
   const token = getToken();
-  if (token) {
+  if (token && token !== "TOKEN") {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
+
 /******** Denúncias ********/
 export async function getReports(){
   const response = await api.get('/denuncias');
-  const report = response.data;
-  console.log(response);
-
-  const obj = {
-    "description": report.descricao,
-    "address": report.endereco,
-    "animal": report.especie,
-    "breeds": report.raca,
-    "status": report.status,
-    "isAnonymous": report.indAnonimo,
-    "lat": report.longitude,
-    "lng": report.latitude,
-  }
-
-  return obj;
+  const reports = response.data;
+  
+  
+  const data = reports.map((report, key) => {
+    return {
+      "id": report.id,
+      "description": report.descricao,
+      "address": report.endereco,
+      "animal": report.especie,
+      "breeds": report.raca,
+      "status": report.status,
+      "isAnonymous": report.indAnonimo,
+      "lat": report.latitude,
+      "lng": report.longitude,
+    }
+  });
+  console.log(data);
+  return data;
 }
 
 export async function postReport(report){
@@ -42,8 +45,8 @@ export async function postReport(report){
     "raca": report.breeds,
     "status": report.status,
     "indAnonimo": report.isAnonymous,
-    "longitude": report.lat,
-    "latitude": report.lng
+    "longitude": report.lng,
+    "latitude": report.lat
   }
   return api.post('/denuncias', obj);
 }
@@ -53,7 +56,7 @@ export async function putReport(id){
 }
 
 export async function deleteReport(id){
-  return;
+  return api.delete('/denuncias/' + id);  
 }
 
 /******** Denúncias JSON SERVER ********/

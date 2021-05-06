@@ -9,7 +9,7 @@ import Report from "../../components/Report";
 
 import alertIcon from "../../assets/alert.png";
 
-import { getReports, getReportsDev } from "../../services/index";
+import { getReports, deleteReport } from "../../services/index";
 import { Context } from "../../context/authContext";
 
 export default function Main() {
@@ -39,7 +39,7 @@ export default function Main() {
   const loadReports = useCallback(async () => {
     setIsLoading(true);
     try {
-      const data = await getReportsDev();
+      const data = await getReports();
       if (mounted.current) {
         setReports(data);
         setIsLoading(false);
@@ -134,6 +134,7 @@ export default function Main() {
     await loadReports();
   };
 
+  /* Funções para manipulação do drawer*/
   const showDrawer = () => {
     setDrawerVisible(true);
   };
@@ -142,7 +143,21 @@ export default function Main() {
     setDrawerVisible(false);
   };
 
-  const onClickMarker = (report) => {
+  const onClickDeleteReport = async () => {
+    try {
+      const response = await deleteReport(currentReport.id);
+      if(mounted.current){
+        hideDrawer();
+        return response;
+      }
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  };
+
+  /* */
+  const onClickMarker = (report) => {    
     setCurrentReport(report);
     showDrawer();
   };
@@ -192,7 +207,7 @@ export default function Main() {
             />
           ))}
       </Map>
-      {!modalVisible && isAuthenticated() && (
+      {!modalVisible && !drawerVisible && isAuthenticated() && (
         <AddButton
           mapInstance={mapInstance}
           onClick={onClickReport}
@@ -225,8 +240,8 @@ export default function Main() {
             <Button onClick={hideDrawer} style={{ marginRight: 8 }}>
               Fechar
             </Button>
-            <Button onClick={null} type="primary">
-              Abrir caso
+            <Button onClick={onClickDeleteReport} type="primary">
+              Excluir caso
             </Button>
           </div>
         }
