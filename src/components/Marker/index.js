@@ -4,14 +4,19 @@ import { Button } from 'antd';
 import './styles.css';
 
 export default function Marker(props){  
-  const { onClick }  = props;
+  const { onClick, report }  = props;
+
+  const handleClick = () =>{
+    onClick(report);
+  }
+  
   return (
     <>
     <Button
       shape="circle" 
       icon={<EnvironmentTwoTone twoToneColor="#F24C27" />}
       background-color = "#FFF587"
-      onClick={onClick}
+      onClick={handleClick}
     >      
     </Button>
     </>
