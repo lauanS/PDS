@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getToken } from "./auth";
-
+import { statusCharToString, statusStringToChar } from "../utils/statusConverter";
 const api = axios.create({
   baseURL: process.env.REACT_APP_SERVER_BASE_URL
 });
@@ -27,7 +27,7 @@ export async function getReports(){
       "address": report.endereco,
       "animal": report.especie,
       "breeds": report.raca,
-      "status": report.status,
+      "status": statusCharToString(report.status),
       "isAnonymous": report.indAnonimo,
       "lat": report.latitude,
       "lng": report.longitude,
@@ -43,7 +43,7 @@ export async function postReport(report){
     "endereco": report.address,
     "especie": report.animal,
     "raca": report.breeds,
-    "status": report.status,
+    "status": statusStringToChar(report.status),
     "indAnonimo": report.isAnonymous,
     "longitude": report.lng,
     "latitude": report.lat

@@ -17,7 +17,7 @@ export default function Report(props){
       lng:lng,
       date: 'X',            
       animal:e.animal,
-      breeds:e.breeds,
+      breeds:e.breeds ? e.breeds : null,
       address: e.address,
       description: e.description,
       status: 'opened',

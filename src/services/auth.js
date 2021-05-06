@@ -9,6 +9,10 @@ export const getToken = () => {
   return sessionStorage.getItem(TOKEN_KEY);
 }
 
+export const isAdministrator = () => {
+  return isAuth();
+}
+
 export const login = token => {
   console.log("Login realizado com sucesso");
   sessionStorage.setItem(TOKEN_KEY, token);
@@ -16,5 +20,5 @@ export const login = token => {
 };
 
 export const logout = () => {
-  localStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(TOKEN_KEY);
 };
