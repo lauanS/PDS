@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "SalvaCão",
+  "name": "SalvaCão - Sistema de Denúncias de Maus Tratos a Animais",
   "icons": [
     {
       "src": "favicon.ico",
