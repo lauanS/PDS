@@ -8,12 +8,16 @@ import { getReports } from "../../../services/index";
 import { statusTranslate } from "../../../utils/statusConverter";
 
 import "./styles.css";
+import ModalViewReport from "../../../components/ViewReport/Modal";
 
 const { Search } = Input;
 
 export default function ControlPanel() {
   const [reports, setReports] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
+  const [currentReport, setCurrentReport] = useState({});
+  const [modalReportVisible, setModalReportVisible] = useState(false);
+
   const [  , setErrors] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,6 +55,11 @@ export default function ControlPanel() {
     searchReports(reports, value);
   };
 
+  const showReportModal = (data) => {
+    setCurrentReport(data)
+    setModalReportVisible(true);
+  };
+
   const updateSearch = (e) => {
     setFilteredReports(searchReports(reports, e.target.value) || []);
   };
@@ -82,7 +91,7 @@ export default function ControlPanel() {
       title: "Endereço",
       dataIndex: "address",
       key: "address",
-      render: (text) => <Link to="\">{text}</Link>,
+      render: (text) => <p>{text}</p>,
     },
     {
       title: "Espécie",
@@ -119,9 +128,17 @@ export default function ControlPanel() {
             bordered
             tableLayout="auto"
             className="table-reports"
+            onRow={(record, rowIndex) => {
+              return { onClick: event => { showReportModal(record) }}
+            }}
           />
         </Space>
       </div>
+      <ModalViewReport
+        report={currentReport}
+        modalVisible={modalReportVisible}
+        setModalVisible={setModalReportVisible}
+      />
     </>
   );
 }
