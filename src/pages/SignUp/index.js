@@ -5,7 +5,7 @@ import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin } from "react-google-login";
 
 import { postSignUp, postGoogleSignIn } from "../../services/index";
 
@@ -45,31 +45,33 @@ export default function SignUp() {
     try {
       console.log(await postSignUp(obj));
 
-      if (mounted.current) {        
-        message.success("Cadastro realizado com sucesso", 2)
-        .then(() => history.push("/login"));        
+      if (mounted.current) {
+        message
+          .success("Cadastro/Login realizado com sucesso", 2)
+          .then(() => history.push("/login"));
       }
     } catch (error) {
       if (mounted.current) {
         message.error("Não foi possível completar o cadastro");
       }
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
-   const handleGoogleLogin = async (response) => {
-     const obj = {
-       name: response.profileObj.name,
-       email: response.profileObj.email,
-       token: response.tokenId,
-     };
-     try {
-      await postGoogleSignIn(obj);
+  const handleGoogleLogin = async (response) => {
+    const obj = {
+      name: response.profileObj.name,
+      email: response.profileObj.email,
+      token: response.tokenId,
+    };
+    try {
+      const data = await postGoogleSignIn(obj);
 
       if (mounted.current) {
-        handleLogin(obj.token);
-        message.success("Cadastro/login realizado com sucesso", 2)
-        .then(() => history.push("/")); 
+        handleLogin(data.token);
+        message
+          .success("Login realizado com sucesso", 2)
+          .then(() => history.push("/"));
       }
     } catch (error) {
       if (mounted.current) {
@@ -78,9 +80,10 @@ export default function SignUp() {
         form.resetFields();
         message.error("Não foi possível realizar o cadastro pelo Google");
       }
+
+      setIsLoading(false);
     }
-    setIsLoading(false);
-  }
+  };
 
   return (
     <>
@@ -185,7 +188,7 @@ export default function SignUp() {
                 //isSignedIn={true} //Manter logado
                 onSuccess={handleGoogleLogin}
                 theme="dark"
-                cookiePolicy={'single_host_origin'}
+                cookiePolicy={"single_host_origin"}
               />
             </div>
           </div>

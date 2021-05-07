@@ -46,8 +46,8 @@ export default function Login() {
         form.resetFields();
         message.error("Erro ao realizar login");
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    }    
   };
 
   const handleGoogleLogin = async (response) => {
@@ -68,10 +68,11 @@ export default function Login() {
       if (mounted.current) {
         console.log("Erro ao tentar cadastrar um novo usuário");
         console.log(error);
+        message.error("Não foi possível realizar o login pelo Google");
         form.resetFields();
       }
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }
 
   const errorGoogleLogin = () => {
