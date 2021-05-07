@@ -1,24 +1,34 @@
-import React, { useState, useEffect, useCallback, useRef, useContext } from "react";
-import { Button, Drawer, Modal } from "antd";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useContext,
+} from "react";
+import { Button, Drawer, Modal, message } from "antd";
 
 import Map from "../../components/Gmaps/index";
 import Marker from "../../components/Marker/index";
 import SearchBox from "../../components/SearchBox/index";
 import AddButton from "../../components/AddButton/index";
 import Report from "../../components/Report";
-
+import ModalViewReport from "../../components/ViewReport/Modal";
 import alertIcon from "../../assets/alert.png";
 
-import { getReports} from "../../services/index";
+import { getReports } from "../../services/index";
 // import {deleteReport } from "../../services/index";
 import { Context } from "../../context/authContext";
 
 export default function Main() {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalReportVisible, setModalReportVisible] = useState(false);
 
   const [currentReport, setCurrentReport] = useState({});
-  const [currentLocation, setCurrentLocation] = useState({ lat: -23.5532481, lng: -46.6402224 });
+  const [currentLocation, setCurrentLocation] = useState({
+    lat: -23.5532481,
+    lng: -46.6402224,
+  });
 
   const [mapInstance, setMapInstance] = useState(false);
   const [mapApi, setMapApi] = useState(false);
@@ -50,6 +60,7 @@ export default function Main() {
         console.log(error);
         setIsLoading(false);
         setErrors(true);
+        message.error("Erro ao carregar as denúncias");
       }
     }
     return;
@@ -57,12 +68,12 @@ export default function Main() {
 
   const latLngToAddress = useCallback(
     async (latlng) => {
-      if(apiReady){
+      if (apiReady) {
         console.log("API READY");
         if (latlng.lat === 0) {
           return "Without address";
         }
-  
+
         const geocoder = new mapApi.Geocoder();
         await geocoder.geocode({ location: latlng }, (results, status) => {
           if (status === "OK") {
@@ -78,7 +89,7 @@ export default function Main() {
             console.log("Geocoder failed due to: " + status);
             setAddress("Erro ao buscar o endereço");
           }
-        });        
+        });
       }
     },
     [mapApi, apiReady]
@@ -121,6 +132,11 @@ export default function Main() {
     setModalVisible(false);
   };
 
+  const showReportModal = () => {
+    setModalReportVisible(true);
+    hideDrawer();
+  };
+
   const onFinishForm = async () => {
     hideModal();
     await loadReports();
@@ -149,7 +165,7 @@ export default function Main() {
   // };
 
   /* */
-  const onClickMarker = (report) => {    
+  const onClickMarker = (report) => {
     setCurrentReport(report);
     showDrawer();
   };
@@ -172,10 +188,10 @@ export default function Main() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         const browserLocation = {
-          lat: position.coords.latitude, 
-          lng: position.coords.longitude
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
         };
-        map.setCenter(browserLocation);      
+        map.setCenter(browserLocation);
         setCurrentLocation(browserLocation);
       });
     }
@@ -209,7 +225,7 @@ export default function Main() {
             />
           ))}
       </Map>
-      {!modalVisible && !drawerVisible && isAuthenticated() && (
+      {!modalVisible && !modalVisible && !drawerVisible && isAuthenticated() && (
         <AddButton
           mapInstance={mapInstance}
           onClick={onClickReport}
@@ -221,7 +237,12 @@ export default function Main() {
       )}
 
       {!isLoading && (
-        <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>
+        <Modal
+          title="Denúncia"
+          visible={modalVisible}
+          onCancel={hideModal}
+          footer={null}
+        >
           <Report
             lat={currentLocation.lat}
             lng={currentLocation.lng}
@@ -242,7 +263,7 @@ export default function Main() {
             <Button onClick={hideDrawer} style={{ marginRight: 8 }}>
               Fechar
             </Button>
-            <Button onClick={hideDrawer} type="primary">
+            <Button onClick={showReportModal} type="primary">
               Abrir caso
             </Button>
           </div>
@@ -259,6 +280,14 @@ export default function Main() {
           </>
         )}
       </Drawer>
+
+      {!modalVisible && 
+        <ModalViewReport
+          report={currentReport}
+          modalVisible={modalReportVisible}
+          setModalVisible={setModalReportVisible}
+        />
+      }
     </>
   );
 }

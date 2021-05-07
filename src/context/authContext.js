@@ -7,6 +7,11 @@ const Context = createContext();
 function AuthProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(isAuth());
 
+  const [adminFlag, setAdminFlag] = useState(false);
+
+  // let adminFlag = false;
+  // const setAdminFlag = (value) => { adminFlag = value };
+  
   const isAuthenticated  = () => {
     if(isAuth() !== authenticated){
       console.debug("isAuth: ", isAuth());
@@ -16,17 +21,18 @@ function AuthProvider({ children }) {
     return authenticated;
   };
 
-  const isAdmin = () => {
-    if(isAuth() !== authenticated){
+  const isAdmin = () => {    
+    if(isAdministrator() !== authenticated){
       console.debug("isAuth: ", isAuth());
       console.debug("authenticated: ", authenticated);
       console.debug("Erro inesperado -> Admin em dois estados diferentes");
     }
-    return isAdministrator();
+    return adminFlag;
   }
 
   const handleLogout = () => {
     logout();
+    setAdminFlag(false);
     setAuthenticated(false);
   };
 
@@ -42,7 +48,7 @@ function AuthProvider({ children }) {
 
 
   return (
-    <Context.Provider value={{ isAuthenticated, isAdmin, handleLogin,  handleLogout}}>
+    <Context.Provider value={{ isAuthenticated, isAdmin, handleLogin,  handleLogout, setAdminFlag}}>
       {children}
     </Context.Provider>
   );

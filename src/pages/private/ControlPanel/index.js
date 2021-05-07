@@ -1,15 +1,22 @@
 import React from "react";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Table, Input, Space } from "antd";
-import { Link } from "react-router-dom";
+import { Table, Input, Space, message } from "antd";
 
 import { getReports } from "../../../services/index";
 
+import { statusTranslate } from "../../../utils/statusConverter";
+
 import "./styles.css";
+import ModalViewReport from "../../../components/ViewReport/Modal";
+
 const { Search } = Input;
+
 export default function ControlPanel() {
   const [reports, setReports] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
+  const [currentReport, setCurrentReport] = useState({});
+  const [modalReportVisible, setModalReportVisible] = useState(false);
+
   const [  , setErrors] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,6 +44,7 @@ export default function ControlPanel() {
         console.log(error);
         setIsLoading(false);
         setErrors(true);
+        message.error("Erro ao carregar as denúncias");
       }
     }
     return;
@@ -44,6 +52,11 @@ export default function ControlPanel() {
 
   const onSearch = (value) => {
     searchReports(reports, value);
+  };
+
+  const showReportModal = (data) => {
+    setCurrentReport(data)
+    setModalReportVisible(true);
   };
 
   const updateSearch = (e) => {
@@ -77,7 +90,7 @@ export default function ControlPanel() {
       title: "Endereço",
       dataIndex: "address",
       key: "address",
-      render: (text) => <Link to="\">{text}</Link>,
+      render: (text) => <p>{text}</p>,
     },
     {
       title: "Espécie",
@@ -86,15 +99,10 @@ export default function ControlPanel() {
       responsive: ["md"],
     },
     {
-      title: "Data",
-      dataIndex: "date",
-      key: "date",
-      responsive: ["md"],
-    },
-    {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (text) => <p>{statusTranslate(text)}</p>
     },
   ];
 
@@ -119,9 +127,17 @@ export default function ControlPanel() {
             bordered
             tableLayout="auto"
             className="table-reports"
+            onRow={(record, rowIndex) => {
+              return { onClick: event => { showReportModal(record) }}
+            }}
           />
         </Space>
       </div>
+      <ModalViewReport
+        report={currentReport}
+        modalVisible={modalReportVisible}
+        setModalVisible={setModalReportVisible}
+      />
     </>
   );
 }

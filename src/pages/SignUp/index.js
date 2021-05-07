@@ -1,13 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useHistory } from "react-router";
 
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 import { GoogleLogin } from 'react-google-login';
 
 import { postSignUp, postGoogleSignIn } from "../../services/index";
+
+import { Context } from "../../context/authContext";
 
 import "./styles.css";
 
@@ -17,6 +19,7 @@ export default function SignUp() {
 
   let history = useHistory();
 
+  const { handleLogin, setAdminFlag } = useContext(Context);
   const [form] = Form.useForm();
 
   const checkMatchingPasswords = (rule, value, callback) => {
@@ -34,22 +37,21 @@ export default function SignUp() {
     setIsLoading(true);
 
     const obj = {
-      nome: e.name,
+      name: e.name,
       email: e.email,
       password: e.password,
     };
 
     try {
-      await postSignUp(obj);
+      console.log(await postSignUp(obj));
 
-      if (mounted.current) {
-        history.push("/login");
+      if (mounted.current) {        
+        message.success("Cadastro realizado com sucesso", 2)
+        .then(() => history.push("/login"));        
       }
     } catch (error) {
       if (mounted.current) {
-        console.log("Erro ao tentar cadastrar um novo usuário");
-        console.log(error);
-        form.resetFields();
+        message.error("Não foi possível completar o cadastro");
       }
     }
     setIsLoading(false);
@@ -57,7 +59,7 @@ export default function SignUp() {
 
    const handleGoogleLogin = async (response) => {
      const obj = {
-       nome: response.profileObj.name,
+       name: response.profileObj.name,
        email: response.profileObj.email,
        token: response.tokenId,
      };
@@ -65,13 +67,16 @@ export default function SignUp() {
       await postGoogleSignIn(obj);
 
       if (mounted.current) {
-        history.push("/login");
+        handleLogin(obj.token);
+        message.success("Cadastro/login realizado com sucesso", 2)
+        .then(() => history.push("/")); 
       }
     } catch (error) {
       if (mounted.current) {
         console.log("Erro ao tentar cadastrar um novo usuário");
         console.log(error);
         form.resetFields();
+        message.error("Não foi possível realizar o cadastro pelo Google");
       }
     }
     setIsLoading(false);
