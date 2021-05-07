@@ -16,7 +16,7 @@ import "./styles.css";
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const mounted = useRef(true);
-  const { handleLogin } = useContext(Context);
+  const { handleLogin, setAdminFlag } = useContext(Context);
   let history = useHistory();
   const [form] = Form.useForm();
 
@@ -33,6 +33,9 @@ export default function Login() {
 
       if (mounted.current) {
         handleLogin(data.token);
+        if(obj.email === "admin@salvacao.com"){
+          setAdminFlag(true);
+        }
         message.success("Login realizado com sucesso", 2)
         .then(() => history.push("/"));        
       }

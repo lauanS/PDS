@@ -93,8 +93,8 @@ export async function postSignUp(signUp){
     email: signUp.email,
     senha: signUp.password
   }
-  const response = await api.post('/cadastro', obj);;
-  return response
+  const response = await api.post('/cadastro', obj);
+  return response;
 }
 
 export async function postGoogleSignIn(signIn) {

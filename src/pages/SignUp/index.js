@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useHistory } from "react-router";
 
 import { Form, Input, Button, message } from "antd";
@@ -9,6 +9,8 @@ import { GoogleLogin } from 'react-google-login';
 
 import { postSignUp, postGoogleSignIn } from "../../services/index";
 
+import { Context } from "../../context/authContext";
+
 import "./styles.css";
 
 export default function SignUp() {
@@ -17,6 +19,7 @@ export default function SignUp() {
 
   let history = useHistory();
 
+  const { handleLogin, setAdminFlag } = useContext(Context);
   const [form] = Form.useForm();
 
   const checkMatchingPasswords = (rule, value, callback) => {
@@ -40,18 +43,15 @@ export default function SignUp() {
     };
 
     try {
-      await postSignUp(obj);
+      console.log(await postSignUp(obj));
 
       if (mounted.current) {        
-        message("Cadastro realizado com sucesso", 2)
+        message.success("Cadastro realizado com sucesso", 2)
         .then(() => history.push("/login"));        
       }
     } catch (error) {
       if (mounted.current) {
-        console.log("Erro ao tentar cadastrar um novo usuário");
-        console.log(error);
-        form.resetFields();
-        message("Não foi possível realizar o cadastro");
+        message.error("Não foi possível completar o cadastro");
       }
     }
     setIsLoading(false);
@@ -67,14 +67,16 @@ export default function SignUp() {
       await postGoogleSignIn(obj);
 
       if (mounted.current) {
-        history.push("/");
+        handleLogin(obj.token);
+        message.success("Cadastro/login realizado com sucesso", 2)
+        .then(() => history.push("/")); 
       }
     } catch (error) {
       if (mounted.current) {
         console.log("Erro ao tentar cadastrar um novo usuário");
         console.log(error);
         form.resetFields();
-        message("Não foi possível realizar o cadastro pelo Google");
+        message.error("Não foi possível realizar o cadastro pelo Google");
       }
     }
     setIsLoading(false);
