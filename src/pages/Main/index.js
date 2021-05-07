@@ -225,7 +225,7 @@ export default function Main() {
             />
           ))}
       </Map>
-      {!modalVisible && !ModalViewReport && !drawerVisible && isAuthenticated() && (
+      {!modalVisible && !modalVisible && !drawerVisible && isAuthenticated() && (
         <AddButton
           mapInstance={mapInstance}
           onClick={onClickReport}
