@@ -46,7 +46,7 @@ export default function SignUp() {
       console.log(await postSignUp(obj));
 
       if (mounted.current) {        
-        message.success("Cadastro realizado com sucesso", 2)
+        message.success("Cadastro/Login realizado com sucesso", 2)
         .then(() => history.push("/login"));        
       }
     } catch (error) {
@@ -58,18 +58,18 @@ export default function SignUp() {
   };
 
    const handleGoogleLogin = async (response) => {
-     const obj = {
-       name: response.profileObj.name,
-       email: response.profileObj.email,
-       token: response.tokenId,
-     };
-     try {
-      await postGoogleSignIn(obj);
+    const obj = {
+      name: response.profileObj.name,
+      email: response.profileObj.email,
+      token: response.tokenId,
+    };
+    try {
+      const data = await postGoogleSignIn(obj);
 
       if (mounted.current) {
-        handleLogin(obj.token);
-        message.success("Cadastro/login realizado com sucesso", 2)
-        .then(() => history.push("/")); 
+        handleLogin(data.token);
+        message.success("Login realizado com sucesso", 2)
+        .then(() => history.push("/"));        
       }
     } catch (error) {
       if (mounted.current) {

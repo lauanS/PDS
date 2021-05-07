@@ -68,6 +68,7 @@ export default function Login() {
       if (mounted.current) {
         console.log("Erro ao tentar cadastrar um novo usuário");
         console.log(error);
+        message.error("Não foi possível realizar o login pelo Google");
         form.resetFields();
       }
     }
