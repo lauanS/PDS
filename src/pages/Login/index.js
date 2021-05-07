@@ -46,8 +46,8 @@ export default function Login() {
         form.resetFields();
         message.error("Erro ao realizar login");
       }
-    }
-    setIsLoading(false);
+      setIsLoading(false);
+    }    
   };
 
   const handleGoogleLogin = async (response) => {
@@ -71,8 +71,8 @@ export default function Login() {
         message.error("Não foi possível realizar o login pelo Google");
         form.resetFields();
       }
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }
 
   const errorGoogleLogin = () => {
