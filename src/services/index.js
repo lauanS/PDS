@@ -86,12 +86,12 @@ export async function postSignIn(signIn){
 }
 
 export async function postSignInDev(signIn){
-  const obj = {
+  const cadastro = {
     email: signIn.email,
-    password: signIn.password
+    senha: signIn.password
   }
 
-  const response = await api.post('/authenticate', obj);
+  const response = await api.post('/authenticate', cadastro);
   const data = response.data;
 
 
@@ -107,13 +107,13 @@ export async function postSignUp(signUp){
 }
 
 export async function postSignUpDev(signUp){
-  const obj = {
+  const authenticate = {
     nome: signUp.name,
     email: signUp.email,
-    password: signUp.password
+    senha: signUp.password
   }
 
-  const response = await api.post('/cadastro', obj);
+  const response = await api.post('/cadastro', authenticate);
   const data = response.data;
 
   return;
