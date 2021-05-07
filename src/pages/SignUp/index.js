@@ -10,7 +10,7 @@ import { GoogleLogin } from 'react-google-login';
 import { postSignUp, postGoogleSignIn } from "../../services/index";
 
 import "./styles.css";
-import { errorMsg } from "../../utils/errorMessage";
+import { errorMsg, successMsg } from "../../utils/messages";
 
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,8 +43,9 @@ export default function SignUp() {
     try {
       await postSignUp(obj);
 
-      if (mounted.current) {
-        history.push("/login");
+      if (mounted.current) {        
+        successMsg("Cadastro realizado com sucesso", 2)
+        .then(() => history.push("/login"));        
       }
     } catch (error) {
       if (mounted.current) {

@@ -78,6 +78,37 @@ export async function deleteReportDev(id){
 
 /******** Login ********/
 export async function postSignIn(signIn){
+  const obj = {
+    email: signIn.email,
+    senha: signIn.password
+  }
+  const response = await api.post('/authenticate', obj);
+  const data = response.data;
+  return { token: data.jwt };
+}
+
+export async function postSignUp(signUp){
+  const obj = {
+    nome: signUp.name,
+    email: signUp.email,
+    senha: signUp.password
+  }
+  const response = await api.post('/cadastro', obj);;
+  return response
+}
+
+export async function postGoogleSignIn(signIn) {
+  const obj = {
+    email: signIn.email,
+    nome: signIn.name
+  }
+  const response = await api.post('/authenticate/google', obj);
+  const data = response.data;
+  return { token: data.jwt };
+}
+
+/******** Funções fake de login e cadastro ********/
+export async function postSignInDev(signIn){
   console.log("Login: ", signIn);
   console.log("...");
   await delay(2000);
@@ -85,20 +116,7 @@ export async function postSignIn(signIn){
   return { data: { token: "TOKEN"} };
 }
 
-export async function postSignInDev(signIn){
-  const cadastro = {
-    email: signIn.email,
-    senha: signIn.password
-  }
-
-  const response = await api.post('/authenticate', cadastro);
-  const data = response.data;
-
-
-  return { data: { token: data.jwt} };
-}
-
-export async function postSignUp(signUp){
+export async function postSignUpDev(signUp){
   console.log("Novo cadastro: ", signUp);
   console.log("...");
   await delay(2000);
@@ -106,20 +124,7 @@ export async function postSignUp(signUp){
   return;
 }
 
-export async function postSignUpDev(signUp){
-  const authenticate = {
-    nome: signUp.name,
-    email: signUp.email,
-    senha: signUp.password
-  }
-
-  const response = await api.post('/cadastro', authenticate);
-  const data = response.data;
-
-  return;
-}
-
-export async function postGoogleSignIn(signIn) {
+export async function postGoogleSignInDev(signIn) {
   console.log("Login via Google: ", signIn);
   await delay(2000);
   return { data: { token: signIn.token }};

@@ -12,7 +12,7 @@ import alertIcon from "../../assets/alert.png";
 import { getReports} from "../../services/index";
 // import {deleteReport } from "../../services/index";
 import { Context } from "../../context/authContext";
-import { errorMsg } from "../../utils/errorMessage";
+import { errorMsg } from "../../utils/messages";
 
 export default function Main() {
   const [drawerVisible, setDrawerVisible] = useState(false);

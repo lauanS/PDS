@@ -12,7 +12,7 @@ import { postSignIn, postGoogleSignIn } from "../../services/index";
 import { Context } from "../../context/authContext";
 
 import "./styles.css";
-import { errorMsg } from "../../utils/errorMessage";
+import { errorMsg, successMsg } from "../../utils/messages";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,11 +30,12 @@ export default function Login() {
     };
 
     try {
-      const res = await postSignIn(obj);
+      const data = await postSignIn(obj);
 
       if (mounted.current) {
-        handleLogin(res.data.token);
-        history.push("/");
+        handleLogin(data.token);
+        successMsg("Login realizado com sucesso", 2)
+        .then(() => history.push("/"));        
       }
     } catch (error) {
       if (mounted.current) {
@@ -49,15 +50,17 @@ export default function Login() {
 
   const handleGoogleLogin = async (response) => {
     const obj = {
-      nome: response.profileObj.name,
+      name: response.profileObj.name,
       email: response.profileObj.email,
       token: response.tokenId,
     };
     try {
-      await postGoogleSignIn(obj);
+      const data = await postGoogleSignIn(obj);
 
       if (mounted.current) {
-        history.push("/");
+        handleLogin(data.token);
+        successMsg("Login realizado com sucesso", 2)
+        .then(() => history.push("/"));        
       }
     } catch (error) {
       if (mounted.current) {

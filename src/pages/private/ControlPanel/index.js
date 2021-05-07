@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { getReports } from "../../../services/index";
 
 import "./styles.css";
-import { errorMsg } from "../../../utils/errorMessage";
+import { errorMsg } from "../../../utils/messages";
 
 const { Search } = Input;
 
