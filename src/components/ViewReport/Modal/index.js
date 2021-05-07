@@ -3,10 +3,6 @@ import { Modal, Button } from "antd";
 
 import ViewReport from "../";
 
-export const showModal = () => {
-
-}
-
 export default function ModalViewReport(props) {
   const [modalVisible, setModalVisible] = useState(true);
 

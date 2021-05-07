@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 
 import { getReports } from "../../../services/index";
 
+import { statusTranslate } from "../../../utils/statusConverter";
+
 import "./styles.css";
 
 const { Search } = Input;
@@ -89,15 +91,10 @@ export default function ControlPanel() {
       responsive: ["md"],
     },
     {
-      title: "Data",
-      dataIndex: "date",
-      key: "date",
-      responsive: ["md"],
-    },
-    {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (text) => <p>{statusTranslate(text)}</p>
     },
   ];
 

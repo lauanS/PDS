@@ -7,8 +7,10 @@ const Context = createContext();
 function AuthProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(isAuth());
 
-  let adminFlag = false;
-  const setAdminFlag = (value) => { adminFlag = value };
+  const [adminFlag, setAdminFlag] = useState(false);
+
+  // let adminFlag = false;
+  // const setAdminFlag = (value) => { adminFlag = value };
   
   const isAuthenticated  = () => {
     if(isAuth() !== authenticated){
