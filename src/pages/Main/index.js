@@ -9,7 +9,7 @@ import Report from "../../components/Report";
 import ModalViewReport from "../../components/ViewReport/Modal";
 import alertIcon from "../../assets/alert.png";
 
-import { getReports} from "../../services/index";
+import { getReports } from "../../services/index";
 // import {deleteReport } from "../../services/index";
 import { Context } from "../../context/authContext";
 
@@ -60,12 +60,12 @@ export default function Main() {
 
   const latLngToAddress = useCallback(
     async (latlng) => {
-      if(apiReady){
+      if (apiReady) {
         console.log("API READY");
         if (latlng.lat === 0) {
           return "Without address";
         }
-  
+
         const geocoder = new mapApi.Geocoder();
         await geocoder.geocode({ location: latlng }, (results, status) => {
           if (status === "OK") {
@@ -81,7 +81,7 @@ export default function Main() {
             console.log("Geocoder failed due to: " + status);
             setAddress("Erro ao buscar o endereço");
           }
-        });        
+        });
       }
     },
     [mapApi, apiReady]
@@ -152,7 +152,7 @@ export default function Main() {
   // };
 
   /* */
-  const onClickMarker = (report) => {    
+  const onClickMarker = (report) => {
     setCurrentReport(report);
     showDrawer();
   };
@@ -175,10 +175,10 @@ export default function Main() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         const browserLocation = {
-          lat: position.coords.latitude, 
+          lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        map.setCenter(browserLocation);      
+        map.setCenter(browserLocation);
         setCurrentLocation(browserLocation);
       });
     }
@@ -224,7 +224,12 @@ export default function Main() {
       )}
 
       {!isLoading && (
-        <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>
+        <Modal
+          title="Denúncia"
+          visible={modalVisible}
+          onCancel={hideModal}
+          footer={null}
+        >
           <Report
             lat={currentLocation.lat}
             lng={currentLocation.lng}

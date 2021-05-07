@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal } from "antd";
+import { Modal, Button } from "antd";
 
 import ViewReport from "../";
 
@@ -17,8 +17,17 @@ export default function ModalViewReport(props) {
   const report = props.report;
 
   return (
-    <Modal title="Denúncia" visible={modalVisible} onCancel={hideModal}>
-      <ViewReport             
+    <Modal
+      title="Denúncia"
+      visible={modalVisible}
+      footer={[
+        <Button type="primary" onClick={hideModal}>
+          OK
+        </Button>
+      ]}
+      >
+      
+      <ViewReport
         report={{
           "id": 1619662846619,
           "lat": -23.5546544984853,
