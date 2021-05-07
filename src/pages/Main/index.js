@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useCallback, useRef, useContext } from "react";
-import { Button, Drawer, Modal } from "antd";
+import { Button, Drawer, Modal, message } from "antd";
 
 import Map from "../../components/Gmaps/index";
 import Marker from "../../components/Marker/index";
 import SearchBox from "../../components/SearchBox/index";
 import AddButton from "../../components/AddButton/index";
 import Report from "../../components/Report";
-
+import ModalViewReport from "../../components/ViewReport/Modal";
 import alertIcon from "../../assets/alert.png";
 
 import { getReports} from "../../services/index";
 // import {deleteReport } from "../../services/index";
 import { Context } from "../../context/authContext";
-import { errorMsg } from "../../utils/messages";
 
 export default function Main() {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -51,7 +50,7 @@ export default function Main() {
         console.log(error);
         setIsLoading(false);
         setErrors(true);
-        errorMsg("Erro ao carregar as denúncias")
+        message.error("Erro ao carregar as denúncias")
       }
     }
     return;
@@ -263,6 +262,7 @@ export default function Main() {
           </>
         )}
       </Drawer>
+      <ModalViewReport report={currentReport} />
     </>
   );
 }

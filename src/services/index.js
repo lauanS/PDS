@@ -80,7 +80,7 @@ export async function deleteReportDev(id){
 export async function postSignIn(signIn){
   const obj = {
     email: signIn.email,
-    senha: signIn.password
+    password: signIn.password
   }
   const response = await api.post('/authenticate', obj);
   const data = response.data;

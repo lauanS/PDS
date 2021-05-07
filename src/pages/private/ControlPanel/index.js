@@ -1,12 +1,11 @@
 import React from "react";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Table, Input, Space } from "antd";
+import { Table, Input, Space, message } from "antd";
 import { Link } from "react-router-dom";
 
 import { getReports } from "../../../services/index";
 
 import "./styles.css";
-import { errorMsg } from "../../../utils/messages";
 
 const { Search } = Input;
 
@@ -40,7 +39,7 @@ export default function ControlPanel() {
         console.log(error);
         setIsLoading(false);
         setErrors(true);
-        errorMsg("Erro ao carregar as denúncias");
+        message.error("Erro ao carregar as denúncias");
       }
     }
     return;

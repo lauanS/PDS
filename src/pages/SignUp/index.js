@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useHistory } from "react-router";
 
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -10,7 +10,6 @@ import { GoogleLogin } from 'react-google-login';
 import { postSignUp, postGoogleSignIn } from "../../services/index";
 
 import "./styles.css";
-import { errorMsg, successMsg } from "../../utils/messages";
 
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +43,7 @@ export default function SignUp() {
       await postSignUp(obj);
 
       if (mounted.current) {        
-        successMsg("Cadastro realizado com sucesso", 2)
+        message("Cadastro realizado com sucesso", 2)
         .then(() => history.push("/login"));        
       }
     } catch (error) {
@@ -52,7 +51,7 @@ export default function SignUp() {
         console.log("Erro ao tentar cadastrar um novo usuário");
         console.log(error);
         form.resetFields();
-        errorMsg("Não foi possível realizar o cadastro");
+        message("Não foi possível realizar o cadastro");
       }
     }
     setIsLoading(false);
@@ -75,7 +74,7 @@ export default function SignUp() {
         console.log("Erro ao tentar cadastrar um novo usuário");
         console.log(error);
         form.resetFields();
-        errorMsg("Não foi possível realizar o cadastro pelo Google");
+        message("Não foi possível realizar o cadastro pelo Google");
       }
     }
     setIsLoading(false);

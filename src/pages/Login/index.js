@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext } from "react";
 import { useHistory } from "react-router";
 
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, message } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -12,7 +12,6 @@ import { postSignIn, postGoogleSignIn } from "../../services/index";
 import { Context } from "../../context/authContext";
 
 import "./styles.css";
-import { errorMsg, successMsg } from "../../utils/messages";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +33,7 @@ export default function Login() {
 
       if (mounted.current) {
         handleLogin(data.token);
-        successMsg("Login realizado com sucesso", 2)
+        message.success("Login realizado com sucesso", 2)
         .then(() => history.push("/"));        
       }
     } catch (error) {
@@ -42,7 +41,7 @@ export default function Login() {
         console.log("Erro ao realizar o login");
         console.log(error);
         form.resetFields();
-        errorMsg("Erro ao realizar login");
+        message.error("Erro ao realizar login");
       }
     }
     setIsLoading(false);
@@ -59,7 +58,7 @@ export default function Login() {
 
       if (mounted.current) {
         handleLogin(data.token);
-        successMsg("Login realizado com sucesso", 2)
+        message.success("Login realizado com sucesso", 2)
         .then(() => history.push("/"));        
       }
     } catch (error) {
@@ -73,7 +72,7 @@ export default function Login() {
   }
 
   const errorGoogleLogin = () => {
-    errorMsg("Não foi possível completar o login pelo google");
+    message.error("Não foi possível completar o login pelo google");
   }
 
   return (
