@@ -281,13 +281,13 @@ export default function Main() {
         )}
       </Drawer>
 
-      (!modalVisible &&
-      <ModalViewReport
-        report={currentReport}
-        modalVisible={modalReportVisible}
-        setModalVisible={setModalReportVisible}
-      />
-      )
+      {!modalVisible && 
+        <ModalViewReport
+          report={currentReport}
+          modalVisible={modalReportVisible}
+          setModalVisible={setModalReportVisible}
+        />
+      }
     </>
   );
 }
