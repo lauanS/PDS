@@ -1,23 +1,24 @@
 import React from "react";
 
-import ViewReport from "../../components/ViewReport";
+import CardViewReport from "../../components/ViewReport/Card";
 import "./styles.css";
 
 export default function ViewReportPage() {
   const report = {
-    "id": 1619638409706,
-    "lat": -23.5535,
-    "lng": -46.64756,
-    "date": "XX",
-    "address": "Avenida Nova Denúncia, 37, São Paulo, SP",
-    "animal": "Cacatua",
+    "id": 1,
+    "description": "O animal está severamente machucado e seu dono se recussa a procurar ajuda, mesmo após a comunidade de unir para pagar um veterinário para o animal",
+    "address": "R. Mituto Mizumoto, 69 - Sé, São Paulo - SP, 01513-040, Brasil",
+    "animal": "Gato",
     "breeds": "",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
-    "status": "closed"
+    "status": "processing",
+    "isAnonymous": false,
+    "lat": "-23.557521150854427",
+    "lng": "-46.63197388276037"
   }
+  
   return (
     <>
-      <ViewReport report={report}/>
+      <CardViewReport report={report}/>
     </>
   );
 }
