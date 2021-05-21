@@ -51,29 +51,23 @@ export async function postReport(report){
   return api.post('/denuncias', obj);
 }
 
-export async function putReport(id){
-  return;
+export async function putReport(report, id){
+  const obj = {
+    "id": id,
+    "descricao": report.description,
+    "endereco": report.address,
+    "especie": report.animal,
+    "raca": report.breeds,
+    "status": statusStringToChar(report.status),
+    "indAnonimo": report.isAnonymous,
+    "longitude": report.lng,
+    "latitude": report.lat
+  }
+  return api.put('/denuncias', obj);
 }
 
 export async function deleteReport(id){
   return api.delete('/denuncias/' + id);  
-}
-
-/******** Denúncias JSON SERVER ********/
-export async function getReportsDev(){
-  return (await api.get('/reports')).data;
-}
-
-export async function postReportDev(report){
-  return api.post('/reports', report);
-}
-
-export async function putReportDev(id){
-  return;
-}
-
-export async function deleteReportDev(id){
-  return;
 }
 
 /******** Login ********/
@@ -105,6 +99,23 @@ export async function postGoogleSignIn(signIn) {
   const response = await api.post('/authenticate/google', obj);
   const data = response.data;
   return { token: data.jwt };
+}
+
+/******** Denúncias JSON SERVER ********/
+export async function getReportsDev(){
+  return (await api.get('/reports')).data;
+}
+
+export async function postReportDev(report){
+  return api.post('/reports', report);
+}
+
+export async function putReportDev(id){
+  return;
+}
+
+export async function deleteReportDev(id){
+  return;
 }
 
 /******** Funções fake de login e cadastro ********/
