@@ -1,8 +1,8 @@
 import React from "react";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { Table, Input, Space, message } from "antd";
 
-import { getReports } from "../../../services/index";
+import useReport from "../../../hooks/useReport";
 
 import { statusTranslate } from "../../../utils/statusConverter";
 
@@ -12,43 +12,16 @@ import ModalViewReport from "../../../components/ViewReport/Modal";
 const { Search } = Input;
 
 export default function ControlPanel() {
-  const [reports, setReports] = useState([]);
+  const {
+    reports, isLoadingReports, errorLoadingReport
+  } = useReport();
+
   const [filteredReports, setFilteredReports] = useState([]);
   const [currentReport, setCurrentReport] = useState({});
   const [modalReportVisible, setModalReportVisible] = useState(false);
 
-  const [  , setErrors] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const mounted = useRef(true);
-
   const screenSize = { x: window.innerWidth, y: window.innerHeight };
 
-  const loadReports = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const data = await getReports();
-      if (mounted.current) {
-        let temp = [];
-        data.map((report, key) => {
-          report.key = key;
-          temp.push(report);
-          return key;
-        });
-        setReports(temp);
-        setFilteredReports(temp);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      if (mounted.current) {
-        console.log(error);
-        setIsLoading(false);
-        setErrors(true);
-        message.error("Erro ao carregar as denúncias");
-      }
-    }
-    return;
-  }, []);
 
   const onSearch = (value) => {
     searchReports(reports, value);
@@ -76,13 +49,18 @@ export default function ControlPanel() {
       : [];
   };
 
-  /* Carregando as denúncias */
+  /* Atualizando as denúncias */
   useEffect(() => {
-    loadReports();
-    return () => {
-      mounted.current = false;
-    };
-  }, [loadReports]);
+    console.log("Chamou setFilteredReports");
+    setFilteredReports(reports);
+  }, [reports]);
+
+  /* Verificando a ocorrência de um erro */
+  useEffect(() => {
+    if(errorLoadingReport === true){
+      message.error("Erro ao carregar as denúncias");
+    }    
+  }, [errorLoadingReport]);
 
   /* Colunas da lista */
   const columns = [
@@ -120,8 +98,8 @@ export default function ControlPanel() {
           />
           <Table
             columns={columns}
-            dataSource={!isLoading ? filteredReports : null}
-            loading={isLoading}
+            dataSource={!isLoadingReports ? filteredReports : null}
+            loading={isLoadingReports}
             pagination={{ pageSize: Math.floor(screenSize.y / 63) }} // Qtd de itens por pag
             scroll={{ y: screenSize.y - 280 }} // Tamanho máximo da tabela
             bordered
