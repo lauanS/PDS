@@ -5,6 +5,10 @@ const api = axios.create({
   baseURL: process.env.REACT_APP_SERVER_BASE_URL
 });
 
+const apiDev = axios.create({
+  baseURL: process.env.REACT_APP_JSON_SERVER
+});
+
 /* Adicionando o token de autenticação no cabeçalho de cada request */
 api.interceptors.request.use(async config => {
   const token = getToken();
@@ -33,7 +37,6 @@ export async function getReports(){
       "lng": report.longitude,
     }
   });
-  console.log(data);
   return data;
 }
 
@@ -69,6 +72,9 @@ export async function putReport(report, id){
 export async function deleteReport(id){
   return api.delete('/denuncias/' + id);  
 }
+
+/******** Comentários ********/
+
 
 /******** Login ********/
 export async function postSignIn(signIn){
@@ -116,6 +122,16 @@ export async function putReportDev(id){
 
 export async function deleteReportDev(id){
   return;
+}
+
+/******** Comentários ********/
+export async function getCommentsDev(){
+  return (await apiDev.get('/comments')).data;
+}
+
+export async function getReportCommentsDev(reportId){
+  const response = await apiDev.get('/comments', { params: { reportId} });
+  return response.data;
 }
 
 /******** Funções fake de login e cadastro ********/
