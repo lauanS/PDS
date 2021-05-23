@@ -16,8 +16,8 @@ import ModalViewReport from "../../components/ViewReport/Modal";
 import alertIcon from "../../assets/alert.png";
 
 import { getReports } from "../../services/index";
-// import {deleteReport } from "../../services/index";
 import { Context } from "../../context/authContext";
+import { statusTranslate } from "../../utils/statusConverter";
 
 export default function Main() {
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -151,19 +151,6 @@ export default function Main() {
     setDrawerVisible(false);
   };
 
-  // const onClickDeleteReport = async () => {
-  //   try {
-  //     const response = await deleteReport(currentReport.id);
-  //     if(mounted.current){
-  //       hideDrawer();
-  //       return response;
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     return;
-  //   }
-  // };
-
   /* */
   const onClickMarker = (report) => {
     setCurrentReport(report);
@@ -264,7 +251,7 @@ export default function Main() {
               Fechar
             </Button>
             <Button onClick={showReportModal} type="primary">
-              Abrir caso
+              Mais detalhes
             </Button>
           </div>
         }
@@ -276,7 +263,7 @@ export default function Main() {
               Raça/Espécie: {currentReport.animal}
               {currentReport.breeds && " | " + currentReport.breeds}
             </p>
-            <p>Situação: {currentReport.status} </p>
+            <p>Situação: {statusTranslate(currentReport.status)} </p>
           </>
         )}
       </Drawer>
