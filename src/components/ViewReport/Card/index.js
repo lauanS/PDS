@@ -1,19 +1,53 @@
-import React, { useState } from "react";
-import { Card, Button, Dropdown, Menu } from "antd";
-import { FrownOutlined, MehOutlined, SmileOutlined, DownOutlined } from '@ant-design/icons';
+import React, { useEffect } from "react";
+import { Card, Button, Dropdown, Menu, message } from "antd";
+import {
+  FrownOutlined,
+  MehOutlined,
+  SmileOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
 
 import ViewReport from "../";
+import useReport from "../../../hooks/useReport";
 
 export default function CardViewReport(props) {
-  const report = props.report;
-  const keyToStatus = {1:"opened", 2: "processing", 3:"closed"}
+  const {
+    deleteReportById,
+    updateReport,
+    errorLoadingReport,
+    setErrorLoadingReport,
+    isLoadingReports,
+  } = useReport();
 
-  function handleMenuClick(e) {
-    console.log("Alterando o status para:", keyToStatus[e.key]);
-  }
-  
+  const report = props.report;
+  const keyToStatus = { 1: "opened", 2: "processing", 3: "closed" };
+
+  const onClickDeleteReport = (e) => {
+    deleteReportById(report.id);
+  };
+
+  const onSelectStatus = async (e) => {
+    if (keyToStatus[e.key] === report.status) {
+      return;
+    } else {
+      report.status = keyToStatus[e.key];
+      await updateReport(report);
+    }
+    console.log(report);
+    //deleteReportById();
+  };
+
+  /* Verificando a ocorrência de um erro */
+  useEffect(() => {
+    if (errorLoadingReport === true) {
+      message.error("Erro ao interagir com as denúncias").then(() => {
+        setErrorLoadingReport(false);
+      });
+    }
+  }, [errorLoadingReport]);
+
   const menu = (
-    <Menu onClick={handleMenuClick}>
+    <Menu onClick={onSelectStatus}>
       <Menu.Item key="1" icon={<FrownOutlined />}>
         Aberto
       </Menu.Item>
@@ -25,13 +59,14 @@ export default function CardViewReport(props) {
       </Menu.Item>
     </Menu>
   );
-  
+
   return (
     <Card
       title="Denúncia"
       bordered={false}
+      loading={isLoadingReports}
       actions={[
-        <Button type="primary" onClick={() => {return}}>
+        <Button type="primary" onClick={onClickDeleteReport}>
           Excluir
         </Button>,
         <>
@@ -40,7 +75,7 @@ export default function CardViewReport(props) {
               Alterar Status <DownOutlined />
             </Button>
           </Dropdown>
-        </>
+        </>,
       ]}
     >
       <ViewReport key="1" report={report} />
