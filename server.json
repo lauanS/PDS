@@ -83,18 +83,18 @@
     {
       "id": 1,
       "reportId": 6,
-      "date":"X",
+      "date":"2021-05-22 12:00:00",
       "comment": "Estamos a caminho"
     },
     {
       "id": 2,
       "reportId": 6,
-      "date":"X",
+      "date":"2021-05-22 15:35:00",
       "comment": "Pegamos o cachorro e estamos levando ao veterinário, iremos levar o dono para depor"
     }, {
       "id": 1,
       "reportId": 6,
-      "date":"X",
+      "date":"2021-05-23 14:50:00",
       "comment": "O veterinário disse que o cachorro não corre risco de vida, e logo irá melhorar"
     }
 
