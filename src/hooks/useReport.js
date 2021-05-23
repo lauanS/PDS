@@ -6,6 +6,8 @@ export default function useReport() {
   const [reports, setReports] = useState([]);
   const [isLoadingReports, setIsLoadingReports] = useState(true);
   const [errorLoadingReport, setErrorLoadingReport] = useState(false);
+  const [errorUpdateReport, setErrorUpdateReport] = useState(false);
+  const [errorDeleteReport, setErrorDeleteReport] = useState(false);
 
   const mounted = useRef(true);
 
@@ -48,7 +50,7 @@ export default function useReport() {
     } catch (error) {
       console.log("Erro ao deletar pelo ID");
       console.log(error);
-      setErrorLoadingReport(true);
+      setErrorDeleteReport(true);
       setIsLoadingReports(false);
     }
   };
@@ -56,7 +58,7 @@ export default function useReport() {
   const updateReport = async (report) => {
     if (!report.id) {
       console.log("Denúncia não possuí ID, não é possívele atualiza-la");
-      setErrorLoadingReport(true);
+      setErrorUpdateReport(true);
       return;
     }
 
@@ -79,7 +81,7 @@ export default function useReport() {
     } catch (error) {
       console.log("Erro ao tentar realizar put do report", report);
       console.log(error);
-      setErrorLoadingReport(true);
+      setErrorUpdateReport(true);
       setIsLoadingReports(false);
     }
   };
@@ -99,5 +101,9 @@ export default function useReport() {
     setErrorLoadingReport,
     deleteReportById,
     updateReport,
+    errorUpdateReport,
+    setErrorUpdateReport,
+    errorDeleteReport,
+    setErrorDeleteReport,
   };
 }

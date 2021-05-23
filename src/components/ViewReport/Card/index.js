@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { Card, Button, Dropdown, Menu, message } from "antd";
+import { Card, Button, Dropdown, Menu, Modal, message } from "antd";
 import {
   FrownOutlined,
   MehOutlined,
   SmileOutlined,
   DownOutlined,
+  ExclamationCircleOutlined,
 } from "@ant-design/icons";
 
 import ViewReport from "../";
@@ -14,16 +15,30 @@ export default function CardViewReport(props) {
   const {
     deleteReportById,
     updateReport,
-    errorLoadingReport,
-    setErrorLoadingReport,
+    errorDeleteReport,
+    errorUpdateReport,
+    setErrorDeleteReport,
+    setErrorUpdateReport,
     isLoadingReports,
   } = useReport();
+
+  const { confirm } = Modal;
 
   const report = props.report;
   const keyToStatus = { 1: "opened", 2: "processing", 3: "closed" };
 
-  const onClickDeleteReport = (e) => {
-    deleteReportById(report.id);
+  const onClickDeleteReport = async (e) => {
+    confirm({
+      title: "Tem certeza que deseja apagar essa denúncia?",
+      icon: <ExclamationCircleOutlined />,
+      content: "Após apagar a denúncia, não será possível recuperá-la",
+      okText: 'Sim, deletar',
+      okType: 'danger',
+      cancelText: 'Cancelar',
+      onOk() {
+        deleteReportById(report.id);
+      },
+    });
   };
 
   const onSelectStatus = async (e) => {
@@ -34,17 +49,25 @@ export default function CardViewReport(props) {
       await updateReport(report);
     }
     console.log(report);
-    //deleteReportById();
   };
 
-  /* Verificando a ocorrência de um erro */
+  /* Verificando a ocorrência de um erro ao *deletar* */
   useEffect(() => {
-    if (errorLoadingReport === true) {
-      message.error("Erro ao interagir com as denúncias").then(() => {
-        setErrorLoadingReport(false);
+    if (errorDeleteReport === true) {
+      message.error("Erro ao tentar excluir a denúncia").then(() => {
+        setErrorDeleteReport(false);
       });
     }
-  }, [errorLoadingReport]);
+  }, [errorDeleteReport, setErrorDeleteReport]);
+
+  /* Verificando a ocorrência de um erro ao *atualizar* */
+  useEffect(() => {
+    if (errorUpdateReport === true) {
+      message.error("Erro ao tentar alterar o status da denúncia").then(() => {
+        setErrorUpdateReport(false);
+      });
+    }
+  }, [errorUpdateReport, setErrorUpdateReport]);
 
   const menu = (
     <Menu onClick={onSelectStatus}>
