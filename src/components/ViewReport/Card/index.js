@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { Card, Button, Dropdown, Menu, Modal, message } from "antd";
 import {
   FrownOutlined,
@@ -11,6 +11,8 @@ import {
 import ViewReport from "../";
 import useReport from "../../../hooks/useReport";
 
+import { Context } from "../../../context/authContext";
+
 export default function CardViewReport(props) {
   const {
     deleteReportById,
@@ -21,6 +23,8 @@ export default function CardViewReport(props) {
     setErrorUpdateReport,
     isLoadingReports,
   } = useReport();
+
+  const { isAuthenticated, isAdmin } = useContext(Context);
 
   const { confirm } = Modal;
 
@@ -74,9 +78,11 @@ export default function CardViewReport(props) {
       <Menu.Item key="1" icon={<FrownOutlined />}>
         Aberto
       </Menu.Item>
-      <Menu.Item key="2" icon={<MehOutlined />}>
-        Processando
-      </Menu.Item>
+      {isAuthenticated() && isAdmin() && (
+        <Menu.Item key="2" icon={<MehOutlined />}>
+          Processando
+        </Menu.Item>
+      )}
       <Menu.Item key="3" icon={<SmileOutlined />}>
         Fechado
       </Menu.Item>
@@ -88,10 +94,11 @@ export default function CardViewReport(props) {
       title="Denúncia"
       bordered={false}
       loading={isLoadingReports}
-      actions={[
+      actions={[isAuthenticated() && isAdmin() && (
         <Button type="primary" onClick={onClickDeleteReport}>
           Excluir
-        </Button>,
+        </Button>
+        ),
         <>
           <Dropdown overlay={menu}>
             <Button>
