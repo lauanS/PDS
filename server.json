@@ -78,5 +78,26 @@
       "status": "opened",
       "isAnonymous": true
     }
+  ],
+  "comments": [ 
+    {
+      "id": 1,
+      "reportId": 6,
+      "date":"X",
+      "comment": "Estamos a caminho"
+    },
+    {
+      "id": 2,
+      "reportId": 6,
+      "date":"X",
+      "comment": "Pegamos o cachorro e estamos levando ao veterinário, iremos levar o dono para depor"
+    }, {
+      "id": 1,
+      "reportId": 6,
+      "date":"X",
+      "comment": "O veterinário disse que o cachorro não corre risco de vida, e logo irá melhorar"
+    }
+
   ]
+
 }
