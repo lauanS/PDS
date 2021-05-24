@@ -31,7 +31,7 @@ export default function CommentList(props) {
       message.error("Erro ao carregar os comentários");
     }
     return;
-  }, []);
+  }, [report]);
 
   /* Carregando os comentários */
   useEffect(() => {
@@ -56,7 +56,7 @@ export default function CommentList(props) {
           className="comment-item"
           author={<p>{comment.author}</p>}
           content={
-            comment.comment.length == 1 || comment.comment === "Caso aberto" ? (
+            comment.comment.length === 1 || comment.comment === "Caso aberto" ? (
               <>
                 <Alert
                   message={statusCharToComment(comment.comment)}

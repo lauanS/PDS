@@ -31,7 +31,7 @@ export default function ModalViewReport(props) {
       ]}
       onCancel={hideModal}
     >
-      <ViewReport key="1" report={report} />
+      <ViewReport report={report} />
     </Modal>
   );
 }

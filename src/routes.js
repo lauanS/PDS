@@ -1,4 +1,5 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import ptBR from 'antd/lib/locale/pt_BR';
 import PrivateRoute from "./components/PrivateRoute/index";
 import Layout from "./components/Layout/index";
 
@@ -11,11 +12,12 @@ import ViewReport from "./pages/ViewReport/index";
 
 import ControlPanel from "./pages/private/ControlPanel/index";
 
-
+import { ConfigProvider } from 'antd';
 import { AuthProvider } from "./context/authContext";
 
 const Routes = () => (
   <AuthProvider>
+    <ConfigProvider locale={ptBR}>
     <BrowserRouter key={"browserRouter"}>
       <Layout>
         <Switch key={"SwitcherRouter"}>
@@ -30,6 +32,7 @@ const Routes = () => (
         </Switch>
       </Layout>
     </BrowserRouter>
+    </ConfigProvider>
   </AuthProvider>
 
   );
