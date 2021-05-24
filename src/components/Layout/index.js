@@ -6,7 +6,7 @@ import {
   UserAddOutlined,
   VideoCameraOutlined,
   MenuFoldOutlined,
-  MenuUnfoldOutlined
+  MenuUnfoldOutlined,
 } from "@ant-design/icons";
 
 import { Layout, Menu } from "antd";
@@ -30,17 +30,17 @@ export default function Main_Layout(props) {
   };
 
   const hideCollapse = () => {
-    if(!collapsed){
+    if (!collapsed) {
       setCollapsed(true);
     }
-  }
+  };
 
   const onClickLogout = () => {
     handleLogout();
     history.push("/");
-  }
+  };
 
-  const MenuFoldIcon = collapsed? MenuUnfoldOutlined: MenuFoldOutlined;
+  const MenuFoldIcon = collapsed ? MenuUnfoldOutlined : MenuFoldOutlined;
 
   return (
     <Layout className="main-layout">
@@ -54,12 +54,16 @@ export default function Main_Layout(props) {
         }}
       >
         <div className="header-container">
-          <MenuFoldIcon onClick={toggleCollapse} style={{ fontSize: 25}}/>
+          <MenuFoldIcon onClick={toggleCollapse} style={{ fontSize: 25 }} />
           <Link
             to="/"
             style={{ height: "100%", display: "flex", alignItems: "center" }}
           >
-            <PetIcon className="header-logo" fill="#FFFFFF" onClick={hideCollapse}/>
+            <PetIcon
+              className="header-logo"
+              fill="#FFFFFF"
+              onClick={hideCollapse}
+            />
           </Link>
           <Link className="header-text" to="/" onClick={hideCollapse}>
             SalvaCão
@@ -67,9 +71,27 @@ export default function Main_Layout(props) {
         </div>
       </Header>
       <Layout className="content-layout">
-        <Sider className="sider-layout" trigger={null} collapsible collapsed={collapsed} breakpoint="lg" collapsedWidth="0" >
+        <Sider
+          className="sider-layout"
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          breakpoint="lg"
+          collapsedWidth="0"
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+          }}
+        >
           <div className="logo" />
-          <Menu theme="light" mode="inline" defaultSelectedKeys={["1"]} onClick={hideCollapse}>
+          <Menu
+            theme="light"
+            mode="inline"
+            defaultSelectedKeys={["1"]}
+            onClick={hideCollapse}
+          >
             {isAuthenticated() ? (
               <Menu.Item
                 key="1"
@@ -95,7 +117,7 @@ export default function Main_Layout(props) {
             )}
           </Menu>
         </Sider>
-        <Content>{props.children}</Content>
+        <Content style={{ overflow: "scroll" }}>{props.children}</Content>
       </Layout>
     </Layout>
   );
