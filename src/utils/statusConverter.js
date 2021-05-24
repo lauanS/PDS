@@ -18,8 +18,6 @@ export function statusTranslate(value) {
   }
 }
 
-
-
 export function statusStringToChar(value) {
   if (value === "opened") {
     return "A";
@@ -27,5 +25,17 @@ export function statusStringToChar(value) {
     return "P";
   } else if (value === "closed") {
     return "F"
+  }
+}
+
+export function statusCharToComment(value) {
+  if (value === "A") {
+    return "Reabriu o caso";
+  } else if (value === "P") {
+    return "Está trabalhando no caso";
+  } else if (value === "F") {
+    return "Fechou o caso"
+  } else if(value === "Caso aberto"){
+    return "Caso aberto"
   }
 }

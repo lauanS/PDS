@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Avatar, Comment, List, Tooltip, message } from "antd";
 import { useLocation } from "react-router";
+
+import { Avatar, Comment, List, Tooltip, Alert, message } from "antd";
 
 import { getReportCommentsDev } from "../../../services";
 
 import { parseISO, format, formatRelative } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
+
+import { statusCharToComment } from "../../../utils/statusConverter";
 
 import adminAvatar from "../../../assets/admin1.png";
 import userAvatar from "../../../assets/user.png";
@@ -36,15 +39,35 @@ export default function CommentList(props) {
     console.log("load c");
   }, [loadComments, setComments]);
 
+  const processToType = {
+    A: "warning",
+    F: "success",
+    P: "info",
+    "Caso aberto": "warning",
+  };
   return (
     <List
+      className="comment-list"
       dataSource={comments}
-      header="Atualizações:"
+      header={<span className="comment-list-header">Atualizações:</span>}
       itemLayout="horizontal"
       renderItem={(comment) => (
         <Comment
+          className="comment-item"
           author={<p>{comment.author}</p>}
-          content={<p>{comment.comment}</p>}
+          content={
+            comment.comment.length == 1 || comment.comment === "Caso aberto" ? (
+              <>
+                <Alert
+                  message={statusCharToComment(comment.comment)}
+                  type={processToType[comment.comment]}
+                  showIcon
+                />
+              </>
+            ) : (
+              <p>{comment.comment}</p>
+            )
+          }
           datetime={
             <Tooltip
               title={format(
@@ -62,9 +85,13 @@ export default function CommentList(props) {
           }
           avatar={
             comment.author !== "SalvaCão" ? (
-              <Avatar src={adminAvatar} alt="Ícone do administrador" />
+              <Avatar
+                src={userAvatar}
+                alt="Ícone do administrador"
+                style={{ cursor: "default" }}
+              />
             ) : (
-              <Avatar src={userAvatar} alt="Ícone do denúnciante" />
+              <Avatar src={adminAvatar} alt="Ícone do denúnciante" />
             )
           }
         />
