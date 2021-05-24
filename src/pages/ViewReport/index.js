@@ -1,66 +1,20 @@
-import React, { useState } from "react";
-import { Avatar, Button, Comment, message, Tooltip } from "antd";
+import React from "react";
 import { useLocation } from "react-router";
 
 import CardViewReport from "../../components/ViewReport/Card";
-import { getReportCommentsDev } from "../../services";
-
-import { parseISO, format, formatRelative } from "date-fns";
-import ptBR from "date-fns/locale/pt-BR";
-
-import adminAvatar from "../../assets/admin1.png";
+import CommentList from "./CommentList";
 
 import "./styles.css";
 export default function ViewReportPage(props) {
   const location = useLocation();
   const report = location.state.report;
 
-  const [comments, setComments] = useState([]);
-
-  /* Date */
-
-  const loadComments = async () => {
-    try {
-      const data = await getReportCommentsDev(report.id);
-      setComments(data);
-    } catch (error) {
-      console.log(error);
-      message.error("Erro ao carregar os comentários");
-    }
-    return;
-  };
-
   return (
     <>
       {report ? (
         <>
           <CardViewReport report={report} />
-          <Button onClick={loadComments}>Exibir comentários</Button>
-
-          {comments.map((comment, key) => (
-            <Comment
-              author={<a>Autor da denúncia</a>}
-              content={<p key={key}>{comment.comment}</p>}
-              datetime={
-                <Tooltip
-                  title={format(
-                    parseISO(comment.date),
-                    "'Dia' dd 'de' MMMM', às ' HH:mm'h'",
-                    { locale: ptBR }
-                  )}
-                >
-                  <span>
-                    {formatRelative(
-                      parseISO(comment.date), 
-                      new Date(), 
-                      { locale: ptBR }
-                    )}
-                  </span>
-                </Tooltip>
-              }
-              avatar={<Avatar src={adminAvatar} alt="Han Solo" />}
-            />
-          ))}
+          <CommentList />          
         </>
       ) : (
         <h1>Nenhuma denúncia selecionada</h1>
