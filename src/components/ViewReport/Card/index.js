@@ -52,7 +52,6 @@ export default function CardViewReport(props) {
       report.status = keyToStatus[e.key];
       await updateReport(report);
     }
-    console.log(report);
   };
 
   /* Verificando a ocorrência de um erro ao *deletar* */

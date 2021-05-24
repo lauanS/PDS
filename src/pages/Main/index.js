@@ -69,7 +69,6 @@ export default function Main() {
   const latLngToAddress = useCallback(
     async (latlng) => {
       if (apiReady) {
-        console.log("API READY");
         if (latlng.lat === 0) {
           return "Without address";
         }

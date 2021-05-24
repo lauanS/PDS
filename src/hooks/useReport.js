@@ -45,8 +45,8 @@ export default function useReport() {
         return report.id !== id;
       });
       setReports(reportsFiltered);
-
       setIsLoadingReports(false);
+      
     } catch (error) {
       console.log("Erro ao deletar pelo ID");
       console.log(error);
@@ -76,8 +76,8 @@ export default function useReport() {
         }
       });
       setReports(reportsFiltered);
-
       setIsLoadingReports(false);
+
     } catch (error) {
       console.log("Erro ao tentar realizar put do report", report);
       console.log(error);
