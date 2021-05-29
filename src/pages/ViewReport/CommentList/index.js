@@ -5,7 +5,7 @@ import { Avatar, Comment, List, Tooltip, Alert, message } from "antd";
 
 import { getReportCommentsDev } from "../../../services";
 
-import { parseISO, format, formatRelative } from "date-fns";
+import { parseISO, format, formatRelative, compareDesc } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 
 import { statusCharToComment } from "../../../utils/statusConverter";
@@ -23,7 +23,12 @@ export default function CommentList(props) {
 
   const loadComments = useCallback(async () => {
     try {
-      const data = await getReportCommentsDev(report.id);
+      let data = await getReportCommentsDev(report.id);
+      data = data.sort((firstComment, secondComment) => {
+        const firstDate = parseISO(firstComment.date);
+        const secondDate = parseISO(secondComment.date);
+        return compareDesc(firstDate, secondDate);
+      });
 
       setComments(data);
     } catch (error) {
@@ -45,6 +50,7 @@ export default function CommentList(props) {
     P: "info",
     "Caso aberto": "warning",
   };
+
   return (
     <List
       className="comment-list"
@@ -56,7 +62,8 @@ export default function CommentList(props) {
           className="comment-item"
           author={<p>{comment.author}</p>}
           content={
-            comment.comment.length === 1 || comment.comment === "Caso aberto" ? (
+            comment.comment.length === 1 ||
+            comment.comment === "Caso aberto" ? (
               <>
                 <Alert
                   message={statusCharToComment(comment.comment)}
