@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router";
-import { Button } from "antd";
+import { Button, Collapse } from "antd";
 
 import CardViewReport from "../../components/ViewReport/Card";
 import Editor from "../../components/Editor";
@@ -14,6 +14,8 @@ export default function ViewReportPage(props) {
 
   const location = useLocation();
   const report = location.state.report;
+
+  const { Panel } = Collapse;
 
   const handleSubmit = () => {
     console.log("Comentário enviado");
@@ -32,30 +34,29 @@ export default function ViewReportPage(props) {
       {report ? (
         <>
           <CardViewReport report={report} />
-          {isEditorOpen ? (
-            <Editor
-              onChange={handleChange}
-              onSubmit={handleSubmit}
-              submitting={submitting}
-              value={value}
-            />
-          ) : (
-            <Button
-              type="text"
-              style={{ display: "block", width: "100%" }}
-              onClick={toggleOpenEditor}
+          <Collapse defaultActiveKey={["1"]} ghost>
+            <Panel
+              key="1"
+              header={
+                  "Adicionar um comentário"
+              }
             >
-              Adicionar um comentário
-            </Button>
-          )}
-          <Button
-            htmlType="submit"
-            loading={submitting}
-            onClick={handleSubmit}
-            type="primary"
-          >
-            Enviar
-          </Button>
+              <Editor
+                onChange={handleChange}
+                onSubmit={handleSubmit}
+                submitting={submitting}
+                value={value}
+              />
+              <Button
+                htmlType="submit"
+                loading={submitting}
+                onClick={handleSubmit}
+                type="primary"
+              >
+                Enviar
+              </Button>
+            </Panel>
+          </Collapse>
           <CommentList />
         </>
       ) : (
