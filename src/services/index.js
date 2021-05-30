@@ -129,6 +129,11 @@ export async function getCommentsDev(){
   return (await apiDev.get('/comments')).data;
 }
 
+export async function postCommentDev(comment){
+  comment.date = new Date();
+  return apiDev.post('/comments', comment);
+}
+
 export async function getReportCommentsDev(reportId){
   const response = await apiDev.get('/comments', { params: { reportId} });
   return response.data;
