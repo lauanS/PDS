@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router";
-import { Button, Collapse } from "antd";
+import { Button, Collapse, message } from "antd";
 
 import CardViewReport from "../../components/ViewReport/Card";
 import Editor from "../../components/Editor";
 import CommentList from "./CommentList";
 
-import { postCommentDev } from "../../services";
+import useComment from "../../hooks/useComment";
 
 import "./styles.css";
 
-export default function ViewReportPage(props) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
+export default function ViewReportPage() {
+  const {
+    reportComments,
+    loadReportComments,
+    isLoadingComments,
+    createComment,
+    errorCreateComment,
+    setErrorCreateComment,
+    errorLoadingComment,
+    setErrorLoadingComment,
+  } = useComment();
+
   const [newCommentText, setNewCommentText] = useState("");
 
   const location = useLocation();
@@ -21,28 +30,35 @@ export default function ViewReportPage(props) {
   const { Panel } = Collapse;
 
   const submitComment = async () => {
-    setIsLoading(true);
     const newComment = {
       reportId: report.id,
       comment: newCommentText,
       author: "João da Silva",
     };
-
-    try {      
-      await postCommentDev(newComment);
-      setIsLoading(false);
-      console.log("Comentário enviado");
-    } catch (error) {
-      console.log("Erro ao tentar adicionar o novo comentário: ", newComment);
-      console.log(error);
-      setError(true);
-      setIsLoading(false);
-    }    
+    createComment(newComment);
   };
 
   const handleChange = (e) => {
     setNewCommentText(e.target.value);
   };
+
+  /* Verificando a ocorrência de um erro ao criar um comentário*/
+  useEffect(() => {
+    if (errorCreateComment === true) {
+      message.error("Erro ao tentar realizar o comentário").then(() => {
+        setErrorCreateComment(false);
+      });
+    }
+  }, [errorCreateComment, setErrorCreateComment]);
+
+  /* Verificando a ocorrência de um erro ao carregar informações de um comentário */
+  useEffect(() => {
+    if (errorLoadingComment === true) {
+      message.error("Erro ao carregar os comentários da denúncia").then(() => {
+        setErrorLoadingComment(false);
+      });
+    }
+  }, [errorLoadingComment, setErrorLoadingComment]);
 
   return (
     <>
@@ -53,12 +69,12 @@ export default function ViewReportPage(props) {
             <Panel key="1" header={"Adicionar um comentário"}>
               <Editor
                 onChange={handleChange}
-                isLoading={isLoading}
+                isLoading={isLoadingComments}
                 value={newCommentText}
               />
               <Button
                 htmlType="submit"
-                loading={isLoading}
+                loading={isLoadingComments}
                 onClick={submitComment}
                 type="primary"
               >
@@ -66,7 +82,13 @@ export default function ViewReportPage(props) {
               </Button>
             </Panel>
           </Collapse>
-          <CommentList />
+          <CommentList
+            reportComments={reportComments}
+            loadReportComments={loadReportComments}
+            isLoadingComments={isLoadingComments}
+            errorLoadingComment={errorLoadingComment}
+            setErrorLoadingComment={errorLoadingComment}
+          />
         </>
       ) : (
         <h1>Nenhuma denúncia selecionada</h1>

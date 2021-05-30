@@ -1,11 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useLocation } from "react-router";
 
 import { Avatar, Comment, List, Tooltip, Alert, message } from "antd";
 
-import { getReportCommentsDev } from "../../../services";
-
-import { parseISO, format, formatRelative, compareDesc } from "date-fns";
+import { parseISO, format, formatRelative } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 
 import { statusCharToComment } from "../../../utils/statusConverter";
@@ -19,30 +17,32 @@ export default function CommentList(props) {
   const location = useLocation();
   const report = location.state.report;
 
-  const [comments, setComments] = useState([]);
+  const {
+    reportComments,
+    loadReportComments,
+    isLoadingComments,
+    errorLoadingComment,
+    setErrorLoadingComment,
+  } = props;
 
   const loadComments = useCallback(async () => {
-    try {
-      let data = await getReportCommentsDev(report.id);
-      data = data.sort((firstComment, secondComment) => {
-        const firstDate = parseISO(firstComment.date);
-        const secondDate = parseISO(secondComment.date);
-        return compareDesc(firstDate, secondDate);
-      });
-
-      setComments(data);
-    } catch (error) {
-      console.log(error);
-      message.error("Erro ao carregar os comentários");
-    }
-    return;
-  }, [report]);
+    loadReportComments(report.id);
+  }, [report, loadReportComments]);
 
   /* Carregando os comentários */
   useEffect(() => {
     loadComments();
     console.log("load c");
-  }, [loadComments, setComments]);
+  }, [loadComments, loadReportComments]);
+
+  /* Verificando a ocorrência de um erro ao carregar informações de um comentário */
+  useEffect(() => {
+    if (errorLoadingComment === true) {
+      message.error("Erro ao carregar os comentários da denúncia").then(() => {
+        setErrorLoadingComment(false);
+      });
+    }
+  }, [errorLoadingComment, setErrorLoadingComment]);
 
   const processToType = {
     A: "warning",
@@ -54,7 +54,8 @@ export default function CommentList(props) {
   return (
     <List
       className="comment-list"
-      dataSource={comments}
+      dataSource={reportComments}
+      loading={isLoadingComments}
       header={<span className="comment-list-header">Atualizações:</span>}
       itemLayout="horizontal"
       renderItem={(comment) => (
