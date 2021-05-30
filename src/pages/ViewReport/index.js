@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router";
-import { Button, Collapse, message } from "antd";
+import { Button, Collapse, Form, message } from "antd";
 
 import CardViewReport from "../../components/ViewReport/Card";
 import Editor from "../../components/Editor";
@@ -22,6 +22,7 @@ export default function ViewReportPage() {
     setErrorLoadingComment,
   } = useComment();
 
+  const [form] = Form.useForm();
   const [newCommentText, setNewCommentText] = useState("");
 
   const location = useLocation();
@@ -29,13 +30,14 @@ export default function ViewReportPage() {
 
   const { Panel } = Collapse;
 
-  const submitComment = async () => {
+  const submitComment = async (e) => {
     const newComment = {
       reportId: report.id,
-      comment: newCommentText,
+      comment: e.description,
       author: "João da Silva",
     };
     createComment(newComment);
+    form.resetFields();
   };
 
   const handleChange = (e) => {
@@ -67,19 +69,21 @@ export default function ViewReportPage() {
           <CardViewReport report={report} />
           <Collapse defaultActiveKey={["1"]} ghost>
             <Panel key="1" header={"Adicionar um comentário"}>
-              <Editor
-                onChange={handleChange}
-                isLoading={isLoadingComments}
-                value={newCommentText}
-              />
-              <Button
-                htmlType="submit"
-                loading={isLoadingComments}
-                onClick={submitComment}
-                type="primary"
-              >
-                Enviar
-              </Button>
+              <Form onFinish={submitComment} form={form}>
+                <Editor
+                  name={"description"}
+                  onChange={handleChange}
+                  isLoading={isLoadingComments}
+                />
+                <Button
+                  htmlType="submit"
+                  loading={isLoadingComments}
+                  type="primary"
+                  style={{ display: "block", width: "100%" }}
+                >
+                  Enviar
+                </Button>
+              </Form>
             </Panel>
           </Collapse>
           <CommentList

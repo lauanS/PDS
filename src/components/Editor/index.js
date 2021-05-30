@@ -1,16 +1,31 @@
 import React from "react";
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 
 import "./styles.css";
 
 export default function Editor(props) {
-  const { onChange, onSubmit, submitting, value } = props;
+  const { onChange, name, isLoading } = props;
   const { TextArea } = Input;
 
   return (
     <>
-      <Form.Item>
-        <TextArea rows={4} onChange={onChange} value={value} />
+      <Form.Item
+        name={name}
+        rules={[
+          { 
+            required: true, 
+            message: "Por favor, insira uma descrição" },
+          {
+            min: 2,
+            message: "Descrição muito curta",
+          },
+        ]}
+      >
+        <TextArea
+          rows={4}
+          onChange={onChange}
+          disabled={isLoading}
+        />
       </Form.Item>
     </>
   );
