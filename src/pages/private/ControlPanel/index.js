@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Table, Input, Space, message } from "antd";
+import { Table, Input, Space, message, Select } from "antd";
 
 import useReport from "../../../hooks/useReport";
 
@@ -62,6 +62,22 @@ export default function ControlPanel() {
     }    
   }, [errorLoadingReport]);
 
+
+  /* Gerando opções dos filtros */
+  const [animalFilter = {name, value}, setAnimalFilter] = useState([]);
+  const [statusFilter = {name, value}, setStatusFilter] = useState([]);
+
+  const createAnimalFilter = (reports) => {
+    const filter = new Set(reports.animal);
+    setAnimalFilter(filter);
+  }
+  
+  const createStatusFilter = (record) => {
+    console.log("Record " + record);
+    setStatusFilter(record);
+    return statusFilter;
+  }
+  
   /* Colunas da lista */
   const columns = [
     {
@@ -96,6 +112,19 @@ export default function ControlPanel() {
             onSearch={onSearch}
             style={{ width: "100%" }}
           />
+          <div className="filters">
+            Filtros:
+            <Select placeholder="Espécie" mode="multiple" showArrow style={{width: '100%'}}>
+                <Select.Option value="Cão">Cão</Select.Option>
+                <Select.Option value="Gato">Gato</Select.Option>
+                <Select.Option value="Cacatua">Cacatua</Select.Option>
+            </Select>
+            <Select placeholder="Status" mode="multiple" showArrow style={{width: '100%'}}>
+                <Select.Option value="Aberto">Aberto</Select.Option>
+                <Select.Option value="Em andamento">Em andamento</Select.Option>
+                <Select.Option value="Fechado">Fechado</Select.Option>
+            </Select>
+          </div>
           <Table
             columns={columns}
             dataSource={!isLoadingReports ? filteredReports : null}
