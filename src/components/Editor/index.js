@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Form, Input, Upload, Modal } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
+import { postFileDev } from "../../services";
+
 import "./styles.css";
 
 export default function Editor(props) {
@@ -22,14 +24,28 @@ export default function Editor(props) {
     });
   };
 
-  const normFile = (e) => {
-    console.log("Upload event:", e);
+  const uploadFile = async (options) => {
+    const { onSuccess, onError, file, onProgress } = options;
+    console.log("meu arquivo: ", file);
 
-    if (Array.isArray(e)) {
-      return e;
-    }
+    const obj = {
+      reportId: 6,
+      name: file.name,
+      fileBase64: await getBase64(file),
+      size: file.size,
+      preview: URL.createObjectURL(file),
+      url: null      
+    };
 
-    return e && e.fileList;
+    postFileDev(obj)
+      .then((res) => {
+        onSuccess(file);
+        console.log("!Sucesso!", res);
+      })
+      .catch((err) => {
+        const error = new Error("!Deu ruim!");
+        onError({ event: error });
+      });
   };
 
   const onPreviewFile = async (file) => {
@@ -78,22 +94,24 @@ export default function Editor(props) {
         <Form.Item
           name="dragger"
           valuePropName="fileList"
-          getValueFromEvent={normFile}
+          getValueProps={() => fileList}
         >
           <Upload.Dragger
             name="files"
-            listType="picture-card"
+            listType="picture"
+            accept="video/*,image/*"
             fileList={fileList}
+            customRequest={uploadFile}
             onPreview={onPreviewFile}
             onChange={onChangeFileList}
           >
-            <p className="ant-upload-drag-icon">
+            <p className="ant-upload-drag-icon p-drag">
               <InboxOutlined />
             </p>
-            <p className="ant-upload-text">
+            <p className="ant-upload-text p-drag">
               Clique ou arraste o arquivo nesta área para envia-los
             </p>
-            <p className="ant-upload-hint">
+            <p className="ant-upload-hint p-drag">
               Suporta o envio de um ou mais arquivos
             </p>
           </Upload.Dragger>

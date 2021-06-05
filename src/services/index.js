@@ -139,6 +139,11 @@ export async function getReportCommentsDev(reportId){
   return response.data;
 }
 
+/******** Arquivos ********/
+export async function postFileDev(file){
+  return apiDev.post('/files', file);
+}
+
 /******** Funções fake de login e cadastro ********/
 export async function postSignInDev(signIn){
   console.log("Login: ", signIn);
