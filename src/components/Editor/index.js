@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Form, Input, Upload, Modal } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
+import FileItem from "../FileItem";
+
 import { postFileDev } from "../../services";
 
 import "./styles.css";
@@ -10,6 +12,7 @@ export default function Editor(props) {
   const { onChange, name, isLoading } = props;
   const { TextArea } = Input;
   const [fileList, setFileList] = useState([]);
+  const [attachedFiles, setAttachedFiles] = useState([]);
 
   const [filePreview, setFilePreview] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -40,6 +43,7 @@ export default function Editor(props) {
     postFileDev(obj)
       .then((res) => {
         onSuccess(file);
+        setAttachedFiles([...attachedFiles, res.data])
         console.log("!Sucesso!", res);
       })
       .catch((err) => {
@@ -104,6 +108,14 @@ export default function Editor(props) {
             customRequest={uploadFile}
             onPreview={onPreviewFile}
             onChange={onChangeFileList}
+            itemRender={(originNode, file, currFileList) => {
+              console.log("<><>", file);
+              return (<FileItem
+                originNode={originNode}
+                file={file}
+                fileList={currFileList}
+              />)
+            }}
           >
             <p className="ant-upload-drag-icon p-drag">
               <InboxOutlined />
