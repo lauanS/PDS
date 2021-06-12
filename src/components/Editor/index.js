@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Form, Input, Upload, Modal } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
-import FileItem from "../FileItem";
+import FileItemList from "../FileItemList";
 
 import { postFileDev } from "../../services";
+import { getBase64 } from "../../utils/base64"
 
 import "./styles.css";
 
@@ -17,15 +18,6 @@ export default function Editor(props) {
   const [filePreview, setFilePreview] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-
-  const getBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
 
   const uploadFile = async (options) => {
     const { onSuccess, onError, file, onProgress } = options;
@@ -109,7 +101,7 @@ export default function Editor(props) {
             customRequest={uploadFile}
             onChange={onChangeFileList}
             itemRender={(originNode, file, currFileList) => {
-              return (<FileItem
+              return (<FileItemList
                 originNode={originNode}
                 onPreview={onPreviewFile}
                 file={file}
