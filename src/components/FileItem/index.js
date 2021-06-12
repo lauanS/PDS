@@ -5,7 +5,7 @@ import prettyBytes from "pretty-bytes";
 import "./styles.css";
 
 export default function FileItem(props) {
-  const { file } = props;
+  const { file, onPreview } = props;
   const url =
     "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png";
 
@@ -27,6 +27,9 @@ export default function FileItem(props) {
     }
   };
 
+  const onClickPreviewImg = () => {
+    onPreview(file);
+  }
   
   return (
     <>
@@ -36,6 +39,7 @@ export default function FileItem(props) {
             className="preview-file-item"
             alt="Imagem enviada"
             style={{ backgroundImage: `url(${file.thumbUrl})`}}
+            onClick={onClickPreviewImg}
           />
           <div className="content-file-item">
             <strong style={{ fontSize: "0.875rem" }}>{file.name}</strong>

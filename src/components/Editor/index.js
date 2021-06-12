@@ -32,12 +32,12 @@ export default function Editor(props) {
     console.log("meu arquivo: ", file);
 
     const obj = {
-      reportId: 6,
-      name: file.name,
-      fileBase64: await getBase64(file),
-      size: file.size,
-      preview: URL.createObjectURL(file),
-      url: null      
+      reportId: 6, // Id da denúncia
+      name: file.name, // Nome do arquivo (exemplo: img.png)
+      fileBase64: await getBase64(file), // Arquivo base64
+      size: file.size, // Tamanho do arquivo (em bytes)
+      preview: URL.createObjectURL(file), // URL para preview (não precisa salvar)
+      url: null // URL no nosso servidor      
     };
 
     postFileDev(obj)
@@ -106,12 +106,11 @@ export default function Editor(props) {
             accept="video/*,image/*"
             fileList={fileList}
             customRequest={uploadFile}
-            onPreview={onPreviewFile}
             onChange={onChangeFileList}
             itemRender={(originNode, file, currFileList) => {
-              console.log("<><>", file);
               return (<FileItem
                 originNode={originNode}
+                onPreview={onPreviewFile}
                 file={file}
                 fileList={currFileList}
               />)
