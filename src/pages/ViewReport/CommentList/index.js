@@ -63,6 +63,9 @@ export default function CommentList(props) {
           className="comment-item"
           author={<p>{comment.author}</p>}
           content={
+            comment.comment === 'O'?
+            <p>{comment.name}</p>
+            :
             comment.comment.length === 1 ||
             comment.comment === "Caso aberto" ? (
               <>

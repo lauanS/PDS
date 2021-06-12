@@ -33,6 +33,7 @@ export default function Editor(props) {
 
     const obj = {
       reportId: 6, // Id da denúncia
+      author: "João da Silva", // Nome de quem enviou o arquivo
       name: file.name, // Nome do arquivo (exemplo: img.png)
       fileBase64: await getBase64(file), // Arquivo base64
       size: file.size, // Tamanho do arquivo (em bytes)
