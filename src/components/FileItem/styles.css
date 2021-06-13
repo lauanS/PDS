@@ -9,6 +9,13 @@
   border-radius: 5px;
 }
 
+.content-file-title{
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 130px;
+  text-overflow: ellipsis;
+}
+
 .progress-file-item {
   margin-right: 10px;
 }

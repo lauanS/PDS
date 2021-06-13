@@ -15,11 +15,11 @@ export default function ViewReportPage() {
     reportComments,
     loadReportComments,
     isLoadingComments,
-    createComment,
     errorCreateComment,
     setErrorCreateComment,
     errorLoadingComment,
     setErrorLoadingComment,
+    updateCommentList,
   } = useComment();
 
   const [form] = Form.useForm();
@@ -37,8 +37,11 @@ export default function ViewReportPage() {
       comment: e.description,
       author: "João da Silva",
     };
-    createComment(newComment);
+    const fileList = attachedFiles.slice();
+    await updateCommentList(newComment, fileList);
     form.resetFields();
+    setAttachedFiles([]);
+    message.success("Comentário enviado");
   };
 
   const handleChange = (e) => {
@@ -72,6 +75,7 @@ export default function ViewReportPage() {
             <Panel key="1" header={"Adicionar um comentário"}>
               <Form onFinish={submitComment} form={form}>
                 <Editor
+                  report={report}
                   name={"description"}
                   onChange={handleChange}
                   isLoading={isLoadingComments}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
@@ -10,8 +10,8 @@ import { getBase64 } from "../../utils/base64";
 import "./styles.css";
 
 export default function Editor(props) {
-  const { onChange, name, isLoading } = props;
-  const {attachedFiles, setAttachedFiles} = props;
+  const { onChange, name, report, isLoading } = props;
+  const { attachedFiles, setAttachedFiles } = props;
   const { TextArea } = Input;
   const [fileList, setFileList] = useState([]);
 
@@ -19,7 +19,7 @@ export default function Editor(props) {
     const { onSuccess, onError, file, onProgress } = options;
 
     const obj = {
-      reportId: 6, // Id da denúncia
+      reportId: report.id, // Id da denúncia
       author: "João da Silva", // Nome de quem enviou o arquivo
       name: file.name, // Nome do arquivo (exemplo: img.png)
       fileBase64: await getBase64(file), // Arquivo base64
@@ -44,16 +44,25 @@ export default function Editor(props) {
     try {
       await deleteFileDev(id);
       // Atualiza a lista de objetos
-      const newFileList = fileList.filter(fileItem => fileItem.id !== id)
+      const newFileList = fileList.filter(fileItem => fileItem.id !== id);
+      const newAttachedFiles = attachedFiles.filter(fileItem => fileItem.id !== id);
+      setAttachedFiles(newAttachedFiles);
       setFileList(newFileList);
     } catch (error) {
-      console.log(error);
+      console.debug(error);
     }
   }
 
   const onChangeFileList = (fileList) => {
     setFileList(fileList.fileList);
   };
+
+  /* Remove os itens anexados após o envio */
+  useEffect(() => {
+    if(attachedFiles.length === 0){
+      setFileList([]);
+    }
+  }, [attachedFiles]);
 
   return (
     <>

@@ -22,7 +22,7 @@ export default function FileItem(props) {
     toggleFileViewerVisible,
   } = useFileViewer();
 
-  const { file } = props;  
+  const { file } = props;
 
   const onClickPreviewImg = () => {
     onPreviewFile(file);
@@ -53,7 +53,7 @@ export default function FileItem(props) {
     }
     setFilePreview(file.url || file.preview || preview);
     setIsLoading(false);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* Carrega a url de prévia inicial */
   useEffect(() => {
@@ -73,7 +73,9 @@ export default function FileItem(props) {
             onClick={onClickPreviewImg}
           />
           <div className="content-file-item">
-            <strong style={{ fontSize: "0.875rem" }}>{file.name}</strong>
+            <div className="content-file-title">
+              <strong style={{ fontSize: "0.875rem" }}>{file.name}</strong>
+            </div>
             <span className="span-file-item">{prettyBytes(file.size)}</span>
           </div>
         </div>

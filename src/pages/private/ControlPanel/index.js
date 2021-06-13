@@ -51,7 +51,6 @@ export default function ControlPanel() {
 
   /* Atualizando as denúncias */
   useEffect(() => {
-    console.log("Chamou setFilteredReports");
     setFilteredReports(reports);
   }, [reports]);
 
