@@ -149,6 +149,11 @@ export async function getReportFilesDev(reportId){
   const response = await apiDev.get('/files', { params: { reportId } });
   return response.data;
 }
+
+export async function deleteFileDev(id){
+  return apiDev.delete('/files/' + id);  
+}
+
 /******** Funções fake de login e cadastro ********/
 export async function postSignInDev(signIn){
   console.log("Login: ", signIn);

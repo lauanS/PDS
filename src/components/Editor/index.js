@@ -4,16 +4,16 @@ import { InboxOutlined } from "@ant-design/icons";
 
 import FileItemList from "../FileItemList";
 
-import { postFileDev } from "../../services";
+import { postFileDev, deleteFileDev } from "../../services";
 import { getBase64 } from "../../utils/base64";
 
 import "./styles.css";
 
 export default function Editor(props) {
   const { onChange, name, isLoading } = props;
+  const {attachedFiles, setAttachedFiles} = props;
   const { TextArea } = Input;
   const [fileList, setFileList] = useState([]);
-  const [attachedFiles, setAttachedFiles] = useState([]);
 
   const uploadFile = async (options) => {
     const { onSuccess, onError, file, onProgress } = options;
@@ -29,6 +29,7 @@ export default function Editor(props) {
 
     postFileDev(obj)
       .then((res) => {
+        file.id = res.data.id;
         onSuccess(file);
         setAttachedFiles([...attachedFiles, res.data]);
       })
@@ -38,8 +39,20 @@ export default function Editor(props) {
       });
   };
 
-  const onChangeFileList = ({ fileList }) => {
-    setFileList({ fileList });
+  const removeFile = async (file) => {
+    const id = file.id;
+    try {
+      await deleteFileDev(id);
+      // Atualiza a lista de objetos
+      const newFileList = fileList.filter(fileItem => fileItem.id !== id)
+      setFileList(newFileList);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const onChangeFileList = (fileList) => {
+    setFileList(fileList.fileList);
   };
 
   return (
@@ -79,6 +92,7 @@ export default function Editor(props) {
                   originNode={originNode}
                   file={file}
                   fileList={currFileList}
+                  removeFile={removeFile}
                 />
               );
             }}

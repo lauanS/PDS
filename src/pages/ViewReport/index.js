@@ -24,6 +24,7 @@ export default function ViewReportPage() {
 
   const [form] = Form.useForm();
   const [newCommentText, setNewCommentText] = useState("");
+  const [attachedFiles, setAttachedFiles] = useState([]);
 
   const location = useLocation();
   const report = location.state.report;
@@ -74,6 +75,8 @@ export default function ViewReportPage() {
                   name={"description"}
                   onChange={handleChange}
                   isLoading={isLoadingComments}
+                  attachedFiles={attachedFiles}
+                  setAttachedFiles={setAttachedFiles}
                 />
                 <Button
                   htmlType="submit"
