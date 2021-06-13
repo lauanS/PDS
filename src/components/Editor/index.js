@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Form, Input, Upload, Modal } from "antd";
+import { Form, Input, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
 import FileItemList from "../FileItemList";
 
 import { postFileDev } from "../../services";
-import { getBase64 } from "../../utils/base64"
+import { getBase64 } from "../../utils/base64";
 
 import "./styles.css";
 
@@ -15,13 +15,8 @@ export default function Editor(props) {
   const [fileList, setFileList] = useState([]);
   const [attachedFiles, setAttachedFiles] = useState([]);
 
-  const [filePreview, setFilePreview] = useState("");
-  const [previewTitle, setPreviewTitle] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-
   const uploadFile = async (options) => {
     const { onSuccess, onError, file, onProgress } = options;
-    console.log("meu arquivo: ", file);
 
     const obj = {
       reportId: 6, // Id da denúncia
@@ -29,44 +24,22 @@ export default function Editor(props) {
       name: file.name, // Nome do arquivo (exemplo: img.png)
       fileBase64: await getBase64(file), // Arquivo base64
       size: file.size, // Tamanho do arquivo (em bytes)
-      preview: URL.createObjectURL(file), // URL para preview (não precisa salvar)
-      url: null // URL no nosso servidor      
+      url: null, // URL no nosso servidor
     };
 
     postFileDev(obj)
       .then((res) => {
         onSuccess(file);
-        setAttachedFiles([...attachedFiles, res.data])
-        console.log("!Sucesso!", res);
+        setAttachedFiles([...attachedFiles, res.data]);
       })
-      .catch((err) => {
-        const error = new Error("!Deu ruim!");
+      .catch((_) => {
+        const error = new Error("Erro ao realizar o upload do arquivo");
         onError({ event: error });
       });
   };
 
-  const onPreviewFile = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-
-    setFilePreview(file.url || file.preview);
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    );
-    setModalVisible(true);
-  };
-
   const onChangeFileList = ({ fileList }) => {
     setFileList({ fileList });
-  };
-
-  const toggleModalVisibel = () => {
-    if (modalVisible) {
-      setModalVisible(false);
-    } else {
-      setModalVisible(true);
-    }
   };
 
   return (
@@ -101,12 +74,13 @@ export default function Editor(props) {
             customRequest={uploadFile}
             onChange={onChangeFileList}
             itemRender={(originNode, file, currFileList) => {
-              return (<FileItemList
-                originNode={originNode}
-                onPreview={onPreviewFile}
-                file={file}
-                fileList={currFileList}
-              />)
+              return (
+                <FileItemList
+                  originNode={originNode}
+                  file={file}
+                  fileList={currFileList}
+                />
+              );
             }}
           >
             <p className="ant-upload-drag-icon p-drag">
@@ -121,15 +95,6 @@ export default function Editor(props) {
           </Upload.Dragger>
         </Form.Item>
       </Form.Item>
-
-      <Modal
-        visible={modalVisible}
-        title={previewTitle}
-        footer={null}
-        onCancel={toggleModalVisibel}
-      >
-        <img alt="imagem enviada" style={{ width: "100%" }} src={filePreview} />
-      </Modal>
     </>
   );
 }

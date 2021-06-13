@@ -1,13 +1,14 @@
 import React from "react";
 import { Progress } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
-import prettyBytes from "pretty-bytes";
+
+import FileItem from "../FileItem";
+
 import "./styles.css";
 
 export default function FileItemList(props) {
-  const { file, onPreview } = props;
-  const url =
-    "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png";
+  // Esse file é o objeto criado durante o uploading de uma imagem
+  // Possui campos diferentes como o "progress"
+  const { file } = props;
 
   const fileStatusToProgressStatus = (status) => {
     if (status === "error") {
@@ -26,26 +27,10 @@ export default function FileItemList(props) {
       return "normal";
     }
   };
-
-  const onClickPreviewImg = () => {
-    onPreview(file);
-  }
   
   return (
     <>
-      <div className="container-file-item">
-        <div className="info-file-item">
-          <div
-            className="preview-file-item"
-            alt="Imagem enviada"
-            style={{ backgroundImage: `url(${file.thumbUrl})`}}
-            onClick={onClickPreviewImg}
-          />
-          <div className="content-file-item">
-            <strong style={{ fontSize: "0.875rem" }}>{file.name}</strong>
-            <span className="span-file-item">{prettyBytes(file.size)}</span>
-          </div>
-        </div>
+      <FileItem file={file}>
         <div className="progress-file-item">
           <Progress
             type="circle"
@@ -54,7 +39,7 @@ export default function FileItemList(props) {
             status={fileStatusToProgressStatus(file.status)}
           />
         </div>
-      </div>
+      </FileItem>
     </>
   );
 }

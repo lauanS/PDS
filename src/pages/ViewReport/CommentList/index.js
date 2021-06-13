@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import { useLocation } from "react-router";
 
 import { Avatar, Comment, List, Tooltip, Alert, message } from "antd";
+import FileItem from "../../../components/FileItem";
 
 import { parseISO, format, formatRelative } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
@@ -64,7 +65,7 @@ export default function CommentList(props) {
           author={<p>{comment.author}</p>}
           content={
             comment.comment === 'O'?
-            <p>{comment.name}</p>
+            <FileItem file={comment} />
             :
             comment.comment.length === 1 ||
             comment.comment === "Caso aberto" ? (
