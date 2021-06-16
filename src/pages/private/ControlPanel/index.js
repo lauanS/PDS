@@ -12,23 +12,23 @@ import ModalViewReport from "../../../components/ViewReport/Modal";
 const { Search } = Input;
 
 export default function ControlPanel() {
-  const {
-    reports, isLoadingReports, errorLoadingReport
-  } = useReport();
-
+  /* Gerando opções dos filtros */
+  const [animalFilter, setAnimalFilter] = useState([]);
+  const [status, setStatus] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
   const [currentReport, setCurrentReport] = useState({});
   const [modalReportVisible, setModalReportVisible] = useState(false);
 
-  const screenSize = { x: window.innerWidth, y: window.innerHeight };
+  const { reports, isLoadingReports, errorLoadingReport } = useReport();
 
+  const screenSize = { x: window.innerWidth, y: window.innerHeight };
 
   const onSearch = (value) => {
     searchReports(reports, value);
   };
 
   const showReportModal = (data) => {
-    setCurrentReport(data)
+    setCurrentReport(data);
     setModalReportVisible(true);
   };
 
@@ -49,6 +49,34 @@ export default function ControlPanel() {
       : [];
   };
 
+  /* Atualizando lista com filtros */
+  const onChangeStatus = (value) => {
+    setStatus(value);
+  };
+
+  /* Atualiza as denúncias filtradas com base nos filtros */
+  const updateFilteredReports = () => {
+    if(status.length === 0){
+      setFilteredReports(reports);
+      return;
+    }
+
+    const newFilteredReports = reports.filter((report) => {
+      if(status.includes(statusTranslate(report.status))){
+        return true;
+      }
+      return false;
+    });
+
+    setFilteredReports(newFilteredReports);
+  }
+
+  /* Filtrando as denúncias com base no status */
+  useEffect(() => {
+    console.log("Irá filtrar");
+    updateFilteredReports();
+  }, [status]);
+
   /* Atualizando as denúncias */
   useEffect(() => {
     console.log("Chamou setFilteredReports");
@@ -57,41 +85,13 @@ export default function ControlPanel() {
 
   /* Verificando a ocorrência de um erro */
   useEffect(() => {
-    if(errorLoadingReport === true){
+    if (errorLoadingReport === true) {
       message.error("Erro ao carregar as denúncias");
-    }    
+    }
   }, [errorLoadingReport]);
 
+  
 
-  /* Gerando opções dos filtros */
-  const [animalFilter = {name, value}, setAnimalFilter] = useState([]);
-
-  /* Atualizando lista com filtros */
-  const onSearchStatus = (value) => {
-    console.log("Entrou em onSelect")
-    console.log("Value: " + value)
-    
-  }
-
-  const onSelectStatus = (value, event) => {
-    console.log("Entrou em onSelect")
-    console.log("Value: " + value)
-    setFilteredReports(FilterStatus(reports, value) || []);
-  }
-
-  const FilterStatus = (list, value) => { 
-    if (value === "") {
-      return list;
-    }
-
-    return Array.isArray(list)
-      ? list.filter(
-          (report) =>
-            report.status.toLowerCase().indexOf(value.toLowerCase()) !== -1
-        )
-      : [];
-
-  }
   /* Colunas da lista */
   const columns = [
     {
@@ -110,15 +110,18 @@ export default function ControlPanel() {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (text) => <p>{statusTranslate(text)}</p>
+      render: (text) => <p>{statusTranslate(text)}</p>,
     },
   ];
 
   return (
     <>
       <div className="table-container">
-        <Space direction="vertical" style={{maxWidth: "100%", maxHeight: "100%"}}>
-          <p className="search-title">Busca por endereço</p>          
+        <Space
+          direction="vertical"
+          style={{ maxWidth: "100%", maxHeight: "100%" }}
+        >
+          <p className="search-title">Busca por endereço</p>
           <Search
             placeholder="Busca por endereço"
             onChange={updateSearch}
@@ -127,30 +130,28 @@ export default function ControlPanel() {
           />
           <div className="filters">
             Filtros:
-            <Select 
-              placeholder="Espécie" 
-              mode="multiple" 
-              showArrow 
-              style={{width: '100%'}}
+            <Select
+              placeholder="Espécie"
+              mode="multiple"
+              showArrow
+              style={{ width: "100%" }}
               autoClearSearchValue
             >
-            
-                <Select.Option value="Cão">Cão</Select.Option>
-                <Select.Option value="Gato">Gato</Select.Option>
-                <Select.Option value="Cacatua">Cacatua</Select.Option>
+              <Select.Option value="Cão">Cão</Select.Option>
+              <Select.Option value="Gato">Gato</Select.Option>
+              <Select.Option value="Cacatua">Cacatua</Select.Option>
             </Select>
-            <Select 
-              placeholder="Status" 
+            <Select
+              placeholder="Status"
               mode="multiple"
-              showArrow 
+              showArrow
               allowClear
-              style={{width: '100%'}}
-              onSearch={onSearchStatus}
-              onSelect={onSelectStatus}
+              style={{ width: "100%" }}
+              onChange={onChangeStatus}
             >
-                <Select.Option value="Aberto">Aberto</Select.Option>
-                <Select.Option value="Em andamento">Em andamento</Select.Option>
-                <Select.Option value="Fechado">Fechado</Select.Option>
+              <Select.Option value="Aberto">Aberto</Select.Option>
+              <Select.Option value="Processando">Processando</Select.Option>
+              <Select.Option value="Fechado">Fechado</Select.Option>
             </Select>
           </div>
           <Table
@@ -163,7 +164,11 @@ export default function ControlPanel() {
             tableLayout="auto"
             className="table-reports"
             onRow={(record, rowIndex) => {
-              return { onClick: event => { showReportModal(record) }}
+              return {
+                onClick: (event) => {
+                  showReportModal(record);
+                },
+              };
             }}
           />
         </Space>
