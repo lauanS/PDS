@@ -13,7 +13,9 @@ const { Search } = Input;
 
 export default function ControlPanel() {
   /* Gerando opções dos filtros */
-  const [animalFilter, setAnimalFilter] = useState([]);
+  const [animals, setAnimalFilter] = useState([]);
+  const [allAnimals, setAllAnimals] = useState([]);
+  const [search, setSearch] = useState("");
   const [status, setStatus] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
   const [currentReport, setCurrentReport] = useState({});
@@ -23,30 +25,13 @@ export default function ControlPanel() {
 
   const screenSize = { x: window.innerWidth, y: window.innerHeight };
 
-  const onSearch = (value) => {
-    searchReports(reports, value);
-  };
-
   const showReportModal = (data) => {
     setCurrentReport(data);
     setModalReportVisible(true);
   };
 
   const updateSearch = (e) => {
-    setFilteredReports(searchReports(reports, e.target.value) || []);
-  };
-
-  const searchReports = (list, search) => {
-    if (search === "") {
-      return list;
-    }
-
-    return Array.isArray(list)
-      ? list.filter(
-          (report) =>
-            report.address.toLowerCase().indexOf(search.toLowerCase()) !== -1
-        )
-      : [];
+    setSearch(e.target.value);
   };
 
   /* Atualizando lista com filtros */
@@ -56,26 +41,39 @@ export default function ControlPanel() {
 
   /* Atualiza as denúncias filtradas com base nos filtros */
   const updateFilteredReports = () => {
-    if(status.length === 0){
-      setFilteredReports(reports);
-      return;
+    let newFilteredReports = reports;
+
+    /* Primeiro filtra pelo endereço */
+    if (search !== "") {
+      newFilteredReports = Array.isArray(newFilteredReports)
+        ? newFilteredReports.filter(
+            (report) =>
+              report.address.toLowerCase().indexOf(search.toLowerCase()) !== -1
+          )
+        : [];
     }
 
-    const newFilteredReports = reports.filter((report) => {
-      if(status.includes(statusTranslate(report.status))){
-        return true;
-      }
-      return false;
-    });
+    /* Filtramos por status */
+    if (status.length !== 0) {
+      newFilteredReports = newFilteredReports.filter((report) => {
+        return status.includes(statusTranslate(report.status)) ;  
+      });
+    }
 
+    /* Filtro por espécie */
+    if (animals.length !== 0) {
+      newFilteredReports = newFilteredReports.filter((report) => {
+        return animals.includes(report.animal) ;  
+      });
+    }
     setFilteredReports(newFilteredReports);
-  }
+  };
 
   /* Filtrando as denúncias com base no status */
   useEffect(() => {
     console.log("Irá filtrar");
     updateFilteredReports();
-  }, [status]);
+  }, [status, search]);
 
   /* Atualizando as denúncias */
   useEffect(() => {
@@ -89,8 +87,6 @@ export default function ControlPanel() {
       message.error("Erro ao carregar as denúncias");
     }
   }, [errorLoadingReport]);
-
-  
 
   /* Colunas da lista */
   const columns = [
@@ -124,8 +120,8 @@ export default function ControlPanel() {
           <p className="search-title">Busca por endereço</p>
           <Search
             placeholder="Busca por endereço"
+            value={search}
             onChange={updateSearch}
-            onSearch={onSearch}
             style={{ width: "100%" }}
           />
           <div className="filters">
