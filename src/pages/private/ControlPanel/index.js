@@ -65,19 +65,33 @@ export default function ControlPanel() {
 
   /* Gerando opções dos filtros */
   const [animalFilter = {name, value}, setAnimalFilter] = useState([]);
-  const [statusFilter = {name, value}, setStatusFilter] = useState([]);
 
-  const createAnimalFilter = (reports) => {
-    const filter = new Set(reports.animal);
-    setAnimalFilter(filter);
+  /* Atualizando lista com filtros */
+  const onSearchStatus = (value) => {
+    console.log("Entrou em onSelect")
+    console.log("Value: " + value)
+    
   }
-  
-  const createStatusFilter = (record) => {
-    console.log("Record " + record);
-    setStatusFilter(record);
-    return statusFilter;
+
+  const onSelectStatus = (value, event) => {
+    console.log("Entrou em onSelect")
+    console.log("Value: " + value)
+    setFilteredReports(FilterStatus(reports, value) || []);
   }
-  
+
+  const FilterStatus = (list, value) => { 
+    if (value === "") {
+      return list;
+    }
+
+    return Array.isArray(list)
+      ? list.filter(
+          (report) =>
+            report.status.toLowerCase().indexOf(value.toLowerCase()) !== -1
+        )
+      : [];
+
+  }
   /* Colunas da lista */
   const columns = [
     {
@@ -107,19 +121,33 @@ export default function ControlPanel() {
           <p className="search-title">Busca por endereço</p>          
           <Search
             placeholder="Busca por endereço"
-            allowClear
             onChange={updateSearch}
             onSearch={onSearch}
             style={{ width: "100%" }}
           />
           <div className="filters">
             Filtros:
-            <Select placeholder="Espécie" mode="multiple" showArrow style={{width: '100%'}}>
+            <Select 
+              placeholder="Espécie" 
+              mode="multiple" 
+              showArrow 
+              style={{width: '100%'}}
+              autoClearSearchValue
+            >
+            
                 <Select.Option value="Cão">Cão</Select.Option>
                 <Select.Option value="Gato">Gato</Select.Option>
                 <Select.Option value="Cacatua">Cacatua</Select.Option>
             </Select>
-            <Select placeholder="Status" mode="multiple" showArrow style={{width: '100%'}}>
+            <Select 
+              placeholder="Status" 
+              mode="multiple"
+              showArrow 
+              allowClear
+              style={{width: '100%'}}
+              onSearch={onSearchStatus}
+              onSelect={onSelectStatus}
+            >
                 <Select.Option value="Aberto">Aberto</Select.Option>
                 <Select.Option value="Em andamento">Em andamento</Select.Option>
                 <Select.Option value="Fechado">Fechado</Select.Option>
