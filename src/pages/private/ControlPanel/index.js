@@ -13,7 +13,7 @@ const { Search } = Input;
 
 export default function ControlPanel() {
   /* Gerando opções dos filtros */
-  const [animals, setAnimalFilter] = useState([]);
+  const [animals, setAnimals] = useState([]);
   const [allAnimals, setAllAnimals] = useState([]);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState([]);
@@ -39,6 +39,11 @@ export default function ControlPanel() {
     setStatus(value);
   };
 
+  /* Atualizando lista com filtros */
+  const onChangeAnimal = (value) => {
+    setAnimals(value);
+  };
+
   /* Atualiza as denúncias filtradas com base nos filtros */
   const updateFilteredReports = () => {
     let newFilteredReports = reports;
@@ -56,14 +61,14 @@ export default function ControlPanel() {
     /* Filtramos por status */
     if (status.length !== 0) {
       newFilteredReports = newFilteredReports.filter((report) => {
-        return status.includes(statusTranslate(report.status)) ;  
+        return status.includes(statusTranslate(report.status));
       });
     }
 
     /* Filtro por espécie */
     if (animals.length !== 0) {
       newFilteredReports = newFilteredReports.filter((report) => {
-        return animals.includes(report.animal) ;  
+        return animals.includes(report.animal);
       });
     }
     setFilteredReports(newFilteredReports);
@@ -73,12 +78,19 @@ export default function ControlPanel() {
   useEffect(() => {
     console.log("Irá filtrar");
     updateFilteredReports();
-  }, [status, search]);
+  }, [status, search, animals]);
 
   /* Atualizando as denúncias */
   useEffect(() => {
     console.log("Chamou setFilteredReports");
     setFilteredReports(reports);
+
+    let uniqueAnimails = new Set();
+    reports.map((report) => {
+      return uniqueAnimails.add(report.animal);
+    });
+
+    setAllAnimals(Array.from(uniqueAnimails).sort());
   }, [reports]);
 
   /* Verificando a ocorrência de um erro */
@@ -132,10 +144,15 @@ export default function ControlPanel() {
               showArrow
               style={{ width: "100%" }}
               autoClearSearchValue
+              onChange={onChangeAnimal}
             >
-              <Select.Option value="Cão">Cão</Select.Option>
-              <Select.Option value="Gato">Gato</Select.Option>
-              <Select.Option value="Cacatua">Cacatua</Select.Option>
+              {allAnimals.map((animal, key) => {
+                return (
+                  <Select.Option value={animal} key={key}>
+                    {animal}
+                  </Select.Option>
+                );
+              })}
             </Select>
             <Select
               placeholder="Status"
