@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 
 import FileViewer, { useFileViewer } from "../FileViewer";
-import { getBase64 } from "../../utils/base64";
+import { fileType, getBase64 } from "../../utils/base64";
 
 import prettyBytes from "pretty-bytes";
 
 import defaultImg from "../../assets/no-image-placeholder.jpg";
-
+import defaultVideoImg from "../../assets/no-video-placeholder.png";
 import "./styles.css";
 
 export default function FileItem(props) {
@@ -60,6 +60,19 @@ export default function FileItem(props) {
     urlPreview();
   }, [urlPreview]);
 
+  const preview = () => {
+    if(isLoading){
+      console.log("Carregando: ");
+      return defaultUrl;
+    }
+    if(fileType(filePreview).indexOf("data:image") === -1){
+      console.log("Vídeo: ", fileType(filePreview));
+      return defaultVideoImg;
+    }
+    console.log("Imagem: ", fileType(filePreview));
+    return filePreview;
+  }
+
   return (
     <>
       <div className="container-file-item">
@@ -68,7 +81,7 @@ export default function FileItem(props) {
             className="preview-file-item"
             alt="Imagem enviada"
             style={{
-              backgroundImage: `url(${isLoading ? defaultUrl : filePreview})`,
+              backgroundImage: `url(${preview()})`,
             }}
             onClick={onClickPreviewImg}
           />

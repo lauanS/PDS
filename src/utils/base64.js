@@ -19,3 +19,9 @@ export async function base64ToFile(base64, fileName) {
   const blob = await res.blob();
   return new File([blob], fileName, { type });
 }
+
+export function fileType(base64file){
+  // de: "data:image/png;base64,iVBORw0KG...
+  // para:  "data:image/png;base64"
+  return base64file.split(",")[0];
+}
