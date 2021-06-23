@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Table, Input, Space, message, Select } from "antd";
+import { Table, Input, Space, message, Select, Tag } from "antd";
 
 import useReport from "../../../hooks/useReport";
 
@@ -85,12 +85,12 @@ export default function ControlPanel() {
     console.log("Chamou setFilteredReports");
     setFilteredReports(reports);
 
-    let uniqueAnimails = new Set();
+    let uniqueAnimals = new Set();
     reports.map((report) => {
-      return uniqueAnimails.add(report.animal);
+      return uniqueAnimals.add(report.animal);
     });
 
-    setAllAnimals(Array.from(uniqueAnimails).sort());
+    setAllAnimals(Array.from(uniqueAnimals).sort());
   }, [reports]);
 
   /* Verificando a ocorrência de um erro */
@@ -99,6 +99,16 @@ export default function ControlPanel() {
       message.error("Erro ao carregar as denúncias");
     }
   }, [errorLoadingReport]);
+
+  /* Criando as tags para exibição do status */
+  const tagName = (value) => {
+      if (value === 'Aberto')
+        return 'green'
+      else if (value === 'Processando')
+        return 'yellow'
+      else if (value === 'Fechado')
+        return 'red'
+  }
 
   /* Colunas da lista */
   const columns = [
@@ -118,7 +128,7 @@ export default function ControlPanel() {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (text) => <p>{statusTranslate(text)}</p>,
+      render: (text) => <Tag color={tagName(statusTranslate(text))}>{statusTranslate(text)}</Tag>,
     },
   ];
 
@@ -144,6 +154,7 @@ export default function ControlPanel() {
               showArrow
               style={{ width: "100%" }}
               autoClearSearchValue
+              maxTagCount="responsive"
               onChange={onChangeAnimal}
             >
               {allAnimals.map((animal, key) => {
@@ -161,6 +172,7 @@ export default function ControlPanel() {
               allowClear
               style={{ width: "100%" }}
               onChange={onChangeStatus}
+              maxTagCount='responsive'
             >
               <Select.Option value="Aberto">Aberto</Select.Option>
               <Select.Option value="Processando">Processando</Select.Option>
