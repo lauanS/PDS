@@ -10,14 +10,30 @@ import { getBase64 } from "../../utils/base64";
 import "./styles.css";
 
 export default function Editor(props) {
-  const { onChange, name, report, isLoading } = props;
+  const { onChange, name, report, isLoading, upload, label } = props;
   const { attachedFiles, setAttachedFiles } = props;
   const { TextArea } = Input;
   const [fileList, setFileList] = useState([]);
 
   const uploadFile = async (options) => {
     const { onSuccess, onError, file, onProgress } = options;
+    
+    if(upload === false){
+      const obj = {
+        reportId: -1, // Id da denúncia
+        author: "João da Silva", // Nome de quem enviou o arquivo
+        name: file.name, // Nome do arquivo (exemplo: img.png)
+        originFile: file,
+        fileBase64: await getBase64(file), // Arquivo base64
+        size: file.size, // Tamanho do arquivo (em bytes)
+        url: null, // URL no nosso servidor
+      };
 
+      onSuccess(file);
+      setAttachedFiles([...attachedFiles, obj]);
+      return;
+    }
+      
     const obj = {
       reportId: report.id, // Id da denúncia
       author: "João da Silva", // Nome de quem enviou o arquivo
@@ -68,6 +84,7 @@ export default function Editor(props) {
     <>
       <Form.Item
         name={name}
+        label={label}
         rules={[
           {
             required: true,

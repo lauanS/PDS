@@ -81,6 +81,7 @@ export default function ViewReportPage() {
                   isLoading={isLoadingComments}
                   attachedFiles={attachedFiles}
                   setAttachedFiles={setAttachedFiles}
+                  upload={true}
                 />
                 <Button
                   htmlType="submit"
