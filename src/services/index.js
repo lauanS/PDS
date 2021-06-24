@@ -80,7 +80,19 @@ export async function deleteReport(id){
 }
 
 /******** Comentários ********/
+export async function getComments(){
+  return (await api.get('/comment')).data;
+}
 
+export async function postComment(comment){
+  comment.date = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+  return api.post('/comment', comment);
+}
+
+export async function getReportComments(reportId){
+  const response = await api.get(`/comment/${reportId}`);
+  return response.data;
+}
 
 /******** Login ********/
 export async function postSignIn(signIn){

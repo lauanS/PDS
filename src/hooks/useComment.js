@@ -2,8 +2,8 @@ import { useState, useCallback, useRef } from "react";
 import { parseISO, compareDesc } from "date-fns";
 
 import {
-  postCommentDev,
-  getReportCommentsDev,
+  postComment,
+  getReportComments,
   getReportFilesDev,
 } from "../services/index";
 
@@ -18,7 +18,7 @@ export default function useComment() {
   const loadReportComments = useCallback(async (reportId) => {
     setIsLoadingComments(true);
     try {
-      let data = await getReportCommentsDev(reportId);
+      let data = await getReportComments(reportId);
       let filesData = await getReportFilesDev(reportId);
 
       // Adicionando arquivos na lista de comentarios
@@ -48,7 +48,7 @@ export default function useComment() {
   const createComment = async (newComment) => {
     setIsLoadingComments(true);
     try {
-      const response = await postCommentDev(newComment);
+      const response = await postComment(newComment);
       setReportComments([response.data, ...reportComments]);
       setIsLoadingComments(false);
     } catch (error) {
@@ -63,7 +63,7 @@ export default function useComment() {
   const updateCommentList = async (newComment, fileList) => {
     setIsLoadingComments(true);
     try {
-      const response = await postCommentDev(newComment);
+      const response = await postComment(newComment);
 
       fileList.map((file) => (file.comment = "O"));
       let data = [...reportComments, ...fileList];

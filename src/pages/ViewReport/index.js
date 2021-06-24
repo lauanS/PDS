@@ -108,7 +108,7 @@ export default function ViewReportPage() {
             loadReportComments={loadReportComments}
             isLoadingComments={isLoadingComments}
             errorLoadingComment={errorLoadingComment}
-            setErrorLoadingComment={errorLoadingComment}
+            setErrorLoadingComment={setErrorLoadingComment}
           />
         </>
       ) : (
