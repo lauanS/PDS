@@ -1,82 +1,233 @@
 {
   "reports": [
     {
-      "id": 1619638409706,
-      "lat": -23.5535,
-      "lng": -46.64756,
-      "date": "XX",
-      "address": "Avenida Nova Denúncia, 37, São Paulo, SP",
+      "id": 1,
+      "description": "O animal está severamente machucado e seu dono se recussa a procurar ajuda, mesmo após a comunidade de unir para pagar um veterinário para o animal",
+      "address": "R. Mituto Mizumoto, 69 - Sé, São Paulo - SP, 01513-040, Brasil",
+      "animal": "Gato",
+      "breeds": "",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-04-20 17:05:00",
+      "lat": "-23.565301150854427",
+      "lng": "-46.63207388276037"
+    },
+    {
+      "id": 2,
+      "description": "Animal preso numa pequena jaula e abandonado nos fundos da residência. Passa vários dias sem ser alimentado.",
+      "address": "R. Conselheiro Furtado, 1401 - Liberdade, São Paulo - SP, 01511-001, Brasil",
       "animal": "Cacatua",
       "breeds": "",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
-      "status": "closed"
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-04-27 16:30:00",
+      "lat": "-23.565332137624303",
+      "lng": "-46.63235970535985"
     },
     {
-      "id": 1619638408888,
-      "lat": -23.55413,
-      "lng": -46.64044,
-      "date": "XX",
-      "address": "Avenide Ipanemas, 123, São Paulo, SP",
-      "animal": "Papagaio",
+      "id": 3,
+      "description": "A ave permanece trancada numa pequena gaiola o tempo todo, sendo tratada apenas uma vez ao dia.",
+      "address": "Av. 23 de Maio, 266 - Bela Vista, São Paulo - SP, 01316-060, Brasil",
+      "animal": "Coruja",
       "breeds": "",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
-      "status": "closed"
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-04-30 09:57:00",
+      "lat": "-23.562971931789814",
+      "lng": "-46.64068528214208"
     },
     {
-      "id": 1619638409999,
-      "lat": -23.56313,
-      "lng": -46.6544,
-      "date": "XX",
-      "address": "Rua Carvalho Cavalcanti, 33, São Paulo, SP",
+      "id": 4,
+      "description": "O dono do gato costuma viajar e abandona o animal por vários dias sozinho no apartamento ao lado.",
+      "address": "R. Gama Cerqueira, 213 - Cambuci, São Paulo - SP, 01539-010, Brasil",
       "animal": "Gato",
       "breeds": "",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
-      "status": "opened"
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-03 17:35:00",
+      "lat": "-23.569344390220195",
+      "lng": "-46.61965676346532"
     },
     {
-      "id": 1619638407777,
-      "lat": -23.54613,
-      "lng": -46.63944,
-      "date": "XX",
-      "address": "Rua Sete e Meio de Abril, 123, São Paulo, SP",
+      "id": 5,
+      "description": "O cachorro encontra-se com uma grave infestação de pulgas e carrapatos. Mesmo avisado, o dono se nega a prestá-lo algum tratamento.",
+      "address": "R. Chuí, 30 - Vila Mariana, São Paulo - SP, 04104-050, Brasil",
       "animal": "Cão",
-      "breeds": "pinscher",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam quis ligula accumsan leo efficitur finibus. Donec quis nisl condimentum, mattis purus id, dictum urna.",
-      "status": "opened"
+      "breeds": "Pinscher",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-05 14:13:00",
+      "lat": "-23.57461520244659",
+      "lng": "-46.638024530799306"
     },
     {
-      "id": 1619639679923,
-      "lat": -23.558268775205526,
-      "lng": -46.63340422468415,
-      "date": "X",
+      "id": 6,
+      "description": "O cachorro foi atropelado pelo dono há mais de uma semana e até agora não foi levado ao veterinário.",
+      "address": "R. Cesário Ramalho, 621 - Cambuci, São Paulo - SP, 01521-000, Brasil",
+      "animal": "Cachorro",
+      "breeds": "Vira-latas",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-07 10:37:00",
+      "lat": "-23.5619491627597",
+      "lng": "-46.61965676346532"
+    },
+    {
+      "id": 7,
+      "description": "Além de não ser alimentado com frequência, o cão vive no quintal descoberto, sob sol e chuva.",
+      "address": "R. Conselheiro Ramalho, 717 - Bela Vista, São Paulo - SP, 01325-001, Brasil",
+      "animal": "Cão",
+      "breeds": "",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-09 12:00:00",
+      "lat": "-23.558251392916773",
+      "lng": "-46.64420434036962"
+    },
+    {
+      "id": 8,
+      "description": "O animal está severamente machucado e seu dono se recusa a procurar ajuda, mesmo após a comunidade se unir para pagar um veterinário para o animal",
+      "address": "Av. Lacerda Franco, 1641 - Cambuci, São Paulo - SP, 01536-001, Brasil",
+      "animal": "Gato",
+      "breeds": "",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-09 15:37:00",
+      "lat": "-23.57721119637531",
+      "lng": "-46.62497826615087"
+    },
+    {
+      "id": 9,
+      "description": "A calopsita pia constantemente, provavelmente por sede e falta de alimento. Sua gaiola fica posicionada na varanda da casa, sendo atingida por ventos fortes que ameaçam derrubá-la.",
+      "address": "R. Dr. Rafael de Barros, 55 - Paraíso, São Paulo - SP, 04003-040, Brasil",
+      "animal": "Calopsita",
+      "breeds": "",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-09 15:45:00",
+      "lat": "-23.572097825983658",
+      "lng": "-46.64497681656591"
+    },
+    {
+      "id": 10,
+      "description": "A dona da casa possui três cadelas não castradas que têm filhotes com frequência. Ela já foi flagrada abandonando filhotes em bairros vizinhos repetidas vezes.",
+      "address": "Avenida do Estado, 4912-5198 - Cambuci, São Paulo - SP, 03105-000, Brasil",
       "animal": "Cachorros",
-      "breeds": "Viralatas",
-      "address": "Rua Barão do Iguape",
-      "description": "O dono do bar costuma afugentar os cachorros que se aproximam do estabelecimento com violência",
-      "status": "opened",
-      "isAnonymous": true
+      "breeds": "",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-12 11:59:00",
+      "lat": "-23.55707123170003",
+      "lng": "-46.620858393103994"
     },
     {
-      "id": 1619650930424,
-      "lat": -23.56069298946934,
-      "lng": -46.64120945291749,
-      "date": "X",
-      "animal": "Cão",
-      "address": "Rua Monsenhor Passalaquá",
-      "description": "Vizinho agride constantemente seu animal",
-      "status": "opened",
-      "isAnonymous": false
+      "id": 11,
+      "description": "O animal apresenta-se muito magro e com ferimentos por todo o corpo.",
+      "address": "R. Álvares Machado, 51 - Liberdade, São Paulo - SP, 06311-160, Brasil",
+      "animal": "Cachorro",
+      "breeds": "Vira-lata",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-12 19:00:00",
+      "lat": "-23.55297992409466",
+      "lng": "-46.63596459427587"
     },
     {
-      "id": 1619662846619,
-      "lat": -23.5546544984853,
-      "lng": -46.632529824545294,
-      "date": "X",
+      "id": 12,
+      "description": "O animal está severamente machucado e seu dono se recusa a procurar ajuda, mesmo após a comunidade se unir para pagar um veterinário para o animal",
+      "address": "R. Dr. Fausto Ferraz, 119 - Bela Vista, São Paulo - SP, 01333-030, Brasil",
       "animal": "Gato",
-      "address": "R. Santa Luzia, 51 - Sé, São Paulo - SP, 01513-030, Brasil",
+      "breeds": "",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-15 22:22:00",
+      "lat": "-23.565902514338784",
+      "lng": "-46.64615698853246"
+    },
+    {
+      "id": 13,
+      "description": "Meu tio nao está dando comida nem água para seu cachorro ja tem aproximadamente 3 dias, o animal está visivelmente magro e sem forças. Endereço: Rua Blueberry nº 34",
+      "address": "R. Onésimo Augusto Pereira, 32 - Aparecidinha, Sorocaba - SP, 18087-265, Brasil",
+      "animal": "Cachorro",
+      "breeds": "Vira lata",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-20 08:06:00",
+      "lat": "-23.4483523",
+      "lng": "-47.3774556"
+    },
+    {
+      "id": 14,
       "description": "O animal está severamente machucado e seu dono se recussa a procurar ajuda, mesmo após a comunidade de unir para pagar um veterinário para o animal",
-      "status": "opened",
-      "isAnonymous": true
+      "address": "R. Mituto Mizumoto, 69 - Sé, São Paulo - SP, 01513-040, Brasil",
+      "animal": "Gato",
+      "breeds": "",
+      "status": "A",
+      "isAnonymous": false,
+      "date": "2021-05-20 13:23:00",
+      "lat": "-23.557521150854427",
+      "lng": "-46.63197388276037"
     }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "reportId": 6,
+      "date": "2021-05-20 12:00:00",
+      "comment": "Caso aberto",
+      "author": "João da Silva"
+    },
+    {
+      "id": 2,
+      "reportId": 6,
+      "date": "2021-05-21 12:00:00",
+      "comment": "P",
+      "author": "SalvaCão"
+    },
+    {
+      "id": 65,
+      "reportId": 6,
+      "date": "2021-05-21 12:02:00",
+      "comment": "Acabamos de aceitar o caso, iremos começar as investigações",
+      "author": "SalvaCão"
+    },
+    {
+      "id": 233,
+      "reportId": 6,
+      "date": "2021-05-21 13:37:00",
+      "comment": "Pegamos o cachorro e estamos levando ao veterinário, iremos levar o dono para depor",
+      "author": "SalvaCão"
+    },
+    {
+      "id": 54,
+      "reportId": 6,
+      "date": "2021-05-22 14:55:00",
+      "comment": "O veterinário disse que o cachorro não corre risco de vida, e logo irá melhorar",
+      "author": "SalvaCão"
+    },
+    {
+      "id": 41,
+      "reportId": 6,
+      "date": "2021-05-22 15:00:00",
+      "comment": "F",
+      "author": "SalvaCão"
+    },
+    {
+      "id": 578,
+      "reportId": 6,
+      "date": "2021-05-24 16:00:00",
+      "comment": "A",
+      "author": "João da Silva"
+    },
+    {
+      "id": 664,
+      "reportId": 6,
+      "date": "2021-05-24 16:05:00",
+      "comment": "Vocês não resolveram nada, o cara continua com o cachorro",
+      "author": "João da Silva"
+    }
+  ],
+  "files": [
+    
   ]
 }

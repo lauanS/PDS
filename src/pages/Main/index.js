@@ -16,13 +16,14 @@ import ModalViewReport from "../../components/ViewReport/Modal";
 import alertIcon from "../../assets/alert.png";
 
 import { getReports } from "../../services/index";
-// import {deleteReport } from "../../services/index";
 import { Context } from "../../context/authContext";
+import { statusTranslate } from "../../utils/statusConverter";
 
 export default function Main() {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalReportVisible, setModalReportVisible] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);;
 
   const [currentReport, setCurrentReport] = useState({});
   const [currentLocation, setCurrentLocation] = useState({
@@ -34,7 +35,7 @@ export default function Main() {
   const [mapApi, setMapApi] = useState(false);
   const [apiReady, setApiReady] = useState(false);
 
-  const [places, setPlaces] = useState([]);
+  const [ , setPlaces] = useState([]);
   const [address, setAddress] = useState("");
 
   const [reports, setReports] = useState([]);
@@ -69,7 +70,6 @@ export default function Main() {
   const latLngToAddress = useCallback(
     async (latlng) => {
       if (apiReady) {
-        console.log("API READY");
         if (latlng.lat === 0) {
           return "Without address";
         }
@@ -151,19 +151,6 @@ export default function Main() {
     setDrawerVisible(false);
   };
 
-  // const onClickDeleteReport = async () => {
-  //   try {
-  //     const response = await deleteReport(currentReport.id);
-  //     if(mounted.current){
-  //       hideDrawer();
-  //       return response;
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     return;
-  //   }
-  // };
-
   /* */
   const onClickMarker = (report) => {
     setCurrentReport(report);
@@ -225,11 +212,13 @@ export default function Main() {
             />
           ))}
       </Map>
-      {!modalVisible && !modalVisible && !drawerVisible && isAuthenticated() && (
+      { !modalVisible && !drawerVisible && isAuthenticated() && (
         <AddButton
           mapInstance={mapInstance}
           onClick={onClickReport}
           onClickConfirm={onClickConfirm}
+          showTooltip={showTooltip}
+          setShowTooltip={setShowTooltip}
         />
       )}
       {apiReady && (
@@ -264,7 +253,7 @@ export default function Main() {
               Fechar
             </Button>
             <Button onClick={showReportModal} type="primary">
-              Abrir caso
+              Mais detalhes
             </Button>
           </div>
         }
@@ -276,7 +265,7 @@ export default function Main() {
               Raça/Espécie: {currentReport.animal}
               {currentReport.breeds && " | " + currentReport.breeds}
             </p>
-            <p>Situação: {currentReport.status} </p>
+            <p>Situação: {statusTranslate(currentReport.status)} </p>
           </>
         )}
       </Drawer>

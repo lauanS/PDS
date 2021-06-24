@@ -5,7 +5,7 @@ import './style.css';
 import { statusTranslate } from '../../utils/statusConverter';
 
 export default function ViewReport(props) {
-  const report = props.report
+  const report = props.report;
 
   return (
     <>

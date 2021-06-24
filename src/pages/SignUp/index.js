@@ -19,10 +19,10 @@ export default function SignUp() {
 
   let history = useHistory();
 
-  const { handleLogin, setAdminFlag } = useContext(Context);
+  const { handleLogin } = useContext(Context);
   const [form] = Form.useForm();
 
-  const checkMatchingPasswords = (rule, value, callback) => {
+  const checkMatchingPasswords = (_, value, callback) => {
     const password = form.getFieldValue("password");
     const passwordConfirmation = form.getFieldValue("passwordConfirmation");
 
@@ -43,9 +43,9 @@ export default function SignUp() {
     };
 
     try {
-      console.log(await postSignUp(obj));
-
+      const data = await postSignUp(obj);
       if (mounted.current) {
+        handleLogin(data);
         message
           .success("Cadastro/Login realizado com sucesso", 2)
           .then(() => history.push("/login"));
@@ -65,7 +65,7 @@ export default function SignUp() {
       token: response.tokenId,
     };
     try {
-      const data = await postGoogleSignIn(obj);
+      const data = (await postGoogleSignIn(obj));
 
       if (mounted.current) {
         handleLogin(data.token);
