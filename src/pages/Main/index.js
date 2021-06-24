@@ -23,6 +23,7 @@ export default function Main() {
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalReportVisible, setModalReportVisible] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);;
 
   const [currentReport, setCurrentReport] = useState({});
   const [currentLocation, setCurrentLocation] = useState({
@@ -211,11 +212,13 @@ export default function Main() {
             />
           ))}
       </Map>
-      {!modalVisible && !modalVisible && !drawerVisible && isAuthenticated() && (
+      { !modalVisible && !drawerVisible && isAuthenticated() && (
         <AddButton
           mapInstance={mapInstance}
           onClick={onClickReport}
           onClickConfirm={onClickConfirm}
+          showTooltip={showTooltip}
+          setShowTooltip={setShowTooltip}
         />
       )}
       {apiReady && (
