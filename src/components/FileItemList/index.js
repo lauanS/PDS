@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Button, Progress, Tooltip } from "antd";
+import { Button, Tooltip } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 
 import FileItem from "../FileItem";
-
+import Progress from "../../components/Progress"
 import "./styles.css";
 
 export default function FileItemList(props) {
@@ -58,9 +58,7 @@ export default function FileItemList(props) {
             </Tooltip>
           )}
           <Progress
-            type="circle"
-            percent={file.percent}
-            width={35}
+            width={20}
             status={fileStatusToProgressStatus(file.status)}
           />
         </div>
