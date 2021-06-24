@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Table, Input, Space, message } from "antd";
+import { Table, Input, Space, message, Select, Tag } from "antd";
 
 import useReport from "../../../hooks/useReport";
 
@@ -12,54 +12,102 @@ import ModalViewReport from "../../../components/ViewReport/Modal";
 const { Search } = Input;
 
 export default function ControlPanel() {
-  const {
-    reports, isLoadingReports, errorLoadingReport
-  } = useReport();
-
+  /* Gerando opções dos filtros */
+  const [animals, setAnimals] = useState([]);
+  const [allAnimals, setAllAnimals] = useState([]);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState([]);
   const [filteredReports, setFilteredReports] = useState([]);
   const [currentReport, setCurrentReport] = useState({});
   const [modalReportVisible, setModalReportVisible] = useState(false);
 
+  const { reports, isLoadingReports, errorLoadingReport } = useReport();
+
   const screenSize = { x: window.innerWidth, y: window.innerHeight };
 
-
-  const onSearch = (value) => {
-    searchReports(reports, value);
-  };
-
   const showReportModal = (data) => {
-    setCurrentReport(data)
+    setCurrentReport(data);
     setModalReportVisible(true);
   };
 
   const updateSearch = (e) => {
-    setFilteredReports(searchReports(reports, e.target.value) || []);
+    setSearch(e.target.value);
   };
 
-  const searchReports = (list, search) => {
-    if (search === "") {
-      return list;
+  /* Atualizando lista com filtros */
+  const onChangeStatus = (value) => {
+    setStatus(value);
+  };
+
+  /* Atualizando lista com filtros */
+  const onChangeAnimal = (value) => {
+    setAnimals(value);
+  };
+
+  /* Atualiza as denúncias filtradas com base nos filtros */
+  const updateFilteredReports = () => {
+    let newFilteredReports = reports;
+
+    /* Primeiro filtra pelo endereço */
+    if (search !== "") {
+      newFilteredReports = Array.isArray(newFilteredReports)
+        ? newFilteredReports.filter(
+            (report) =>
+              report.address.toLowerCase().indexOf(search.toLowerCase()) !== -1
+          )
+        : [];
     }
 
-    return Array.isArray(list)
-      ? list.filter(
-          (report) =>
-            report.address.toLowerCase().indexOf(search.toLowerCase()) !== -1
-        )
-      : [];
+    /* Filtramos por status */
+    if (status.length !== 0) {
+      newFilteredReports = newFilteredReports.filter((report) => {
+        return status.includes(statusTranslate(report.status));
+      });
+    }
+
+    /* Filtro por espécie */
+    if (animals.length !== 0) {
+      newFilteredReports = newFilteredReports.filter((report) => {
+        return animals.includes(report.animal);
+      });
+    }
+    setFilteredReports(newFilteredReports);
   };
+
+  /* Filtrando as denúncias com base no status */
+  useEffect(() => {
+    console.log("Irá filtrar");
+    updateFilteredReports();
+  }, [status, search, animals]);
 
   /* Atualizando as denúncias */
   useEffect(() => {
     setFilteredReports(reports);
+
+    let uniqueAnimals = new Set();
+    reports.map((report) => {
+      return uniqueAnimals.add(report.animal);
+    });
+
+    setAllAnimals(Array.from(uniqueAnimals).sort());
   }, [reports]);
 
   /* Verificando a ocorrência de um erro */
   useEffect(() => {
-    if(errorLoadingReport === true){
+    if (errorLoadingReport === true) {
       message.error("Erro ao carregar as denúncias");
-    }    
+    }
   }, [errorLoadingReport]);
+
+  /* Criando as tags para exibição do status */
+  const tagName = (value) => {
+      if (value === 'Aberto')
+        return 'green'
+      else if (value === 'Processando')
+        return 'yellow'
+      else if (value === 'Fechado')
+        return 'red'
+  }
 
   /* Colunas da lista */
   const columns = [
@@ -79,22 +127,57 @@ export default function ControlPanel() {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (text) => <p>{statusTranslate(text)}</p>
+      render: (text) => <Tag color={tagName(statusTranslate(text))}>{statusTranslate(text)}</Tag>,
     },
   ];
 
   return (
     <>
       <div className="table-container">
-        <Space direction="vertical" style={{maxWidth: "100%", maxHeight: "100%"}}>
-          <p className="search-title">Busca por endereço</p>          
+        <Space
+          direction="vertical"
+          style={{ maxWidth: "100%", maxHeight: "100%" }}
+        >
+          <p className="search-title">Busca por endereço</p>
           <Search
             placeholder="Busca por endereço"
-            allowClear
+            value={search}
             onChange={updateSearch}
-            onSearch={onSearch}
             style={{ width: "100%" }}
           />
+          <div className="filters">
+            Filtros:
+            <Select
+              placeholder="Espécie"
+              mode="multiple"
+              showArrow
+              style={{ width: "100%" }}
+              autoClearSearchValue
+              maxTagCount="responsive"
+              onChange={onChangeAnimal}
+            >
+              {allAnimals.map((animal, key) => {
+                return (
+                  <Select.Option value={animal} key={key}>
+                    {animal}
+                  </Select.Option>
+                );
+              })}
+            </Select>
+            <Select
+              placeholder="Status"
+              mode="multiple"
+              showArrow
+              allowClear
+              style={{ width: "100%" }}
+              onChange={onChangeStatus}
+              maxTagCount='responsive'
+            >
+              <Select.Option value="Aberto">Aberto</Select.Option>
+              <Select.Option value="Processando">Processando</Select.Option>
+              <Select.Option value="Fechado">Fechado</Select.Option>
+            </Select>
+          </div>
           <Table
             columns={columns}
             dataSource={!isLoadingReports ? filteredReports : null}
@@ -105,7 +188,11 @@ export default function ControlPanel() {
             tableLayout="auto"
             className="table-reports"
             onRow={(record, rowIndex) => {
-              return { onClick: event => { showReportModal(record) }}
+              return {
+                onClick: (event) => {
+                  showReportModal(record);
+                },
+              };
             }}
           />
         </Space>
