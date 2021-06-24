@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form, Input, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 
@@ -6,7 +6,7 @@ import FileItemList from "../FileItemList";
 
 import { postFileDev, deleteFileDev } from "../../services";
 import { getBase64 } from "../../utils/base64";
-
+import { Context } from "../../context/authContext";
 import "./styles.css";
 
 export default function Editor(props) {
@@ -15,13 +15,16 @@ export default function Editor(props) {
   const { TextArea } = Input;
   const [fileList, setFileList] = useState([]);
 
+  const { getUser } = useContext(Context);
+  const userName = getUser();
+  
   const uploadFile = async (options) => {
     const { onSuccess, onError, file } = options;
     
     if(upload === false){
       const obj = {
         reportId: -1, // Id da denúncia
-        author: "João da Silva", // Nome de quem enviou o arquivo
+        author: userName, // Nome de quem enviou o arquivo
         name: file.name, // Nome do arquivo (exemplo: img.png)
         originFile: file,
         fileBase64: await getBase64(file), // Arquivo base64
@@ -36,7 +39,7 @@ export default function Editor(props) {
       
     const obj = {
       reportId: report.id, // Id da denúncia
-      author: "João da Silva", // Nome de quem enviou o arquivo
+      author: userName, // Nome de quem enviou o arquivo
       name: file.name, // Nome do arquivo (exemplo: img.png)
       fileBase64: await getBase64(file), // Arquivo base64
       size: file.size, // Tamanho do arquivo (em bytes)

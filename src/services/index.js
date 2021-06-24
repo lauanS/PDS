@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getToken } from "./auth";
 import { statusCharToString, statusStringToChar } from "../utils/statusConverter";
+import { format } from "date-fns";
 const api = axios.create({
   baseURL: process.env.REACT_APP_SERVER_BASE_URL
 });
@@ -34,6 +35,9 @@ export async function getReports(){
       "isAnonymous": report.indAnonimo,
       "lat": report.latitude,
       "lng": report.longitude,
+      "author": report.author,
+      "date": report.data,
+      "userId": report.usuarioId
     }
   });
   return data;
@@ -147,7 +151,7 @@ export async function getCommentsDev(){
 }
 
 export async function postCommentDev(comment){
-  comment.date = new Date();
+  comment.date = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
   return apiDev.post('/comments', comment);
 }
 

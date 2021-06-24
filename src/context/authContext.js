@@ -44,7 +44,7 @@ function AuthProvider({ children }) {
 
   const handleLogin = (auth) => {
     login(auth.token);
-    setUserName(auth.name);
+    setUserName(auth.username);
     setUserEmail(auth.email);
     setAuthenticated(true);
     if (auth.isAdmin) {
@@ -53,6 +53,13 @@ function AuthProvider({ children }) {
     console.log(auth);
   };
 
+  const getUser = () => {
+    return userName;
+  }
+
+  const getEmail = () => {
+    return userEmail;
+  }
   /* Verifica se o usuário já está logado */
   useEffect(() => {
     setAuthenticated(isAuth());
@@ -66,8 +73,8 @@ function AuthProvider({ children }) {
         handleLogin,
         handleLogout,
         setAdminFlag,
-        userName,
-        userEmail,
+        getUser,
+        getEmail,
       }}
     >
       {children}

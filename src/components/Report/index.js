@@ -1,16 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Button, Form, Input, Switch } from 'antd';
 
 import { postFileDev, postReport } from "../../services/index";
 import Editor from '../Editor';
 import format from 'date-fns/format'
+import { Context } from "../../context/authContext"
 
 export default function Report(props){
   const { lat, lng, address, onFinish } = props;
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
-  const [attachedFiles, setAttachedFiles] = useState("");
-  
+  const [attachedFiles, setAttachedFiles] = useState([]);
+
+  const { getUser, getEmail } = useContext(Context);
+  const userName = getUser();
+
   const mounted = useRef(true);
 
   const handleSubmit = async e => {
@@ -26,15 +30,15 @@ export default function Report(props){
       description: e.description,
       status: 'opened',
       isAnonymous:e.isAnonymous,
-      author: "Lauan dos Santos",
-      userId: "lauan@email.com"
+      author: userName,
+      userId: getEmail()
     }
     
     const report = (await postReport(obj)).data;
     attachedFiles.map((file) => {
       const objFile = {
         reportId: report.id, // Id da denúncia
-        author: "Lauan dos Santos", // Nome de quem enviou o arquivo
+        author: userName, // Nome de quem enviou o arquivo
         name: file.name, // Nome do arquivo (exemplo: img.png)
         fileBase64: file.fileBase64, // Arquivo base64
         size: file.size, // Tamanho do arquivo (em bytes)

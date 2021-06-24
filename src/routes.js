@@ -24,9 +24,8 @@ const Routes = () => {
               <Route key={"pag1"} exact path="/" component={Main} />
               <Route key={"pag2"} exact path="/login" component={Login} />  
               <Route key={"pag3"} exact path="/cadastro" component={SignUp} /> 
+              <Route key={"pag4"} exact path="/view" component={ViewReport}/>
               <PrivateRoute key={"pri1"} exact path="/control" component={ControlPanel}/>
-              <PrivateRoute key={"pri2"} exact path="/view" component={ViewReport}/>
-
               <Route key={"RDefault"} path="*" component={NotFound} />
             </Switch>
           </Layout>

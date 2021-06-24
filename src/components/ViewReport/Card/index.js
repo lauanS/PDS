@@ -24,9 +24,10 @@ export default function CardViewReport(props) {
     isLoadingReports,
   } = useReport();
 
-  const { isAuthenticated, isAdmin } = useContext(Context);
+  const { isAuthenticated, isAdmin, getUser } = useContext(Context);
 
   const { confirm } = Modal;
+  const userName = getUser();
 
   const report = props.report;
   const keyToStatus = { 1: "opened", 2: "processing", 3: "closed" };
@@ -53,6 +54,10 @@ export default function CardViewReport(props) {
       await updateReport(report);
     }
   };
+
+  const havePermission = (author) => {
+    return (userName === author) || isAdmin();
+  }
 
   /* Verificando a ocorrência de um erro ao *deletar* */
   useEffect(() => {
@@ -93,7 +98,7 @@ export default function CardViewReport(props) {
       title="Denúncia"
       bordered={false}
       loading={isLoadingReports}
-      actions={[isAuthenticated() && isAdmin() && (
+      actions={havePermission(report.author) && ([isAuthenticated() && isAdmin() && (
         <Button type="primary" onClick={onClickDeleteReport}>
           Excluir
         </Button>
@@ -105,7 +110,7 @@ export default function CardViewReport(props) {
             </Button>
           </Dropdown>
         </>,
-      ]}
+      ])}
     >
       <ViewReport key="1" report={report} />
     </Card>
