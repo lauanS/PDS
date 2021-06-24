@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 
-import { isAuth, isAdministrator, logout, login } from "../services/auth";
+import { isAuth, getLoggedUsername, getLoggedEmail, isAdministrator, logout, login } from "../services/auth";
 
 const Context = createContext();
 
@@ -26,12 +26,15 @@ function AuthProvider({ children }) {
   };
 
   const isAdmin = () => {
+    setAdminFlag(isAdministrator());
     if (isAdministrator() !== authenticated) {
       console.debug("isAuth: ", isAuth());
       console.debug("authenticated: ", authenticated);
       console.debug("Erro inesperado -> Admin em dois estados diferentes");
     }
-    return isAuthenticated && adminFlag;
+    console.log(isAdministrator(), adminFlag);
+
+    return isAuthenticated() && adminFlag;
   };
 
   const handleLogout = () => {
@@ -43,7 +46,7 @@ function AuthProvider({ children }) {
   };
 
   const handleLogin = (auth) => {
-    login(auth.token);
+    login(auth);
     setUserName(auth.username);
     setUserEmail(auth.email);
     setAuthenticated(true);
@@ -51,18 +54,21 @@ function AuthProvider({ children }) {
       setAdminFlag(true);
     }
     console.log(auth);
+
   };
 
   const getUser = () => {
-    return userName;
+    return getLoggedUsername();
   }
 
   const getEmail = () => {
-    return userEmail;
+    return getLoggedEmail();
   }
+
   /* Verifica se o usuário já está logado */
   useEffect(() => {
     setAuthenticated(isAuth());
+    console.log("Infos: ", getEmail(), getUser(), isAdmin());
   }, []);
 
   return (

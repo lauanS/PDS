@@ -10,12 +10,23 @@ export const getToken = () => {
 }
 
 export const isAdministrator = () => {
-  return isAuth();
+  return sessionStorage.getItem('@salvacao-isAdmin');
+}
+
+export const getLoggedUsername = () => {
+  return sessionStorage.getItem('@salvacao-username');
+}
+
+export const getLoggedEmail = () => {
+  return sessionStorage.getItem('@salvacao-email');
 }
 
 export const login = token => {
-  sessionStorage.setItem(TOKEN_KEY, token);
+  sessionStorage.setItem(TOKEN_KEY, token.token);
   sessionStorage.setItem(TOKENTIME_KEY, Date.now());
+  sessionStorage.setItem('@salvacao-username', token.username);
+  sessionStorage.setItem('@salvacao-email', token.email);
+  sessionStorage.setItem('@salvacao-isAdmin', token.isAdmin);
 };
 
 export const logout = () => {
