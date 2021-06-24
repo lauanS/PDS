@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Button, Form, Input, Switch } from 'antd';
 
-import { postFileDev, postReport } from "../../services/index";
+import { postFile, postReport } from "../../services/index";
 import Editor from '../Editor';
 import format from 'date-fns/format'
 import { Context } from "../../context/authContext"
@@ -44,8 +44,8 @@ export default function Report(props){
         size: file.size, // Tamanho do arquivo (em bytes)
         url: null, // URL no nosso servidor
       };
-
-      postFileDev(objFile)
+  
+      postFile(objFile)
       .then((res) => {
         file.originFile.id = res.data.id;
       })
