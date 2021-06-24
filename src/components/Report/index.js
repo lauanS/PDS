@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form, Input, Switch } from 'antd';
 
-import { postReport } from "../../services/index";
+import { postFileDev, postReport } from "../../services/index";
+import Editor from '../Editor';
+import format from 'date-fns/format'
 
 export default function Report(props){
   const { lat, lng, address, onFinish } = props;
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState("");
+  
   const mounted = useRef(true);
 
   const handleSubmit = async e => {
@@ -15,16 +19,38 @@ export default function Report(props){
       id: new Date().getTime(),
       lat:lat,
       lng:lng,
-      date: new Date().getTime(),            
+      date: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSS"),            
       animal:e.animal,
       breeds:e.breeds ? e.breeds : "",
       address: e.address,
       description: e.description,
       status: 'opened',
-      isAnonymous:e.isAnonymous
+      isAnonymous:e.isAnonymous,
+      author: "Lauan dos Santos",
+      userId: "lauan@email.com"
     }
-    console.log(obj);
-    await postReport(obj);
+    
+    const report = (await postReport(obj)).data;
+    attachedFiles.map((file) => {
+      const objFile = {
+        reportId: report.id, // Id da denúncia
+        author: "Lauan dos Santos", // Nome de quem enviou o arquivo
+        name: file.name, // Nome do arquivo (exemplo: img.png)
+        fileBase64: file.fileBase64, // Arquivo base64
+        size: file.size, // Tamanho do arquivo (em bytes)
+        url: null, // URL no nosso servidor
+      };
+
+      postFileDev(objFile)
+      .then((res) => {
+        file.originFile.id = res.data.id;
+      })
+      .catch((_) => {
+        new Error("Erro ao realizar o upload do arquivo");
+      });
+      return true;
+    });
+
     form.resetFields();
     await onFinish();
     
@@ -103,18 +129,15 @@ export default function Report(props){
         <Switch disabled={isLoading}/>
       </Form.Item>
 
-      <Form.Item
-        label="Descrição da denúncia"
-        name={'description'}
-        rules={[
-                {
-                  required: true,
-                  message: 'Por favor, digite uma descrição detalhada do problema',
-                },
-              ]}
-      >
-        <Input.TextArea disabled={isLoading}/>
-      </Form.Item>
+      <Editor
+        name={"description"}
+        label={"Descrição da denúncia"}
+        onChange={() => {return;}}
+        isLoading={isLoading}
+        attachedFiles={attachedFiles}
+        setAttachedFiles={setAttachedFiles}
+        upload={false}
+      />
 
       <Form.Item>
         <Button type="default" loading={isLoading} htmlType="submit">

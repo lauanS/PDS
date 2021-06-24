@@ -1,7 +1,11 @@
 import { useState, useCallback, useRef } from "react";
 import { parseISO, compareDesc } from "date-fns";
 
-import { postCommentDev, getReportCommentsDev } from "../services/index";
+import {
+  postCommentDev,
+  getReportCommentsDev,
+  getReportFilesDev,
+} from "../services/index";
 
 export default function useComment() {
   const [reportComments, setReportComments] = useState([]);
@@ -15,6 +19,12 @@ export default function useComment() {
     setIsLoadingComments(true);
     try {
       let data = await getReportCommentsDev(reportId);
+      let filesData = await getReportFilesDev(reportId);
+
+      // Adicionando arquivos na lista de comentarios
+      filesData.map((file) => (file.comment = "O"));
+      data = [...data, ...filesData];
+
       if (mounted.current) {
         data = data.sort((firstComment, secondComment) => {
           const firstDate = parseISO(firstComment.date);
@@ -25,6 +35,7 @@ export default function useComment() {
         setIsLoadingComments(false);
       }
     } catch (error) {
+      console.log("Erro a load");
       if (mounted.current) {
         console.log(error);
         setIsLoadingComments(false);
@@ -37,7 +48,7 @@ export default function useComment() {
   const createComment = async (newComment) => {
     setIsLoadingComments(true);
     try {
-      const response = await postCommentDev(newComment);      
+      const response = await postCommentDev(newComment);
       setReportComments([response.data, ...reportComments]);
       setIsLoadingComments(false);
     } catch (error) {
@@ -48,14 +59,53 @@ export default function useComment() {
     }
   };
 
+  /* Adiona um comentário e os arquivos na lista */
+  const updateCommentList = async (newComment, fileList) => {
+    setIsLoadingComments(true);
+    try {
+      const response = await postCommentDev(newComment);
+
+      fileList.map((file) => (file.comment = "O"));
+      let data = [...reportComments, ...fileList];
+      data = data.sort((firstComment, secondComment) => {
+        const firstDate = parseISO(firstComment.date);
+        const secondDate = parseISO(secondComment.date);
+        return compareDesc(firstDate, secondDate);
+      });
+
+      setReportComments([response.data, ...data]);
+      setIsLoadingComments(false);
+    } catch (error) {
+      console.log("Erro ao tentar adicionar o novo comentário: ", newComment);
+      console.log(error);
+      setErrorCreateComment(true);
+      setIsLoadingComments(false);
+    }
+  }
+
+  const addFilesToCommentList = (fileList) => {
+    // Adicionando arquivos na lista de comentarios
+    fileList.map((file) => (file.comment = "O"));
+    let data = [...reportComments, ...fileList];
+    data = data.sort((firstComment, secondComment) => {
+      const firstDate = parseISO(firstComment.date);
+      const secondDate = parseISO(secondComment.date);
+      return compareDesc(firstDate, secondDate);
+    });
+    console.debug("Novos comentario: ", data);
+    setReportComments(data);
+  }
+  
   return {
     reportComments,
     loadReportComments,
-    createComment,
+    createComment, // rever
     isLoadingComments,
     errorLoadingComment,
     setErrorLoadingComment,
     errorCreateComment,
     setErrorCreateComment,
+    updateCommentList,
+    addFilesToCommentList // rever
   };
 }
