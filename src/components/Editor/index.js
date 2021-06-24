@@ -60,16 +60,23 @@ export default function Editor(props) {
 
   const removeFile = async (file) => {
     const id = file.id;
-    try {
-      await deleteFileDev(id);
-      // Atualiza a lista de objetos
-      const newFileList = fileList.filter(fileItem => fileItem.id !== id);
-      const newAttachedFiles = attachedFiles.filter(fileItem => fileItem.id !== id);
-      setAttachedFiles(newAttachedFiles);
-      setFileList(newFileList);
-    } catch (error) {
-      console.debug(error);
+    if(id){
+      try {
+        await deleteFileDev(id);
+        // Atualiza a lista de objetos
+        const newFileList = fileList.filter(fileItem => fileItem.id !== id);
+        const newAttachedFiles = attachedFiles.filter(fileItem => fileItem.id !== id);
+        setAttachedFiles(newAttachedFiles);
+        setFileList(newFileList);
+      } catch (error) {
+        console.debug(error);
+      }
+      return;
     }
+    const newFileList = fileList.filter(fileItem => fileItem.uid !== file.uid);
+    const newAttachedFiles = attachedFiles.filter(fileItem => fileItem.uid !== file.uid);
+    setAttachedFiles(newAttachedFiles);
+    setFileList(newFileList);
   }
 
   const onChangeFileList = (fileList) => {
