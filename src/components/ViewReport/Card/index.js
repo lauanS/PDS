@@ -13,6 +13,7 @@ import useReport from "../../../hooks/useReport";
 
 import { Context } from "../../../context/authContext";
 import { statusStringToChar } from "../../../utils/statusConverter";
+import { useHistory } from "react-router";
 
 export default function CardViewReport(props) {
   const {
@@ -32,6 +33,7 @@ export default function CardViewReport(props) {
 
   const {report, loadReportComments} = props;
   const keyToStatus = { 1: "opened", 2: "processing", 3: "closed" };
+  let history = useHistory();
 
   const onClickDeleteReport = async (e) => {
     confirm({
@@ -42,7 +44,12 @@ export default function CardViewReport(props) {
       okType: 'danger',
       cancelText: 'Cancelar',
       onOk() {
-        deleteReportById(report.id);
+        const deleteReport = async () => {
+          await deleteReportById(report.id);
+          history.push("/");
+        }
+        deleteReport();
+        
       },
     });
   };
