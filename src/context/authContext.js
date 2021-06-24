@@ -6,18 +6,22 @@ const Context = createContext();
 
 function AuthProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(isAuth());
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const [, setUserName] = useState("");
+  const [, setUserEmail] = useState("");
 
-  const [adminFlag, setAdminFlag] = useState(false);
+  const [, setAdminFlag] = useState(false);
 
   const isAuthenticated = () => {
     return authenticated;
   };
 
   const isAdmin = () => {
-    setAdminFlag(isAdministrator());
-    return isAuthenticated() && adminFlag;
+    const admin = isAdministrator();
+    if(admin === "true"){
+      setAdminFlag(true);
+      return true;
+    }
+    return false;
   };
 
   const handleLogout = () => {
