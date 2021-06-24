@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 export default function AddButton(props) {
   const { onClick, onClickConfirm } = props;
   const [ isSelected, setIsSelected ] = useState(false);
-  const [ showTooltip, setShowTooltip ] = useState(true);
+  const { showTooltip, setShowTooltip } = props;
 
   const handleOnClick = () => {
     if(isSelected){
@@ -25,7 +25,7 @@ export default function AddButton(props) {
 
   useEffect(() => {
     const count = async() => {
-      await delay(7000);
+      await delay(2000);
       console.log(showTooltip)
       setShowTooltip(false)
     }
