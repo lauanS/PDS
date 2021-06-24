@@ -34,7 +34,7 @@ export default function Main() {
   const [mapApi, setMapApi] = useState(false);
   const [apiReady, setApiReady] = useState(false);
 
-  const [places, setPlaces] = useState([]);
+  const [ , setPlaces] = useState([]);
   const [address, setAddress] = useState("");
 
   const [reports, setReports] = useState([]);

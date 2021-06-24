@@ -1,44 +1,56 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react";
 
-import { isAuth, isAdministrator, logout, login } from '../services/auth';
+import { isAuth, isAdministrator, logout, login } from "../services/auth";
 
 const Context = createContext();
 
 function AuthProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(isAuth());
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const [adminFlag, setAdminFlag] = useState(false);
 
   // let adminFlag = false;
   // const setAdminFlag = (value) => { adminFlag = value };
-  
-  const isAuthenticated  = () => {
-    if(isAuth() !== authenticated){
+
+  const isAuthenticated = () => {
+    if (isAuth() !== authenticated) {
       console.debug("isAuth: ", isAuth());
       console.debug("authenticated: ", authenticated);
-      console.debug("Erro inesperado -> Autenticação em dois estados diferentes");
+      console.debug(
+        "Erro inesperado -> Autenticação em dois estados diferentes"
+      );
     }
     return authenticated;
   };
 
-  const isAdmin = () => {    
-    if(isAdministrator() !== authenticated){
+  const isAdmin = () => {
+    if (isAdministrator() !== authenticated) {
       console.debug("isAuth: ", isAuth());
       console.debug("authenticated: ", authenticated);
       console.debug("Erro inesperado -> Admin em dois estados diferentes");
     }
-    return adminFlag;
-  }
+    return isAuthenticated && adminFlag;
+  };
 
   const handleLogout = () => {
     logout();
+    setUserName("");
+    setUserEmail("");
     setAdminFlag(false);
     setAuthenticated(false);
   };
 
-  const handleLogin = (token) => {
-    login(token);
+  const handleLogin = (auth) => {
+    login(auth.token);
+    setUserName(auth.name);
+    setUserEmail(auth.email);
     setAuthenticated(true);
+    if (auth.isAdmin) {
+      setAdminFlag(true);
+    }
+    console.log(auth);
   };
 
   /* Verifica se o usuário já está logado */
@@ -46,9 +58,18 @@ function AuthProvider({ children }) {
     setAuthenticated(isAuth());
   }, []);
 
-
   return (
-    <Context.Provider value={{ isAuthenticated, isAdmin, handleLogin,  handleLogout, setAdminFlag}}>
+    <Context.Provider
+      value={{
+        isAuthenticated,
+        isAdmin,
+        handleLogin,
+        handleLogout,
+        setAdminFlag,
+        userName,
+        userEmail,
+      }}
+    >
       {children}
     </Context.Provider>
   );

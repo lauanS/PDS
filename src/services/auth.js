@@ -14,7 +14,6 @@ export const isAdministrator = () => {
 }
 
 export const login = token => {
-  console.log("Login realizado com sucesso");
   sessionStorage.setItem(TOKEN_KEY, token);
   sessionStorage.setItem(TOKENTIME_KEY, Date.now());
 };

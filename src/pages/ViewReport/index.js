@@ -23,7 +23,7 @@ export default function ViewReportPage() {
   } = useComment();
 
   const [form] = Form.useForm();
-  const [newCommentText, setNewCommentText] = useState("");
+  const [ , setNewCommentText] = useState("");
   const [attachedFiles, setAttachedFiles] = useState([]);
 
   const location = useLocation();

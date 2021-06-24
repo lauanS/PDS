@@ -16,7 +16,7 @@ export default function Editor(props) {
   const [fileList, setFileList] = useState([]);
 
   const uploadFile = async (options) => {
-    const { onSuccess, onError, file, onProgress } = options;
+    const { onSuccess, onError, file } = options;
     
     if(upload === false){
       const obj = {

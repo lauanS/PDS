@@ -16,7 +16,7 @@ import "./styles.css";
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const mounted = useRef(true);
-  const { handleLogin, setAdminFlag } = useContext(Context);
+  const { handleLogin } = useContext(Context);
   let history = useHistory();
   const [form] = Form.useForm();
 
@@ -32,10 +32,7 @@ export default function Login() {
       const data = await postSignIn(obj);
 
       if (mounted.current) {
-        handleLogin(data.token);
-        if(obj.email === "admin@salvacao.com"){
-          setAdminFlag(true);
-        }
+        handleLogin(data);
         message.success("Login realizado com sucesso", 2)
         .then(() => history.push("/"));        
       }
@@ -60,7 +57,7 @@ export default function Login() {
       const data = await postGoogleSignIn(obj);
 
       if (mounted.current) {
-        handleLogin(data.token);
+        handleLogin(data);
         message.success("Login realizado com sucesso", 2)
         .then(() => history.push("/"));        
       }

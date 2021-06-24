@@ -27,14 +27,11 @@ export default function Report(props){
       status: 'opened',
       isAnonymous:e.isAnonymous,
       author: "Lauan dos Santos",
-      usuarioId: "lauan@email.com"
+      userId: "lauan@email.com"
     }
-    console.log(obj);
-    console.log("arquivos: ", attachedFiles);
+    
     const report = (await postReport(obj)).data;
-    console.log("report", report);
     attachedFiles.map((file) => {
-      console.log("Enviando arquivo...");
       const objFile = {
         reportId: report.id, // Id da denúncia
         author: "Lauan dos Santos", // Nome de quem enviou o arquivo
@@ -47,11 +44,11 @@ export default function Report(props){
       postFileDev(objFile)
       .then((res) => {
         file.originFile.id = res.data.id;
-        console.log("Enviado");
       })
       .catch((_) => {
         new Error("Erro ao realizar o upload do arquivo");
       });
+      return true;
     });
 
     form.resetFields();
