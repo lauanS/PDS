@@ -145,7 +145,7 @@ export async function postSignUp(signUp){
     username: data.nome,
     email: data.email,
     isAdmin: data.admin  
-  };;
+  };
 }
 
 export async function postGoogleSignIn(signIn) {

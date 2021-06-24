@@ -15,22 +15,10 @@ function AuthProvider({ children }) {
   // const setAdminFlag = (value) => { adminFlag = value };
 
   const isAuthenticated = () => {
-    if (isAuth() !== authenticated) {
-      console.debug("isAuth: ", isAuth());
-      console.debug("authenticated: ", authenticated);
-      console.debug(
-        "Erro inesperado -> Autenticação em dois estados diferentes"
-      );
-    }
     return authenticated;
   };
 
   const isAdmin = () => {
-    if (isAdministrator() !== authenticated) {
-      console.debug("isAuth: ", isAuth());
-      console.debug("authenticated: ", authenticated);
-      console.debug("Erro inesperado -> Admin em dois estados diferentes");
-    }
     return isAuthenticated && adminFlag;
   };
 
