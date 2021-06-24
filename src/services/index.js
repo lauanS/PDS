@@ -70,13 +70,21 @@ export async function putReport(report, id){
     "status": statusStringToChar(report.status),
     "indAnonimo": report.isAnonymous,
     "longitude": report.lng,
-    "latitude": report.lat
+    "latitude": report.lat,
+    "data": report.date,
+    "author": report.author,
+    "usuarioId": report.userId
   }
   return api.put('/denuncias', obj);
 }
 
 export async function deleteReport(id){
   return api.delete('/denuncias/' + id);  
+}
+
+export async function postUpdateStatus(obj){  
+  console.log("POST: ", obj);
+  return api.post('/denuncias/atualizarStatus', obj);
 }
 
 /******** Comentários ********/

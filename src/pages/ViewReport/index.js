@@ -77,7 +77,7 @@ export default function ViewReportPage() {
     <>
       {report ? (
         <>
-          <CardViewReport report={report} />
+          <CardViewReport report={report} loadReportComments={loadReportComments}/>
           {havePermission(report.author) &&
             <Collapse defaultActiveKey={["1"]} ghost>
               <Panel key="1" header={"Adicionar um comentário"}>

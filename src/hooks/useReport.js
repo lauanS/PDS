@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-import { getReports, putReport, deleteReport } from "../services/index";
+import { getReports, putReport, deleteReport, postUpdateStatus } from "../services/index";
+import { statusCharToString } from "../utils/statusConverter";
 
 export default function useReport() {
   const [reports, setReports] = useState([]);
@@ -86,6 +87,37 @@ export default function useReport() {
     }
   };
 
+  const updateStatus = async (obj) => {
+    if (!obj.reportId) {
+      console.log("Denúncia não possuí ID, não é possívele atualiza-la");
+      setErrorUpdateReport(true);
+      return reports;
+    }
+
+    setIsLoadingReports(true);
+    try {
+      await postUpdateStatus(obj);
+
+      // Atualiza a nossa lista de reports
+      const id = obj.reportId;
+      const reportsFiltered = reports.map((reportFilter) => {
+        if (reportFilter.id === id) {
+          reportFilter.status = statusCharToString(obj.status);
+        }
+        return reportFilter;     
+      });
+      setReports(reportsFiltered);
+      setIsLoadingReports(false);
+      return(reportsFiltered);
+    } catch (error) {
+      console.log("Erro ao tentar realizar atualizar o status", obj);
+      console.log(error);
+      setErrorUpdateReport(true);
+      setIsLoadingReports(false);
+      return reports;
+    }
+  };
+
   /* Carregando as denúncias */
   useEffect(() => {
     loadReports();
@@ -105,5 +137,6 @@ export default function useReport() {
     setErrorUpdateReport,
     errorDeleteReport,
     setErrorDeleteReport,
+    updateStatus,
   };
 }

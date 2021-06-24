@@ -12,11 +12,12 @@ import ViewReport from "../";
 import useReport from "../../../hooks/useReport";
 
 import { Context } from "../../../context/authContext";
+import { statusStringToChar } from "../../../utils/statusConverter";
 
 export default function CardViewReport(props) {
   const {
     deleteReportById,
-    updateReport,
+    updateStatus,
     errorDeleteReport,
     errorUpdateReport,
     setErrorDeleteReport,
@@ -29,7 +30,7 @@ export default function CardViewReport(props) {
   const { confirm } = Modal;
   const userName = getUser();
 
-  const report = props.report;
+  const {report, loadReportComments} = props;
   const keyToStatus = { 1: "opened", 2: "processing", 3: "closed" };
 
   const onClickDeleteReport = async (e) => {
@@ -51,8 +52,15 @@ export default function CardViewReport(props) {
       return;
     } else {
       report.status = keyToStatus[e.key];
-      await updateReport(report);
+      const obj = {
+        author: userName,
+        reportId: report.id,
+        status: statusStringToChar(keyToStatus[e.key])
+      }
+      await updateStatus(obj);
+      await loadReportComments(report.id);
     }
+    console.log("Report pag: ", report);
   };
 
   const havePermission = (author) => {
