@@ -4,7 +4,7 @@ import { parseISO, compareDesc } from "date-fns";
 import {
   postComment,
   getReportComments,
-  getReportFilesDev,
+  getReportFiles,
 } from "../services/index";
 
 export default function useComment() {
@@ -19,12 +19,10 @@ export default function useComment() {
     setIsLoadingComments(true);
     try {
       let data = await getReportComments(reportId);
-      let filesData = await getReportFilesDev(reportId);
-
+      let filesData = await getReportFiles(reportId);
       // Adicionando arquivos na lista de comentarios
       filesData.map((file) => (file.comment = "O"));
       data = [...data, ...filesData];
-
       if (mounted.current) {
         data = data.sort((firstComment, secondComment) => {
           const firstDate = parseISO(firstComment.date);

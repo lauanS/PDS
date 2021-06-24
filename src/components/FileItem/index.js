@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 
 import FileViewer, { useFileViewer } from "../FileViewer";
-import { fileType, getBase64 } from "../../utils/base64";
+import { getFileType, getBase64 } from "../../utils/base64";
 
 import prettyBytes from "pretty-bytes";
 
@@ -62,14 +62,11 @@ export default function FileItem(props) {
 
   const preview = () => {
     if(isLoading){
-      console.log("Carregando: ");
       return defaultUrl;
     }
-    if(fileType(filePreview).indexOf("data:image") === -1){
-      console.log("Vídeo: ", fileType(filePreview));
+    if(getFileType(filePreview) === "video"){
       return defaultVideoImg;
     }
-    console.log("Imagem: ", fileType(filePreview));
     return filePreview;
   }
 

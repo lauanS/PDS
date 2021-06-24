@@ -25,3 +25,19 @@ export function fileType(base64file){
   // para:  "data:image/png;base64"
   return base64file.split(",")[0];
 }
+
+export function getFileType(filePreview){
+  const baseInfo = filePreview.split(",")[0];
+
+  const isBase64 = baseInfo.match(/data:(.*?);base64/);
+  if(isBase64){
+    if(baseInfo.indexOf("data:image") !== -1){
+      return "img";
+    } 
+    return "video";
+  }
+  if(filePreview.match(/(png|jpg)\?generation/)){
+    return "img";
+  } 
+  return "video";
+}

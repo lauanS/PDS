@@ -33,7 +33,6 @@ export default function CommentList(props) {
   /* Carregando os comentários */
   useEffect(() => {
     loadComments();
-    console.log("load c");
   }, [loadComments, loadReportComments]);
 
   /* Verificando a ocorrência de um erro ao carregar informações de um comentário */

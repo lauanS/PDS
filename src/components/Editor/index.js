@@ -4,7 +4,7 @@ import { InboxOutlined } from "@ant-design/icons";
 
 import FileItemList from "../FileItemList";
 
-import { postFileDev, deleteFileDev } from "../../services";
+import { postFile, deleteFile } from "../../services";
 import { getBase64 } from "../../utils/base64";
 import { Context } from "../../context/authContext";
 import "./styles.css";
@@ -36,7 +36,6 @@ export default function Editor(props) {
       setAttachedFiles([...attachedFiles, obj]);
       return;
     }
-      
     const obj = {
       reportId: report.id, // Id da denúncia
       author: userName, // Nome de quem enviou o arquivo
@@ -46,7 +45,7 @@ export default function Editor(props) {
       url: null, // URL no nosso servidor
     };
 
-    postFileDev(obj)
+    postFile(obj)
       .then((res) => {
         file.id = res.data.id;
         onSuccess(file);
@@ -62,7 +61,7 @@ export default function Editor(props) {
     const id = file.id;
     if(id){
       try {
-        await deleteFileDev(id);
+        await deleteFile(id);
         // Atualiza a lista de objetos
         const newFileList = fileList.filter(fileItem => fileItem.id !== id);
         const newAttachedFiles = attachedFiles.filter(fileItem => fileItem.id !== id);

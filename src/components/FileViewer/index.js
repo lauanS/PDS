@@ -2,14 +2,14 @@ import React from "react";
 import { Modal } from "antd";
 import useFileViewer from "./hooks/useFileViewer";
 import "./styles.css";
-import { fileType } from "../../utils/base64";
+import { getFileType } from "../../utils/base64";
 import VideoPlayer from "../VideoPlayer";
 
 const FileViewer = (props) => {
   const { fileViewerTitle, fileViewerVisible, toggleFileViewerVisible } = props;
 
   const { filePreview } = props;
-  const type = fileType(filePreview);
+  const type = getFileType(filePreview);
   
   return (
     <>
@@ -19,7 +19,7 @@ const FileViewer = (props) => {
         footer={null}
         onCancel={toggleFileViewerVisible}
       >
-        {type.indexOf("data:image") !== -1 ? (
+        {type === "img" ? (
           <img alt="imagem enviada" style={{ width: "100%" }} src={filePreview} />
         ) : (
           <VideoPlayer src={filePreview}/>

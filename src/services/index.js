@@ -102,6 +102,21 @@ export async function getReportComments(reportId){
   return response.data;
 }
 
+/******** Arquivos ********/
+export async function postFile(file){
+  file.date =  format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+  return api.post('/files', file);
+}
+
+export async function getReportFiles(reportId){
+  const response = await api.get(`/files/reports/${reportId}`);
+  return response.data;
+}
+
+export async function deleteFile(id){
+  return api.delete('/files/' + id);  
+}
+
 /******** Login ********/
 export async function postSignIn(signIn){
   const obj = {
@@ -182,7 +197,7 @@ export async function getReportCommentsDev(reportId){
 
 /******** Arquivos ********/
 export async function postFileDev(file){
-  file.date = new Date();
+  file.date =  format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
   return apiDev.post('/files', file);
 }
 
