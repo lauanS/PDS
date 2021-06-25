@@ -110,10 +110,14 @@ export default function Report(props){
           allowClear
         >
           <Option value="Cabra">Cabra</Option>
-          <Option value="Cachorro">Cachorro</Option>
+          <Option value="Cacatua">Cacatua</Option>
+          <Option value="Cachorro">Cachorro</Option>          
+          <Option value="Calopsita">Calopsita</Option>          
+          <Option value="Capivara">Capivara</Option>          
           <Option value="Cavalo">Cavalo</Option>
+          <Option value="Cobra">Cobra</Option>
           <Option value="Coelho">Coelho</Option>
-          <Option value="Cobra">Coelho</Option>
+          <Option value="Coruja">Coruja</Option>
           <Option value="Gado bovino">Gado bovino</Option>
           <Option value="Galinha">Galinha</Option>
           <Option value="Ganso">Ganso</Option>
@@ -121,10 +125,12 @@ export default function Report(props){
           <Option value="Hamster">Hamster</Option>
           <Option value="Ovelha">Ovelha</Option>
           <Option value="Pássaro silvestre">Pássaro silvestre</Option>
+          <Option value="Papagaio">Papagaio</Option>
           <Option value="Pato">Pato</Option>
           <Option value="Peru">Peru</Option>
           <Option value="Pombo">Pombo</Option>
           <Option value="Rato">Rato</Option>
+          <Option value="Tartaruga">Tartaruga</Option>
           <Option value="Outro">Outro</Option>
         </Select>
       </Form.Item>
