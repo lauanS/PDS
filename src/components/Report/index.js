@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Button, Form, Input, Switch } from 'antd';
+import { Button, Form, Input, Switch, Select } from 'antd';
 
 import { postFile, postReport } from "../../services/index";
 import Editor from '../Editor';
 import format from 'date-fns/format'
 import { Context } from "../../context/authContext"
+
+const { Option } = Select;
 
 export default function Report(props){
   const { lat, lng, address, onFinish } = props;
@@ -63,6 +65,10 @@ export default function Report(props){
     }
   }
 
+  const onAnimalChange = (value) => {
+    form.setFieldsValue(value);
+  }
+
   /* Atualiza o status do mounted ao desmontar o componente para impedir vazamento de memória */
   useEffect(() => {
     return () => {mounted.current = false} 
@@ -95,16 +101,40 @@ export default function Report(props){
         rules={[
                 {
                   required: true,
-                  message: 'Por favor, digite a espécie do animal (ex.: cachorro, gato etc)',
+                  message: 'Por favor, selecione uma espécie.',
                 },
               ]}
       >
 
-        <Input 
-          type='text' 
-          disabled={isLoading} 
-          placeholder="Digite a espécie do animal (ex.: cachorro)" 
-        />
+        <Select
+          placeholder="Selecione um animal..."
+          onChange={onAnimalChange}
+          allowClear
+        >
+          <Option value="Cabra">Cabra</Option>
+          <Option value="Cacatua">Cacatua</Option>
+          <Option value="Cachorro">Cachorro</Option>          
+          <Option value="Calopsita">Calopsita</Option>          
+          <Option value="Capivara">Capivara</Option>          
+          <Option value="Cavalo">Cavalo</Option>
+          <Option value="Cobra">Cobra</Option>
+          <Option value="Coelho">Coelho</Option>
+          <Option value="Coruja">Coruja</Option>
+          <Option value="Gado bovino">Gado bovino</Option>
+          <Option value="Galinha">Galinha</Option>
+          <Option value="Ganso">Ganso</Option>
+          <Option value="Gato">Gato</Option>
+          <Option value="Hamster">Hamster</Option>
+          <Option value="Ovelha">Ovelha</Option>
+          <Option value="Pássaro silvestre">Pássaro silvestre</Option>
+          <Option value="Papagaio">Papagaio</Option>
+          <Option value="Pato">Pato</Option>
+          <Option value="Peru">Peru</Option>
+          <Option value="Pombo">Pombo</Option>
+          <Option value="Rato">Rato</Option>
+          <Option value="Tartaruga">Tartaruga</Option>
+          <Option value="Outro">Outro</Option>
+        </Select>
       </Form.Item>
 
       <Form.Item
