@@ -6,6 +6,8 @@ import Editor from '../Editor';
 import format from 'date-fns/format'
 import { Context } from "../../context/authContext"
 
+const { Option } = Select;
+
 export default function Report(props){
   const { lat, lng, address, onFinish } = props;
   const [form] = Form.useForm();
