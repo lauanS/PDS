@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Button, Form, Input, Switch } from 'antd';
+import { Button, Form, Input, Switch, Select } from 'antd';
 
 import { postFile, postReport } from "../../services/index";
 import Editor from '../Editor';
@@ -63,6 +63,10 @@ export default function Report(props){
     }
   }
 
+  const onAnimalChange = (value) => {
+    form.setFieldsValue(value);
+  }
+
   /* Atualiza o status do mounted ao desmontar o componente para impedir vazamento de memória */
   useEffect(() => {
     return () => {mounted.current = false} 
@@ -95,16 +99,34 @@ export default function Report(props){
         rules={[
                 {
                   required: true,
-                  message: 'Por favor, digite a espécie do animal (ex.: cachorro, gato etc)',
+                  message: 'Por favor, selecione uma espécie.',
                 },
               ]}
       >
 
-        <Input 
-          type='text' 
-          disabled={isLoading} 
-          placeholder="Digite a espécie do animal (ex.: cachorro)" 
-        />
+        <Select
+          placeholder="Selecione um animal..."
+          onChange={onAnimalChange}
+          allowClear
+        >
+          <Option value="Cabra">Cabra</Option>
+          <Option value="Cachorro">Cachorro</Option>
+          <Option value="Cavalo">Cavalo</Option>
+          <Option value="Coelho">Coelho</Option>
+          <Option value="Cobra">Coelho</Option>
+          <Option value="Gado bovino">Gado bovino</Option>
+          <Option value="Galinha">Galinha</Option>
+          <Option value="Ganso">Ganso</Option>
+          <Option value="Gato">Gato</Option>
+          <Option value="Hamster">Hamster</Option>
+          <Option value="Ovelha">Ovelha</Option>
+          <Option value="Pássaro silvestre">Pássaro silvestre</Option>
+          <Option value="Pato">Pato</Option>
+          <Option value="Peru">Peru</Option>
+          <Option value="Pombo">Pombo</Option>
+          <Option value="Rato">Rato</Option>
+          <Option value="Outro">Outro</Option>
+        </Select>
       </Form.Item>
 
       <Form.Item

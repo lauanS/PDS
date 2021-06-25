@@ -25,7 +25,7 @@ export default function AddButton(props) {
 
   useEffect(() => {
     const count = async() => {
-      await delay(2000);
+      await delay(5000);
       console.log(showTooltip)
       setShowTooltip(false)
     }
